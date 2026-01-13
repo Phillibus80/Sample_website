@@ -1,0 +1,22 @@
+@use '../../../scss/main' as main;
+
+.btn {
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &_icon {
+    height: 1.25rem;
+    width: 1.25rem;
+    color: green;
+
+    &:hover {
+      color: main.$colors-grey-text;
+    }
+  }
+
+  &_text {
+
+  }
+}

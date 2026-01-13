@@ -1,0 +1,46 @@
+<?php
+require_once __DIR__ . '/../../utils.php';
+
+$requestData = Flight::request()->data;
+
+$requiredFieldsAndTypes = [
+    'component_name' => 'alphaNumeric',
+];
+
+$validationErrors = validateRequestData(
+    $requestData,
+    $requiredFieldsAndTypes
+);
+
+// Missing required fields
+if (count($validationErrors) > 0) {
+    sendResponse(422, 'All fields are required: component_name.', $validationErrors);
+}
+
+try {
+    $db = Flight::db();
+
+    $new_component_name = $requestData->component_name;
+
+    // Check if the component already exists
+    $component_check_query = '
+            SELECT * FROM COMPONENTS WHERE NAME = ?;
+        ';
+    $component_check_result = runQuery($db, $component_check_query, [$new_component_name]);
+    if ($component_check_result) {
+        sendResponse(409, 'Component already exists.');
+    }
+
+    // Create the component
+    $statement = '
+            INSERT INTO COMPONENTS (NAME) 
+            VALUES (?)
+            ';
+    $component_creation_results = runQuery($db, $statement, [$new_component_name]);
+
+    $db = null;
+    sendResponse(200, 'Component: ' . $new_component_name . ' created.');
+} catch (Exception $e) {
+    $db = null;
+    sendResponse(500, 'There was an error.');
+}

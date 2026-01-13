@@ -1,0 +1,8 @@
+.subtractCircle {
+  color: red;
+
+  &:hover {
+    color: gray;
+    cursor: pointer;
+  }
+}

@@ -1,0 +1,14 @@
+@use '../../scss/colors/colors' as colors;
+
+.onTop {
+  z-index: 100;
+}
+
+.navi_background {
+  background-color: colors.$nav-bar-background !important;
+
+  @media (min-width: 768px) {
+    width: 90%;
+    margin: 0 auto;
+  }
+}

@@ -1,0 +1,56 @@
+// MEDIA QUERY MANAGER
+
+/*
+< 576px:    X-Small
+>= 576px:   Small
+>= 768px:   Medium
+>= 992px:   Large
+>= 1200px:  X-Large
+>= 1400px:  XX-Large
+
+$breakpoint argument choices:
+- xs
+- sm
+- md
+- lg
+- xl
+- xxl
+1em = 16px
+*/
+@mixin respond($breakpoint) {
+  @if $breakpoint == xs {
+    @media only screen and (width < 576px) {
+      @content
+    };
+  }
+
+  @if $breakpoint == sm {
+    @media only screen and (width >= 576px) {
+      @content
+    };
+  }
+
+  @if $breakpoint == md {
+    @media only screen and (width >= 768px) {
+      @content
+    };
+  }
+
+  @if $breakpoint == lg {
+    @media only screen and (width >= 992px) {
+      @content
+    };
+  }
+
+  @if $breakpoint == xl {
+    @media only screen and (width >= 1200px) {
+      @content
+    }; //800px
+  }
+
+  @if $breakpoint == xxl {
+    @media only screen and (width >= 1400px) {
+      @content
+    }; //900px
+  }
+}

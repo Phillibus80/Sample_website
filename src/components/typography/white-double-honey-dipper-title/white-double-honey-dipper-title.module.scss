@@ -1,0 +1,19 @@
+@use '../../../scss/main' as main;
+
+.title {
+  &_image {
+    max-height: 70px;
+    max-width: 100%;
+    transform: scale(100%);
+
+    &_flipped {
+      transform: scaleX(-100%);
+    }
+  }
+
+  &_text {
+    font-family: main.$type-title-font;
+    color: rgba(white, 0.90);
+    font-weight: 550;
+  }
+}

@@ -1,0 +1,31 @@
+@use '../../scss/main' as main;
+
+.title {
+  font-family: main.$type-subtitle-font;
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.contact_us {
+
+  &_row {
+
+  }
+
+  &_item {
+    font-family: main.$type-normal-text-font;
+    color: white;
+    font-size: 1rem;
+
+    @include main.abstracts-respond(md) {
+      font-size: 1.25rem;
+    }
+  }
+
+  &_image {
+    height: 30px;
+    width: 30px;
+    color: white;
+  }
+}

@@ -1,0 +1,59 @@
+@use '../../scss/main' as main;
+
+.error_message {
+  margin-top: .5rem;
+  color: red !important;
+  font-weight: bold;
+}
+
+.form_button {
+  background-color: black !important;
+  color: main.$colors-primary-yellow !important;
+  border-color: white !important;
+  z-index: 10 !important;
+
+  &:hover {
+    cursor: pointer;
+    background-color: main.$colors-primary-yellow !important;
+    color: black !important;
+    border-color: black !important;
+  }
+}
+
+.login {
+  h1 {
+    margin: 4.5rem 0 2rem;
+    text-align: center;
+    font-family: main.$type-title-font;
+    font-weight: bold;
+  }
+
+  &_form {
+    border: 2px solid main.$colors-primary-yellow;
+    background-color: black;
+    border-radius: .75rem;
+    font-family: main.$type-normal-text-font;
+
+    &_background {
+      opacity: 10%;
+      left: -15%;
+      display: none;
+      visibility: hidden;
+
+      @include main.abstracts-respond(md) {
+        display: block;
+        visibility: visible;
+      }
+    }
+
+    .container {
+      @include main.abstracts-respond(sm) {
+        border-radius: 0;
+      }
+
+      &_section {
+        margin-bottom: 4rem;
+      }
+    }
+  }
+}

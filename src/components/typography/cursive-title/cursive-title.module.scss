@@ -1,0 +1,13 @@
+@use '../../../scss/main' as main;
+
+.textStyle {
+  font-family: main.$type-cursive-font;
+
+  @include main.abstracts-respond(xs) {
+    font-size: 1.5rem;
+  }
+
+  @include main.abstracts-respond(md) {
+    font-size: 2rem;
+  }
+}

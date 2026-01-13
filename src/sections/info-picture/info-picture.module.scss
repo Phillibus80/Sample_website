@@ -1,0 +1,9 @@
+@use '../../scss/main' as main;
+
+.item {
+
+  &_picture {
+    width: 100%;
+    max-height: 550px;
+  }
+}

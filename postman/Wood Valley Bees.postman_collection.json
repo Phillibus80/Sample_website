@@ -1,0 +1,2660 @@
+{
+  "info": {
+    "_postman_id": "e7458133-d905-409a-bd21-f492b5a1b8a0",
+    "name": "Wood Valley Bees",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "12794840"
+  },
+  "item": [
+    {
+      "name": "Pages",
+      "item": [
+        {
+          "name": "Sections",
+          "item": [
+            {
+              "name": "Components",
+              "item": [
+                {
+                  "name": "Content",
+                  "item": [
+                    {
+                      "name": "Update Component Content",
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{Bearer_Token}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "PATCH",
+                        "header": [
+                          {
+                            "key": "X-CSRF-Token",
+                            "value": "{{CSRF_TOKEN}}",
+                            "type": "text"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n    \"event_title\": \"home3 33\",\n    \"event_description\": \"Bu  iu\",\n    \"event_location\": \"Alamo Dome\",\n     \"event_time\": \"2025-12-29 18:15:06\"\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{API_URL}}/api/pages_sections_components_content/:component_content_id",
+                          "host": [
+                            "{{API_URL}}"
+                          ],
+                          "path": [
+                            "api",
+                            "pages_sections_components_content",
+                            ":component_content_id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "component_content_id",
+                              "value": "80"
+                            }
+                          ]
+                        }
+                      },
+                      "response": []
+                    },
+                    {
+                      "name": "Delete Component Content",
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{Bearer_Token}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Origin",
+                            "value": "{{LOCAL_UI_URL}}",
+                            "type": "text"
+                          },
+                          {
+                            "key": "X-CSRF-Token",
+                            "value": "{{CSRF_TOKEN}}",
+                            "type": "text"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{API_URL}}/api/pages_sections_components_content/:component_content_id",
+                          "host": [
+                            "{{API_URL}}"
+                          ],
+                          "path": [
+                            "api",
+                            "pages_sections_components_content",
+                            ":component_content_id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "component_content_id",
+                              "value": "98"
+                            }
+                          ]
+                        }
+                      },
+                      "response": []
+                    },
+                    {
+                      "name": "Create Component Content",
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{Bearer_Token}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "X-CSRF-Token",
+                            "value": "{{CSRF_TOKEN}}",
+                            "type": "text"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n    \"link_text\": \"boots and pants\",\n    \"link_url\": \"bummer house\"\n\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{API_URL}}/api/pages_sections_components_content/:page_section_component_id",
+                          "host": [
+                            "{{API_URL}}"
+                          ],
+                          "path": [
+                            "api",
+                            "pages_sections_components_content",
+                            ":page_section_component_id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "page_section_component_id",
+                              "value": "1"
+                            }
+                          ]
+                        }
+                      },
+                      "response": []
+                    }
+                  ]
+                },
+                {
+                  "name": "Create Component",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{Bearer_Token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "X-CSRF-Token",
+                        "value": "{{CSRF_TOKEN}}",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"page_section_id\": 18,\n    \"component_id\": 18\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{API_URL}}/api/pages_sections_components",
+                      "host": [
+                        "{{API_URL}}"
+                      ],
+                      "path": [
+                        "api",
+                        "pages_sections_components"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Update Component",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{Bearer_Token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "PATCH",
+                    "header": [
+                      {
+                        "key": "X-CSRF-Token",
+                        "value": "{{CSRF_TOKEN}}",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"component_id\": \"6\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{API_URL}}/api/pages_sections_components/:ps_id/:old_component_id",
+                      "host": [
+                        "{{API_URL}}"
+                      ],
+                      "path": [
+                        "api",
+                        "pages_sections_components",
+                        ":ps_id",
+                        ":old_component_id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "ps_id",
+                          "value": "3"
+                        },
+                        {
+                          "key": "old_component_id",
+                          "value": "5"
+                        }
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Delete Component",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{Bearer_Token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "X-CSRF-Token",
+                        "value": "{{CSRF_TOKEN}}",
+                        "type": "text"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{API_URL}}/api/pages_sections_components/:id",
+                      "host": [
+                        "{{API_URL}}"
+                      ],
+                      "path": [
+                        "api",
+                        "pages_sections_components",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "11"
+                        }
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Update Page Section",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Bearer_Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "X-CSRF-Token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"page_name\": \"Home\",\n    \"show_section\": true,\n    \"priority\": 1\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{API_URL}}/api/pages_sections/:id",
+                  "host": [
+                    "{{API_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "pages_sections",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Page Section",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Bearer_Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-CSRF-Token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"page_name\": \"vvvv\",\n    \"section_name\": \"Header\",\n    \"show_section\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{API_URL}}/api/pages_sections/",
+                  "host": [
+                    "{{API_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "pages_sections",
+                    ""
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Page Section",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Bearer_Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Origin",
+                    "value": "{{LOCAL_UI_URL}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "X-CSRF-Token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{API_URL}}/api/pages_sections/:page_section_id",
+                  "host": [
+                    "{{API_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "pages_sections",
+                    ":page_section_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "page_section_id",
+                      "value": "6"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Page Content",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{LOCAL_UI_URL}}",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "url": {
+              "raw": "{{API_URL}}/api/pages?page=home",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "pages"
+              ],
+              "query": [
+                {
+                  "key": "origin",
+                  "value": "localhost:5173",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "home"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Page",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{Bearer_Token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-CSRF-Token",
+                "value": "{{CSRF_TOKEN}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"page_name\": \"newest page\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{API_URL}}/api/pages",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "pages"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Page",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{Bearer_Token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{LOCAL_UI_URL}}",
+                "type": "text"
+              },
+              {
+                "key": "X-CSRF-Token",
+                "value": "{{CSRF_TOKEN}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{API_URL}}/api/pages/:id",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "pages",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Page",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{Bearer_Token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "X-CSRF-Token",
+                "value": "{{CSRF_TOKEN}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"page_name\": \"Sky Net\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{API_URL}}/api/pages/:id",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "pages",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "4"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Sections",
+      "item": [
+        {
+          "name": "Sections",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{Bearer_Token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{LOCAL_UI_URL}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{API_URL}}/api/sections?page=about-us",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "sections"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "about-us"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Section",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{Bearer_Token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{LOCAL_UI_URL}}",
+                "type": "text"
+              },
+              {
+                "key": "X-CSRF-Token",
+                "value": "{{CSRF_TOKEN}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"section_name\": \"World\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{API_URL}}/api/sections",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "sections"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Section",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{Bearer_Token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{LOCAL_UI_URL}}",
+                "type": "text",
+                "disabled": true
+              },
+              {
+                "key": "X-CSRF-Token",
+                "value": "{{CSRF_TOKEN}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"section_name\": \"comments\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{API_URL}}/api/sections/:id",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "sections",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "12"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Section",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{Bearer_Token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{LOCAL_UI_URL}}",
+                "type": "text"
+              },
+              {
+                "key": "X-CSRF-Token",
+                "value": "{{CSRF_TOKEN}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{API_URL}}/api/sections/:id",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "sections",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Users",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{Bearer_Token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{LOCAL_UI_URL}}",
+                "type": "text",
+                "disabled": true
+              },
+              {
+                "key": "Authorization",
+                "value": "{{Bearer_Token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{API_URL}}/api/users",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "role",
+                  "value": "email",
+                  "disabled": true
+                },
+                {
+                  "key": "role",
+                  "value": "all",
+                  "disabled": true
+                },
+                {
+                  "key": "filter",
+                  "value": "'EMAIL'",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Roles",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{Bearer_Token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{LOCAL_UI_URL}}",
+                "type": "text",
+                "disabled": true
+              },
+              {
+                "key": "Authorization",
+                "value": "{{Bearer_Token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{API_URL}}/api/users?role=email",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "role",
+                  "value": "email"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{Bearer_Token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{LOCAL_UI_URL}}"
+              },
+              {
+                "key": "X-CSRF-Token",
+                "value": "{{CSRF_TOKEN}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"firstName\": \"ffff\",\n    \"lastName\": \"Shadow\",\n    \"email\": \"shoNuffer@gmail.com\",\n    \"userName\": \"testing\",\n    \"password\": \"stuffstufferd\",\n    \"permissions\": [\"Admin\"]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{API_URL}}/api/users/:user_id",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                ":user_id"
+              ],
+              "variable": [
+                {
+                  "key": "user_id",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User by Username",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{Bearer_Token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{LOCAL_UI_URL}}",
+                "type": "text",
+                "disabled": true
+              },
+              {
+                "key": "Authorization",
+                "value": "{{Bearer_Token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{API_URL}}/api/users/:user_name",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                ":user_name"
+              ],
+              "variable": [
+                {
+                  "key": "user_name",
+                  "value": "phillibus"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create User",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{Bearer_Token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{LOCAL_UI_URL}}",
+                "type": "text",
+                "disabled": true
+              },
+              {
+                "key": "X-CSRF-Token",
+                "value": "{{CSRF_TOKEN}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"first_name\": \"shadows\",\n    \"last_name\": \"nin\",\n    \"email\": \"admin@ninja.com\",\n    \"username\": \"test\",\n    \"password\": \"testtest\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{API_URL}}/api/users",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{Bearer_Token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{LOCAL_UI_URL}}",
+                "type": "text"
+              },
+              {
+                "key": "X-CSRF-Token",
+                "value": "{{CSRF_TOKEN}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{API_URL}}/api/users/:id",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "6"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var obj = pm.response.json();",
+                  "pm.environment.set(\"Bearer_Token\", obj.token);",
+                  "pm.environment.set('CSRF_TOKEN', obj.csrfToken);"
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{Bearer_Token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{LOCAL_UI_URL}}",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"test\",\n    \"password\": \"testtest\"\n}"
+            },
+            "url": {
+              "raw": "{{API_URL}}/api/login",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var obj = pm.response.json();",
+                  "pm.environment.set(\"Bearer_Token\", '');"
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{Bearer_Token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Origin",
+                "value": "{{LOCAL_UI_URL}}",
+                "disabled": true
+              },
+              {
+                "key": "X-CSRF-Token",
+                "value": "{{CSRF_TOKEN}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"theOne\"\n}"
+            },
+            "url": {
+              "raw": "{{API_URL}}/api/logout",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Content",
+      "item": [
+        {
+          "name": "Links",
+          "item": [
+            {
+              "name": "Links by Section Name",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Bearer_Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Origin",
+                    "value": "{{LOCAL_UI_URL}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{API_URL}}/api/links/:section_name",
+                  "host": [
+                    "{{API_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "links",
+                    ":section_name"
+                  ],
+                  "variable": [
+                    {
+                      "key": "section_name",
+                      "value": "header"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Links",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Origin",
+                    "value": "{{LOCAL_UI_URL}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{API_URL}}/api/links?page-links=true",
+                  "host": [
+                    "{{API_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "links"
+                  ],
+                  "query": [
+                    {
+                      "key": "page-links",
+                      "value": "true"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Link",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Bearer_Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Origin",
+                    "value": "{{LOCAL_UI_URL}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "X-CSRF-Token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"link_text\": \"Old School\",\n    \"url\": \"https://www.yahoo.com\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{API_URL}}/api/links",
+                  "host": [
+                    "{{API_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "links"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Link",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Bearer_Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Origin",
+                    "value": "{{LOCAL_UI_URL}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "X-CSRF-Token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{API_URL}}/api/links/:id",
+                  "host": [
+                    "{{API_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "links",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "8"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Link",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Bearer_Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "X-CSRF-Token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"link_text\": \"Sky Net\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{API_URL}}/api/links/:id",
+                  "host": [
+                    "{{API_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "links",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "8"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "auth": {
+            "type": "bearer",
+            "bearer": [
+              {
+                "key": "token",
+                "value": "{{Bearer_Token}}",
+                "type": "string"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  ""
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  ""
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Events",
+          "item": [
+            {
+              "name": "Events",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Origin",
+                    "value": "{{LOCAL_UI_URL}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{API_URL}}/api/events",
+                  "host": [
+                    "{{API_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "events"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Events",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Bearer_Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Origin",
+                    "value": "{{LOCAL_UI_URL}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "X-CSRF-Token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"title\": \"63 Annual HoneyFest\",\n    \"description\": \"TREAT YA SELF to a shit ton of honey\",\n    \"location\": \"Frost Bank Center\",\n    \"address\": \"1 Frost Bank Center Dr\",\n    \"city\": \"San Antonio\",\n    \"state\": \"TX\",\n    \"zip\": \"78219\",\n    \"telephone\": null,\n    \"lat\": \"29.42717\",\n    \"lng\": \"-98.43742\",\n    \"event_time\": \"\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{API_URL}}/api/events",
+                  "host": [
+                    "{{API_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "events"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Event",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Bearer_Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Origin",
+                    "value": "{{LOCAL_UI_URL}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "X-CSRF-Token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{API_URL}}/api/events/:id",
+                  "host": [
+                    "{{API_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "events",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "3"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Events",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Bearer_Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "X-CSRF-Token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n \"title\": \"Alamo Dome Stucky Buns\",\n \"description\": \"There once was a man from Nantucket\", \n \"location\": \"This old house\",\n \"address\": \"123 Some street\",\n \"city\": \"Anytown\",\n \"state\": \"MN\",\n \"zip\" :\"12345\",\n \"lat\": 45.2546,\n \"lng\": 54.6452\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{API_URL}}/api/events/:id",
+                  "host": [
+                    "{{API_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "events",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "2"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "auth": {
+            "type": "bearer",
+            "bearer": [
+              {
+                "key": "token",
+                "value": "{{Bearer_Token}}",
+                "type": "string"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  ""
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  ""
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Locations",
+          "item": [
+            {
+              "name": "Locations",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Origin",
+                    "value": "{{LOCAL_UI_URL}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{API_URL}}/api/locations",
+                  "host": [
+                    "{{API_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "locations"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Location",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Bearer_Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Origin",
+                    "value": "{{LOCAL_UI_URL}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "X-CSRF-Token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"Retama Park\",\n    \"address\": \"1 Retama Prkwy\",\n    \"city\": \"Selma\",\n    \"state\": \"TX\",\n    \"zip\": 78154,\n    \"telephone\": \"2105555555\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{API_URL}}/api/locations",
+                  "host": [
+                    "{{API_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "locations"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Location",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Bearer_Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Origin",
+                    "value": "{{LOCAL_UI_URL}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "X-CSRF-Token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{API_URL}}/api/locations/:id",
+                  "host": [
+                    "{{API_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "locations",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "3"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Location",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Bearer_Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "X-CSRF-Token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n \"title\": \"Alamo Dome Stucky Buns\",\n \"description\": \"There once was a man from Nantucket\", \n \"location\": \"This old house\",\n \"address\": \"123 Some street\",\n \"city\": \"Anytown\",\n \"state\": \"MN\",\n \"zip\" :\"12345\",\n \"lat\": 45.2546,\n \"lng\": 54.6452\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{API_URL}}/api/locations/:id",
+                  "host": [
+                    "{{API_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "locations",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "2"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "auth": {
+            "type": "bearer",
+            "bearer": [
+              {
+                "key": "token",
+                "value": "{{Bearer_Token}}",
+                "type": "string"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  ""
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  ""
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Images",
+          "item": [
+            {
+              "name": "Images by Section Name",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Bearer_Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Origin",
+                    "value": "{{LOCAL_UI_URL}}",
+                    "type": "text",
+                    "disabled": true
+                  }
+                ],
+                "url": {
+                  "raw": "{{API_URL}}/api/images/:section_name",
+                  "host": [
+                    "{{API_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "images",
+                    ":section_name"
+                  ],
+                  "variable": [
+                    {
+                      "key": "section_name",
+                      "value": "footer"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Images",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Origin",
+                    "value": "{{LOCAL_UI_URL}}",
+                    "type": "text",
+                    "disabled": true
+                  }
+                ],
+                "url": {
+                  "raw": "{{API_URL}}/api/images",
+                  "host": [
+                    "{{API_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "images"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Image",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Bearer_Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Origin",
+                    "value": "{{LOCAL_UI_URL}}",
+                    "type": "text",
+                    "disabled": true
+                  },
+                  {
+                    "key": "X-CSRF-Token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"image_text\": \"Yellow Honey Bee Graphic\",\n    \"src\": \"/api/img/yellow_bee.png\",\n    \"alt\": \"A graphic of a bee with yellow color fill\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{API_URL}}/api/images",
+                  "host": [
+                    "{{API_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "images"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Remove Image",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Bearer_Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Origin",
+                    "value": "{{LOCAL_UI_URL}}",
+                    "type": "text",
+                    "disabled": true
+                  },
+                  {
+                    "key": "X-CSRF-Token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{API_URL}}/api/images/:id",
+                  "host": [
+                    "{{API_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "images",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "5"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Image",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "X-CSRF-Token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"image_text\": \"dd\",\n    \"src\": \"/api/queen_bee.png\",\n    \"alt\": \"asdfasdf\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{API_URL}}/api/images/:id",
+                  "host": [
+                    "{{API_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "images",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "15"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Text Content",
+          "item": [
+            {
+              "name": "Text Content by Section Name",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Bearer_Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Origin",
+                    "value": "{{LOCAL_UI_URL}}",
+                    "type": "text",
+                    "disabled": true
+                  }
+                ],
+                "url": {
+                  "raw": "{{API_URL}}/api/textcontent/:section_name",
+                  "host": [
+                    "{{API_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "textcontent",
+                    ":section_name"
+                  ],
+                  "variable": [
+                    {
+                      "key": "section_name",
+                      "value": "footer"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Text Content",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Origin",
+                    "value": "{{LOCAL_UI_URL}}",
+                    "type": "text",
+                    "disabled": true
+                  }
+                ],
+                "url": {
+                  "raw": "{{API_URL}}/api/textcontent",
+                  "host": [
+                    "{{API_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "textcontent"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Text Content",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Bearer_Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Origin",
+                    "value": "{{LOCAL_UI_URL}}",
+                    "type": "text",
+                    "disabled": true
+                  },
+                  {
+                    "key": "X-CSRF-Token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"text_content\": \"Yellow Honey Dipper\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{API_URL}}/api/textcontent",
+                  "host": [
+                    "{{API_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "textcontent"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Remove Text Content",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Bearer_Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Origin",
+                    "value": "{{LOCAL_UI_URL}}",
+                    "type": "text",
+                    "disabled": true
+                  },
+                  {
+                    "key": "X-CSRF-Token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"image_name\": \"banner-top\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{API_URL}}/api/textcontent/:id",
+                  "host": [
+                    "{{API_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "textcontent",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "31"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Text Content",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "X-CSRF-Token",
+                    "value": "{{CSRF_TOKEN}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"text_content\": \"45hjfgh\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{API_URL}}/api/textcontent/:id",
+                  "host": [
+                    "{{API_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "textcontent",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "28"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Components",
+      "item": [
+        {
+          "name": "Components",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{Bearer_Token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{LOCAL_UI_URL}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{API_URL}}/api/components",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "components"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "home",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Component",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{Bearer_Token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{LOCAL_UI_URL}}",
+                "type": "text"
+              },
+              {
+                "key": "X-CSRF-Token",
+                "value": "{{CSRF_TOKEN}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"component_name\": \"World\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{API_URL}}/api/components",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "components"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Component",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{Bearer_Token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{LOCAL_UI_URL}}",
+                "type": "text",
+                "disabled": true
+              },
+              {
+                "key": "X-CSRF-Token",
+                "value": "{{CSRF_TOKEN}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"component_name\": \"comments\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{API_URL}}/api/components/:id",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "components",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "12"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Component",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{Bearer_Token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{LOCAL_UI_URL}}",
+                "type": "text"
+              },
+              {
+                "key": "X-CSRF-Token",
+                "value": "{{CSRF_TOKEN}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{API_URL}}/api/components/:id",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "api",
+                "components",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Send Email",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\": \"bob@example.com\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{API_URL}}/api/send_email",
+          "host": [
+            "{{API_URL}}"
+          ],
+          "path": [
+            "api",
+            "send_email"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

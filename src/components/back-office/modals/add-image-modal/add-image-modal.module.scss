@@ -1,0 +1,12 @@
+@use '../../../../scss/main' as main;
+
+.input {
+  &_background {
+    background-color: white;
+    color: black;
+  }
+}
+
+.error_text {
+  color: main.$colors-error-text
+}

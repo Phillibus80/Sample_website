@@ -1,0 +1,40 @@
+@use '../../scss/main' as main;
+
+.honeycomb {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 4rem;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 99;
+
+  mask-image: url('/masks/rounded-hexagon.svg');
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-image: url('/masks/rounded-hexagon.svg');
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+
+  background-color: main.$colors-primary-yellow;
+
+  animation: bounce 2s ease-in-out infinite;
+
+  svg {
+    font-size: 1.5rem;
+    fill: white;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}

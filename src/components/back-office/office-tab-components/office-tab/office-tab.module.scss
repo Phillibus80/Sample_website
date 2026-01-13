@@ -1,0 +1,20 @@
+.cardStack {
+  position: relative;
+  animation: dealCard 0.6s ease-out forwards;
+  animation-delay: calc(var(--card-index) * 0.5s);
+
+  opacity: 0;
+  transform: translateY(-100px) scale(0.95);
+  z-index: calc(100 - var(--card-index));
+}
+
+@keyframes dealCard {
+  0% {
+    opacity: 0;
+    transform: translateY(-100px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

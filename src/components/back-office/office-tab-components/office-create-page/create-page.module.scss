@@ -1,0 +1,16 @@
+.page {
+  border: 2px solid rgba(black, .1);
+
+  .section {
+    background-color: rgba(black, .1);
+  }
+
+  .subtractCircle {
+    color: red;
+
+    &:hover {
+      color: gray;
+      cursor: pointer;
+    }
+  }
+}

@@ -1,0 +1,20 @@
+@use '../../../scss/main' as main;
+
+.social_gallery {
+  &_title {
+    font-family: main.$type-title-font;
+    color: white;
+    font-size: 1.75rem;
+    font-weight: bold;
+
+    @include main.abstracts-respond(md) {
+      font-size: 2rem;
+    }
+  }
+
+  &_image {
+    object-fit: cover;
+    height: 200px;
+    width: 200px;
+  }
+}

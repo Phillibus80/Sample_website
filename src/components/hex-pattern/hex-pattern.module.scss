@@ -1,0 +1,51 @@
+@use '../../scss/main' as main;
+
+.hex {
+  float: left;
+  margin-left: 3px;
+  margin-bottom: -26px;
+
+  & .top {
+    width: 0;
+    border-bottom: 30px solid #FFF;
+    border-left: 52px solid transparent;
+    border-right: 52px solid transparent;
+  }
+
+  & .middle {
+    width: 104px;
+    height: 60px;
+    background: #FFF;
+  }
+
+  & .bottom {
+    width: 0;
+    border-top: 30px solid #FFF;
+    border-left: 52px solid transparent;
+    border-right: 52px solid transparent;
+  }
+}
+
+.hide {
+  display: none;
+
+  @include main.abstracts-respond(lg) {
+    display: block;
+  }
+}
+
+.sm_hide {
+  display: none;
+
+  @include main.abstracts-respond(lg) {
+    display: block;
+  }
+}
+
+.hexRow {
+  clear: left;
+
+  &.even {
+    margin-left: 53px;
+  }
+}

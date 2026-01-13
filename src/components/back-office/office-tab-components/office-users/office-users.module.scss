@@ -1,0 +1,32 @@
+@use '../../../../scss/main' as main;
+
+.table {
+  &_row {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &_input {
+    background-color: white;
+    color: black;
+  }
+
+  &_disabled {
+    background-color: rgba(main.$colors-grey-text, .2);
+    color: black;
+  }
+}
+
+.subtractCircle {
+  color: red;
+
+  &:hover {
+    color: gray;
+    cursor: pointer;
+  }
+}
+
+.error_text {
+  color: main.$colors-error-text
+}

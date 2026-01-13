@@ -1,0 +1,134 @@
+@use '../../../scss/main' as main;
+@use "sass:math";
+
+$image_size: 250px;
+$half_image_size: calc(#{$image_size} / 2);
+$image_gap: 10px;
+
+// X positioning
+$right_push: calc(#{$half_image_size} + calc(#{$half_image_size} / 2) + #{$image_gap});
+
+// Y positioning
+$stagger_up: calc((#{$half_image_size} / 2) - #{$image_gap});
+$stagger_down: calc(#{$stagger_up} + #{$image_size} - #{$image_gap});
+$middle_y: calc(#{$stagger_up} + #{$half_image_size} - (#{$image_gap} / 2));
+
+.gallery {
+  max-width: 100%;
+  height: 100%;
+
+  @include main.abstracts-respond(md) {
+    min-height: 600px;
+  }
+
+  &_image {
+    grid-area: 1/1;
+    width: 100%;
+    height: 40%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    transform: scale(.65);
+
+    @include main.abstracts-respond(sm) {
+      height: 60%;
+      transform: scale(.5);
+    }
+
+    @include main.abstracts-respond(md) {
+      transform: scale(.6);
+    }
+
+    @include main.abstracts-respond(lg) {
+      width: $image_size;
+      aspect-ratio: 1.15;
+      transform: scale(1);
+    }
+  }
+
+  & > .gallery_image {
+    @include main.abstracts-respond(xs) {
+      &:not(:first-child) {
+        display: none;
+      }
+    }
+
+    @include main.abstracts-respond(sm) {
+      &:not(:first-child) {
+        display: none;
+      }
+    }
+
+    @include main.abstracts-respond(lg) {
+      @for $i from 1 through 9 {
+        $mod: $i % 3;
+        $group: math.floor(math.div($i - 1, 3)); // 0, 1, 2 for group 1, 2, 3
+
+        // Determine y value
+        $y: if($mod == 1, $stagger_up, if($mod == 2, $stagger_down, $middle_y));
+
+        // Determine x multiplier based on pattern
+        $x_mult: 0;
+        @if $mod == 1 or $mod == 2 {
+          $x_mult: $group * 2; // 0, 2, 4
+        } @else {
+          $x_mult: $group * 2 + 1; // 1, 3, 5
+        }
+
+        $x: if($x_mult == 0, 0, calc(#{$x_mult} * #{$right_push}));
+
+        &:nth-child(#{$i}) {
+          display: block;
+          transform: translate(#{$x}, #{$y});
+        }
+      }
+
+      // The above pattern generates the
+      // css below
+
+      //&:nth-child(1) {
+      //  display: block;
+      //  transform: translate(0, $stagger_up);
+      //}
+      //
+      //&:nth-child(2) {
+      //  display: block;
+      //  transform: translate(0, $stagger_down);
+      //}
+      //
+      //&:nth-child(3) {
+      //  display: block;
+      //  transform: translate($right_push, $middle_y);
+      //}
+      //
+      //&:nth-child(4) {
+      //  display: block;
+      //  transform: translate(calc(2 * #{$right_push}), $stagger_up);
+      //}
+      //
+      //&:nth-child(5) {
+      //  display: block;
+      //  transform: translate(calc(2 * #{$right_push}), $stagger_down);
+      //}
+      //
+      //&:nth-child(6) {
+      //  display: block;
+      //  transform: translate(calc(3 * #{$right_push}), $middle_y);
+      //}
+      //
+      //&:nth-child(7) {
+      //  display: block;
+      //  transform: translate(calc(4 * #{$right_push}), $stagger_up);
+      //}
+      //
+      //&:nth-child(8) {
+      //  display: block;
+      //  transform: translate(calc(4 * #{$right_push}), $stagger_down);
+      //}
+      //
+      //&:nth-child(9) {
+      //  display: block;
+      //  transform: translate(calc(5 * #{$right_push}), $middle_y);
+      //}
+    }
+  }
+}

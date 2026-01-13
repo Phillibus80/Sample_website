@@ -1,0 +1,13 @@
+@use '../../scss/main' as main;
+@use "sass:color";
+
+.hex {
+  background-color: rgba(24, 24, 24, 1);
+  min-height: 100%;
+
+  &_background {
+    opacity: 4%;
+    left: -15%;
+    top: 0;
+  }
+}

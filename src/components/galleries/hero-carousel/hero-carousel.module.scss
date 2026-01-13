@@ -1,0 +1,26 @@
+@use '../../../scss/main' as main;
+
+.carousel {
+    margin-top: 0;
+    z-index: 0;
+
+    @include main.abstracts-respond(md) {
+        margin-top: -4.22rem;
+    }
+
+    &_image_container {
+        max-height: 250px;
+
+        @include main.abstracts-respond(sm) {
+            max-height: 400px;
+        }
+
+        @include main.abstracts-respond(md) {
+            max-height: 500px;
+        }
+
+        @include main.abstracts-respond(lg) {
+            max-height: 700px;
+        }
+    }
+}

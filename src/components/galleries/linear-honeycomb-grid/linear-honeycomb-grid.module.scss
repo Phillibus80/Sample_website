@@ -1,0 +1,41 @@
+@use '../../../scss/main' as main;
+
+.honeycomb_gallery {
+  max-width: 100%;
+
+  .honeycomb_gallery_image {
+    margin-top: 0;
+    transform: scale(.85);
+
+    @include main.abstracts-respond(md) {
+      align-self: flex-start;
+      margin-right: 0;
+      width: 350px;
+      transform: scale(1);
+    }
+
+    &:not(:first-child) {
+      @include main.abstracts-respond(lg) {
+        display: block;
+      }
+    }
+
+    &:nth-child(even) {
+      @include main.abstracts-respond(md) {
+        margin-top: 8rem;
+      }
+
+      @include main.abstracts-respond(lg) {
+        margin-top: 9rem;
+      }
+
+      @include main.abstracts-respond(xl) {
+        margin-top: 10rem;
+      }
+
+      @include main.abstracts-respond(xxl) {
+        margin-top: 12rem;
+      }
+    }
+  }
+}

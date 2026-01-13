@@ -1,0 +1,13 @@
+@use '../../scss/main' as main;
+
+.section_wrapper {
+  padding: 1rem;
+
+  @include main.abstracts-respond(md) {
+    padding: 3rem;
+  }
+
+  @include main.abstracts-respond(lg) {
+    padding: 5rem;
+  }
+}

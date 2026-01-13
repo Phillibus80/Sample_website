@@ -1,0 +1,59 @@
+@use '../../../scss/main';
+@use 'sass:color';
+
+.map {
+  border: 2px black solid;
+  background-color: rgba(0, 0, 0, 0.9);
+
+  &_background {
+    opacity: 5%;
+    left: 30%;
+
+    @include main.abstracts-respond(lg) {
+      left: 0;
+    }
+  }
+
+  &_title {
+    font-family: main.$type-title-font;
+    font-weight: 520;
+    color: black;
+    background-color: main.$colors-primary-yellow;
+  }
+
+  &_content {
+    flex-direction: column;
+
+    @include main.abstracts-respond(md) {
+      flex-direction: row;
+    }
+
+    &_details {
+      font-family: main.$type-title-font;
+      font-weight: bolder;
+      border-bottom: 2px solid main.$colors-primary-yellow;
+      color: white;
+    }
+
+    &_text {
+      font-family: main.$type-normal-text-font;
+      width: 100%;
+      text-align: justify;
+      color: white;
+
+      @include main.abstracts-respond(md) {
+        width: 50%;
+      }
+    }
+
+    &_container {
+      height: 250px;
+      width: 100%;
+
+      .leafletContainer {
+        height: 250px !important;
+        width: 100%;
+      }
+    }
+  }
+}

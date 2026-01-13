@@ -1,0 +1,12 @@
+{
+  "require": {
+    "phpmailer/phpmailer": "^v7.0.0",
+    "ext-pdo": "*",
+    "firebase/php-jwt": "^v7.0.2",
+    "ext-json": "*",
+    "ext-gd": "*",
+    "flightphp/core": "^v3.17.2",
+    "ext-curl": "*",
+    "vlucas/phpdotenv": "^5.6"
+  }
+}

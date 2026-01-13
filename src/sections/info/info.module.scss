@@ -1,0 +1,9 @@
+@use '../../scss/main' as main;
+
+.info {
+
+  &_text {
+    font-family: main.$type-normal-text-font;
+    color: main.$colors-grey-text;
+  }
+}

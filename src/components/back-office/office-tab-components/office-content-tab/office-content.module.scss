@@ -1,0 +1,14 @@
+@use '../../../../scss/main' as main;
+
+.subtractCircle {
+  color: red;
+
+  &:hover {
+    color: gray;
+    cursor: pointer;
+  }
+}
+
+.error_text {
+  color: main.$colors-error-text;
+}

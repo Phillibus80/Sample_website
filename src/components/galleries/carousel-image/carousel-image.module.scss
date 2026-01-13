@@ -1,0 +1,14 @@
+.imageGradient {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background: linear-gradient(90deg, rgba(255, 255, 255, .9) 5%, rgba(87, 199, 133, 0) 40%);
+  }
+}

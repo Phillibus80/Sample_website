@@ -1,0 +1,30 @@
+#DEVELOPMENT
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [QSA,L]
+</IfModule>
+
+#PRODUCTION
+#RewriteEngine On
+# RewriteCond %{SERVER_PORT} 80
+#RewriteRule ^(.*)$ https://thecatladypetsitting.com/$1 [R=301,L]
+#
+## Set the base directory for the website
+#RewriteBase /
+#
+## Rewrite requests to /subdir to the /api/index.php file
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteRule ^api/(.*)$ /api/index.php?url=$1 [QSA,L]
+#
+## If the request is not for a file or directory, rewrite it to index.html
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteRule ^ index.html [L]
+#
+## Handle Authorization Header.
+#RewriteCond %{HTTP:Authorization} .
+#RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+#
+#SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1

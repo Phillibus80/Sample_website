@@ -1,0 +1,64 @@
+@use '../../scss/main' as main;
+@use "sass:color";
+
+.footer {
+  background-color: rgba(24, 24, 24, 1);
+  min-height: 600px;
+
+  &_title {
+    font-family: main.$type-title-font;
+    color: white;
+    font-size: 1.25rem;
+    font-weight: bold;
+
+    @include main.abstracts-respond(md) {
+      font-size: 2rem;
+    }
+  }
+
+  &_subtitle {
+    font-family: main.$type-subtitle-font;
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+
+    @include main.abstracts-respond(md) {
+      font-size: 2rem;
+    }
+  }
+
+  &_form {
+    &_label {
+      display: none;
+    }
+
+    &_email {
+      line-height: 2.5rem;
+      background-color: rgba(white, .45);
+    }
+
+    &_btn {
+      border-color: white;
+      background-color: main.$colors-primary-yellow;
+      color: color.scale($color: main.$colors-grey-text, $lightness: -75%, $space: hsl);
+    }
+  }
+
+  &_background {
+    opacity: 4%;
+    left: 0;
+    transform: scale(90%) translate(-100px, 50px);
+
+    @include main.abstracts-respond(sm) {
+      left: 50%;
+    }
+
+    @include main.abstracts-respond(md) {
+      transform: scale(90%) translate(100%, 50px);
+    }
+
+    @include main.abstracts-respond(lg) {
+      transform: scale(90%) translate(75%, 50px);
+    }
+  }
+}

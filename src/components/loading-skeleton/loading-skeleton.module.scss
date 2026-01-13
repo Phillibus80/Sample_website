@@ -1,0 +1,19 @@
+@use '../../scss/colors/colors' as colors;
+@use '../../scss/main' as main;
+
+.onTop {
+  z-index: 100;
+}
+
+.navi_background {
+  @media (min-width: 768px) {
+    width: 90%;
+    margin: 0 auto;
+  }
+}
+
+.carousel {
+  margin-top: 0;
+  z-index: 0;
+  min-height: 500px;
+}

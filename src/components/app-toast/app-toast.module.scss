@@ -1,0 +1,21 @@
+@use '../../scss/main' as main;
+
+.toast {
+  font-family: main.$type-normal-text-font;
+  font-weight: bold;
+
+  &_primary {
+    background-color: blue;
+    color: white;
+  }
+
+  &_warn {
+    background-color: yellow;
+    color: black;
+  }
+
+  &_error {
+    background-color: red;
+    color: white;
+  }
+}

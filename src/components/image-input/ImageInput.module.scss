@@ -1,0 +1,36 @@
+@use '../../scss/main' as main;
+
+.sectionWrapper {
+  margin-bottom: 0 !important;
+
+  .customFileInput {
+    margin: .5rem 0;
+    transition: all .2s ease-in-out;
+
+    &::file-selector-button {
+      font-weight: bold;
+      padding: 0.5rem;
+      outline: none;
+      border-radius: .5rem;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .disabledField {
+    margin: .5rem 0;
+
+    &::file-selector-button {
+      font-weight: bold;
+      padding: 0.5rem;
+      outline: none;
+      border-radius: .5rem;
+    }
+  }
+}
+
+.error_text {
+  color: main.$colors-error-text
+}

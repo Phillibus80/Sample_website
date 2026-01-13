@@ -1,0 +1,35 @@
+@use '../../scss/main' as main;
+
+.benefits {
+  background-color: main.$colors-primary-yellow;
+
+  &_image {
+    margin: 4rem auto;
+    max-width: 350px;
+
+    @include main.abstracts-respond(lg) {
+      max-width: 500px;
+    }
+  }
+
+  &_list {
+
+    &_item {
+      font-family: main.$type-normal-text-font;
+      font-size: 2rem;
+      font-weight: 600;
+      color: white;
+      transition: background-color ease-in-out 300ms, color ease-in-out 300ms;
+
+      &_highlight {
+        background-color: white;
+        color: main.$colors-primary-yellow;
+      }
+
+      &:hover {
+        background-color: white;
+        color: main.$colors-primary-yellow;
+      }
+    }
+  }
+}

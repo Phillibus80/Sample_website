@@ -1,0 +1,19 @@
+@use '../../../../scss/main' as main;
+
+.section {
+  font-family: main.$type-normal-text-font;
+
+  &_title {
+    font-family: main.$type-title-font;
+    font-weight: bolder;
+  }
+}
+
+.subtractCircle {
+  color: red;
+
+  &:hover {
+    color: gray;
+    cursor: pointer;
+  }
+}
