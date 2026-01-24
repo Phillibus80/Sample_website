@@ -21,9 +21,11 @@ try {
     $pageRemoveResults = runQuery($db, $pageRemoveQuery, [$page_id]);
 
     $db = null;
+    writeLog('DELETE /pages', 'success', 'Page removed.', $decodedToken->user->username);
     sendResponse(200, 'Page: ' . $page_id . ' removed.');
 } catch (Exception $e) {
     $db = null;
+    writeLog('DELETE /pages', 'critical', $e->getMessage(), $decodedToken->user->username);
     sendResponse(500, 'There was an error.');
     exit;
 }

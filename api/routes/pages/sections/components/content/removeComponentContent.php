@@ -20,9 +20,11 @@ try {
     runQuery($db, $removeQuery, [$pathParam]);
 
     $db = null;
+    writeLog('DELETE /pages_sections_components_content', 'success', 'Component content removed.', $decodedToken->user->username);
     sendResponse(200, 'Component Content id:: ' . $pathParam . ' removed.');
 } catch (Exception $e) {
     $db = null;
+    writeLog('DELETE /pages_sections_components_content', 'critical', $e->getMessage(), $decodedToken->user->username);
     sendResponse(500, 'There was an error.');
     exit;
 }

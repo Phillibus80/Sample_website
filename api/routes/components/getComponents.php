@@ -47,11 +47,13 @@ try {
     }
 
     $db = null;
+    writeLog('GET /components', 'success', 'Components retrieved.', null);
     sendResponse(200, null, [
         'count' => count($response),
         'data' => $response
     ]);
 } catch (Exception $e) {
     $db = null;
+    writeLog('GET /components', 'critical', $e->getMessage(), null);
     sendResponse(500, 'There was an error.');
 }

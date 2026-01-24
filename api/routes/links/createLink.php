@@ -34,8 +34,10 @@ try {
     ]);
 
     $db = null;
+    writeLog('POST /links', 'success', 'Link created.', $decodedToken->user->username);
     sendResponse(200, 'Link Created.');
 } catch (Exception $e) {
     $db = null;
+    writeLog('POST /links', 'critical', $e->getMessage(), $decodedToken->user->username);
     sendResponse(500, 'There was an error.');
 }

@@ -97,9 +97,11 @@ try {
     }
 
     $db = null;
+    writeLog('PATCH /pages_sections_components', 'success', 'Page section component updated.', $decodedToken->user->username);
     sendResponse(200, null, $response);
 } catch (Exception $e) {
     $db = null;
+    writeLog('PATCH /pages_sections_components', 'critical', $e->getMessage(), $decodedToken->user->username);
     sendResponse(500, 'There was an error.');
     exit;
 }

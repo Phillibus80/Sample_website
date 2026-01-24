@@ -21,9 +21,11 @@ try {
     $pageRemoveResults = runQuery($db, $remove_query, [$psc_id]);
 
     $db = null;
+    writeLog('DELETE /pages_sections_components', 'success', 'Page section component removed.', $decodedToken->user->username);
     sendResponse(200, 'Page Section Component: ' . $psc_id . ' removed.');
 } catch (Exception $e) {
     $db = null;
+    writeLog('DELETE /pages_sections_components', 'critical', $e->getMessage(), $decodedToken->user->username);
     sendResponse(500, 'There was an error.');
     exit;
 }

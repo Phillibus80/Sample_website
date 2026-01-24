@@ -20,9 +20,11 @@ try {
     runQuery($db, $location_remove_query, [$pathParam]);
 
     $db = null;
+    writeLog('DELETE /locations', 'success', 'Location removed.', $decodedToken->user->username);
     sendResponse(200, 'Location id:: ' . $pathParam . ' removed.');
 } catch (Exception $e) {
     $db = null;
+    writeLog('DELETE /locations', 'critical', $e->getMessage(), $decodedToken->user->username);
     sendResponse(500, 'There was an error.');
     exit;
 }

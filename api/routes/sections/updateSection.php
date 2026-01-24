@@ -58,9 +58,11 @@ try {
     }
 
     $db = null;
+    writeLog('PATCH /sections', 'success', 'Section updated.', $decodedToken->user->username);
     sendResponse(200, null, $response);
 } catch (Exception $e) {
     $db = null;
+    writeLog('PATCH /sections', 'critical', $e->getMessage(), $decodedToken->user->username);
     sendResponse(500, 'There was an error.');
     exit;
 }

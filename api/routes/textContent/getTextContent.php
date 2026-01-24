@@ -14,12 +14,14 @@ try {
     }
 
     $db = null;
+    writeLog('GET /textcontent', 'success', 'Text content retrieved.', null);
     sendResponse(200, null, [
         'count' => count($response),
         'data' => $getTextContentResponse
     ]);
 } catch (Exception $e) {
     $db = null;
+    writeLog('GET /textcontent', 'critical', $e->getMessage(), null);
     sendResponse(500, 'There was an error.');
     exit;
 }

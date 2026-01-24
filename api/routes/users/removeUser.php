@@ -21,9 +21,11 @@ try {
     $userRemoveResults = runQuery($db, $userRemoveQuery, [$user_id]);
 
     $db = null;
+    writeLog('DELETE /users', 'success', 'User removed.', $decodedToken->user->username);
     sendResponse(200, 'User:: ' . $user_id . ' removed.');
 } catch (Exception $e) {
     $db = null;
+    writeLog('DELETE /users', 'critical', $e->getMessage(), $decodedToken->user->username);
     sendResponse(500, 'There was an error.');
     exit;
 }

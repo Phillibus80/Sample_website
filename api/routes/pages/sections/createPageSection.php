@@ -183,6 +183,7 @@ try {
         $components_content_id = $db->lastInsertId();
 
         $db = null;
+        writeLog('POST /pages_sections', 'success', 'Page section created.', $decodedToken->user->username);
         sendResponse(200, 'Page Section: created.', [
             'page_name' => $new_page_section_page_name,
             'section_name' => $new_page_section_section_name,
@@ -194,6 +195,7 @@ try {
     }
 } catch (Exception $e) {
     $db = null;
+    writeLog('POST /pages_sections', 'critical', $e->getMessage(), $decodedToken->user->username);
     sendResponse(500, 'There was an error.');
     exit;
 }

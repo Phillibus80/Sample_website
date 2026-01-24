@@ -17,8 +17,10 @@ try {
     $component_removal_results = runQuery($db, $component_removal_query, [$component_id]);
 
     $db = null;
+    writeLog('DELETE /components', 'success', 'Component removed.', $decodedToken->user->username);
     sendResponse(200, 'Component:: ' . $component_id . ' removed.');
 } catch (Exception $e) {
     $db = null;
+    writeLog('DELETE /components', 'critical', $e->getMessage(), $decodedToken->user->username);
     sendResponse(500, 'There was an error.');
 }

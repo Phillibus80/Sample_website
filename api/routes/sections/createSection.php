@@ -41,9 +41,11 @@ try {
     $section_creation_results = runQuery($db, $statement, [$new_section_name]);
 
     $db = null;
+    writeLog('POST /sections', 'success', 'Section created.', $decodedToken->user->username);
     sendResponse(200, 'Section: ' . $new_section_name . ' created.');
 } catch (Exception $e) {
     $db = null;
+    writeLog('POST /sections', 'critical', $e->getMessage(), $decodedToken->user->username);
     sendResponse(500, 'There was an error.');
     exit;
 }

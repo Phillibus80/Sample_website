@@ -35,9 +35,11 @@ try {
     }
 
     $db = null;
+    writeLog('GET /textcontent/{section_name}', 'success', 'Text content by section retrieved.', $decodedToken->user->username);
     sendResponse(200, null, $textResponse);
 } catch (Exception $e) {
     $db = null;
+    writeLog('GET /textcontent/{section_name}', 'critical', $e->getMessage(), $decodedToken->user->username);
     sendResponse(500, 'There was an error.');
     exit;
 }

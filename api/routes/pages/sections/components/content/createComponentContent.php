@@ -171,9 +171,11 @@ try {
         ];
     }
     $db = null;
+    writeLog('POST /pages_sections_components_content', 'success', 'Component content created.', $decodedToken->user->username);
     sendResponse(200, 'Component Content created.', ['data' => $response]);
 } catch (Exception $e) {
     $db = null;
+    writeLog('POST /pages_sections_components_content', 'critical', $e->getMessage(), $decodedToken->user->username);
     sendResponse(500, 'There was an error.');
     exit;
 }

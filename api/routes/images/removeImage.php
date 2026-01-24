@@ -20,8 +20,10 @@ try {
     runQuery($db, $imageRemoveQuery, [$imageId]);
 
     $db = null;
+    writeLog('DELETE /images', 'success', 'Image removed.', $decodedToken->user->username);
     sendResponse(200, 'Image id:: ' . $imageId . ' removed.');
 } catch (Exception $e) {
     $db = null;
+    writeLog('DELETE /images', 'critical', $e->getMessage(), $decodedToken->user->username);
     sendResponse(500, 'There was an error.');
 }

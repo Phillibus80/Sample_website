@@ -61,11 +61,13 @@ try {
             $requestData->alt ?? ''
         ]);
 
+        writeLog('POST /images', 'success', 'Image created.', $decodedToken->user->username);
         sendResponse(200, 'The file has been uploaded.');
     } else {
         sendResponse(500, 'Sorry, there was an error uploading your file.');
     }
 } catch (Exception $e) {
     $db = null;
+    writeLog('POST /images', 'critical', $e->getMessage(), $decodedToken->user->username);
     sendResponse(500, 'Sorry, there was an error uploading your file.');
 }

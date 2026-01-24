@@ -118,9 +118,11 @@ try {
     ];
 
     $db = null;
+    writeLog('PATCH /pages_sections', 'success', 'Page section updated.', $decodedToken->user->username);
     sendResponse(200, null, $response);
 } catch (Exception $e) {
     $db = null;
+    writeLog('PATCH /pages_sections', 'critical', $e->getMessage(), $decodedToken->user->username);
     sendResponse(500, 'There was an error.');
     exit;
 }

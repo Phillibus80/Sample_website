@@ -31,9 +31,11 @@ try {
     ]);
 
     $db = null;
+    writeLog('POST /textcontent', 'success', 'Text content created.', $decodedToken->user->username);
     sendResponse(200, 'Text Content Created.');
 } catch (Exception $e) {
     $db = null;
+    writeLog('POST /textcontent', 'critical', $e->getMessage(), $decodedToken->user->username);
     sendResponse(500, 'There was an error.');
     exit;
 }

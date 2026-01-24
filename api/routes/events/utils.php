@@ -3,7 +3,7 @@
  * @param $db
  * @return void
  */
-function getEvents($db): void
+function getEvents($db, ?string $username = null): void
 {
     try {
         $statement = 'SELECT e.ID as event_id, 
@@ -41,11 +41,13 @@ function getEvents($db): void
             );
         }
         $db = null;
+        writeLog('GET /events', 'success', 'Events retrieved.', $username);
         sendResponse(200, null, [
             'count' => count($response),
             'data' => $getTextContentResponse
         ]);
     } catch (Exception $e) {
+        writeLog('GET /events', 'critical', $e->getMessage(), $username);
         sendResponse(500, 'There was an error.');
         exit;
     }
