@@ -40,11 +40,13 @@ try {
     }
 
     $db = null;
+    writeLog('GET /links', 'success', 'Links retrieved.', null);
     sendResponse(200, null, array(
         'count' => count($getLinksResponse),
         'data' => $getLinksResponse
     ));
 } catch (Exception $e) {
     $db = null;
+    writeLog('GET /links', 'critical', $e->getMessage(), null);
     sendResponse(500, 'There was an error.');
 }

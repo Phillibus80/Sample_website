@@ -20,9 +20,11 @@ try {
     runQuery($db, $textContentRemoveQuery, [$pathParam]);
 
     $db = null;
+    writeLog('DELETE /textcontent', 'success', 'Text content removed.', $decodedToken->user->username);
     sendResponse(200, 'Text Content id:: ' . $pathParam . ' removed.');
 } catch (Exception $e) {
     $db = null;
+    writeLog('DELETE /textcontent', 'critical', $e->getMessage(), $decodedToken->user->username);
     sendResponse(500, 'There was an error.');
     exit;
 }

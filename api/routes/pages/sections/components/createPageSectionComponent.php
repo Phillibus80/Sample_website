@@ -84,9 +84,11 @@ try {
     }
 
     $db = null;
+    writeLog('POST /pages_sections_components', 'success', 'Page section component created.', $decodedToken->user->username);
     sendResponse(200, 'Component ' . $request_data['component_id'] . ' added.', $response);
 } catch (Exception $e) {
     $db = null;
+    writeLog('POST /pages_sections_components', 'critical', $e->getMessage(), $decodedToken->user->username);
     sendResponse(500, 'There was an error.');
     exit;
 }

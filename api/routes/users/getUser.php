@@ -28,6 +28,7 @@ try {
         }
 
         $db = null;
+        writeLog('GET /users/{username}', 'success', 'User retrieved.', $decodedToken->user->username);
         sendResponse(200, null, ['user' => $userResponse]);
     } else {
         $db = null;
@@ -35,6 +36,7 @@ try {
     }
 } catch (Exception $e) {
     $db = null;
+    writeLog('GET /users/{username}', 'critical', $e->getMessage(), $decodedToken->user->username);
     sendResponse(500, 'There was an error.');
     exit;
 }

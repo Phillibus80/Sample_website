@@ -63,8 +63,10 @@ try {
     }
 
     $db = null;
+    writeLog('PATCH /links', 'success', 'Link updated.', $decodedToken->user->username);
     sendResponse(200, null, $response);
 } catch (Exception $e) {
     $db = null;
+    writeLog('PATCH /links', 'critical', $e->getMessage(), $decodedToken->user->username);
     sendResponse(500, 'There was an error.');
 }

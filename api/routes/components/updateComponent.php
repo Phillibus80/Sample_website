@@ -57,8 +57,10 @@ try {
     }
 
     $db = null;
+    writeLog('PATCH /components', 'success', 'Component updated.', $decodedToken->user->username);
     sendResponse(200, null, $response);
 } catch (Exception $e) {
     $db = null;
+    writeLog('PATCH /components', 'critical', $e->getMessage(), $decodedToken->user->username);
     sendResponse(500, 'There was an error.');
 }

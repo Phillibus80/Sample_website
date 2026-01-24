@@ -1028,4 +1028,15 @@ Flight::route('DELETE /locations/@location_id', function ($location_id) {
     require_once 'routes/locations/removeLocation.php';
 });
 
+//----------------//
+// ---- Logs ---- //
+
+Flight::route('GET /logs', function () {
+    $decodedToken = requireAuth();
+    if (!$decodedToken) return;
+
+    require_once 'routes/logs/getLog.php';
+});
+
+
 Flight::start();

@@ -157,9 +157,11 @@ try {
 
     }
     $db = null;
+    writeLog('GET /pages', 'success', 'Pages retrieved.', null);
     sendResponse(200, null, $pageContentResponse);
 } catch (Exception $e) {
     $db = null;
+    writeLog('GET /pages', 'critical', $e->getMessage(), null);
     sendResponse(500, 'There was an error.');
     exit;
 }

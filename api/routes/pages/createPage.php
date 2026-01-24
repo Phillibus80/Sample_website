@@ -48,10 +48,12 @@ try {
     $page_link_query = runQuery($db, $page_link_statement, [$new_page_title, '/' . $new_page_name]);
 
     $db = null;
+    writeLog('POST /pages', 'success', 'Page created.', $decodedToken->user->username);
     sendResponse(200, 'Page: ' . $new_page_name . ' created.');
 } catch (Exception $e) {
     error_log('Page creation error: ' . $e->getMessage());
     $db = null;
+    writeLog('POST /pages', 'critical', $e->getMessage(), $decodedToken->user->username);
 
     if (Flight::get('IN_DEVELOPMENT')) {
         sendResponse(500, 'There was an error.', ['errorMessage' => $e->getMessage()]);

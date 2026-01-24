@@ -20,11 +20,13 @@ try {
     }
 
     $db = null;
+    writeLog('GET /locations', 'success', 'Locations retrieved.', null);
     sendResponse(200, null, [
         'count' => count($response),
         'data' => $locations
     ]);
 } catch (Exception $e) {
     $db = null;
+    writeLog('GET /locations', 'critical', $e->getMessage(), null);
     sendResponse(500, 'There was an error.');
 }

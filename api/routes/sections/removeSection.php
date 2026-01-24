@@ -18,9 +18,11 @@ try {
     $sectionRemoveResults = runQuery($db, $section_removal_query, [$section_id]);
 
     $db = null;
+    writeLog('DELETE /sections', 'success', 'Section removed.', $decodedToken->user->username);
     sendResponse(200, 'Section:: ' . $section_id . ' removed.');
 } catch (Exception $e) {
     $db = null;
+    writeLog('DELETE /sections', 'critical', $e->getMessage(), $decodedToken->user->username);
     sendResponse(500, 'There was an error.');
     exit;
 }

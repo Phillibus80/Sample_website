@@ -88,8 +88,10 @@ try {
         $mail->Subject = "Contact request generated from the Wood Valley Bees' website.";
         $mail->Body = "EMAIL:: " . $customer_email . "<br/>";
         $mail->send();
+        writeLog('POST /send_email', 'success', 'Email sent.', null);
     }
 } catch (Exception $e) {
+    writeLog('POST /send_email', 'critical', $e->getMessage(), null);
     sendResponse(500, 'Trouble sending email, please again later.', [
         'additionalInfo' => $e->getMessage()
     ]);

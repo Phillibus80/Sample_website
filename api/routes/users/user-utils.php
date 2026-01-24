@@ -170,7 +170,7 @@ function getUserByEmail($db, string $emailAddress, string $roleName = ''): ?arra
  * @param string $role_name
  * @return void
  */
-function getUsersByRole($db, string $role_name): void
+function getUsersByRole($db, string $role_name, ?string $username = null): void
 {
     try {
         $get_users_statement = '
@@ -184,9 +184,11 @@ function getUsersByRole($db, string $role_name): void
         $response = buildUserResponse($statementResult);
 
         $db = null;
+        writeLog('GET /users', 'success', 'Users retrieved.', $username);
         sendResponse(200, null, ['users' => $response]);
     } catch (Exception $e) {
         $db = null;
+        writeLog('GET /users', 'critical', $e->getMessage(), $username);
         sendResponse(500, 'There was an error getting the OfficeUsers.', ['errorMessage' => $e->getMessage()]);
     }
 }
@@ -197,7 +199,7 @@ function getUsersByRole($db, string $role_name): void
  * @param $db
  * @return array|null
  */
-function getAllUserRoles($db): ?array
+function getAllUserRoles($db, ?string $username = null): ?array
 {
     try {
         $get_users_statement = '
@@ -213,9 +215,11 @@ function getAllUserRoles($db): ?array
         }
 
         $db = null;
+        writeLog('GET /users', 'success', 'Users retrieved.', $username);
         sendResponse(200, null, ['roles' => $roleResponse]);
     } catch (Exception $e) {
         $db = null;
+        writeLog('GET /users', 'critical', $e->getMessage(), $username);
         sendResponse(500, 'There was an error getting the OfficeUsers.', ['errorMessage' => $e->getMessage()]);
     }
 
@@ -230,7 +234,7 @@ function getAllUserRoles($db): ?array
  * @return void
  */
 #[NoReturn]
-function getUsers($db): void
+function getUsers($db, ?string $username = null): void
 {
     try {
         $userQuery = 'SELECT * FROM USERS';
@@ -269,9 +273,11 @@ function getUsers($db): void
         }
 
         $db = null;
+        writeLog('GET /users', 'success', 'Users retrieved.', $username);
         sendResponse(200, null, $response);
     } catch (Exception $e) {
         $db = null;
+        writeLog('GET /users', 'critical', $e->getMessage(), $username);
         sendResponse(500, 'There was an error getting the OfficeUsers.', ['errorMessage' => $e->getMessage()]);
     }
 }
@@ -286,7 +292,7 @@ function getUsers($db): void
  * @return void
  */
 #[NoReturn]
-function getUsersWithExclusionFilter($db, $filter): void
+function getUsersWithExclusionFilter($db, $filter, ?string $username = null): void
 {
     try {
         $userQuery = '
@@ -332,9 +338,11 @@ function getUsersWithExclusionFilter($db, $filter): void
         }
 
         $db = null;
+        writeLog('GET /users', 'success', 'Users retrieved.', $username);
         sendResponse(200, null, $filtered_response);
     } catch (Exception $e) {
         $db = null;
+        writeLog('GET /users', 'critical', $e->getMessage(), $username);
         sendResponse(500, 'There was an error getting the Users.', ['errorMessage' => $e->getMessage()]);
     }
 }

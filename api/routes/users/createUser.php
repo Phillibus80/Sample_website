@@ -22,6 +22,7 @@ if (count($validationErrors) > 0) {
 
 try {
     $db = Flight::db();
+    $logUsername = isset($decodedToken) ? $decodedToken->user->username : null;
     $encrypted_password = isset(Flight::request()->data->password)
         ? password_hash(Flight::request()->data->password, PASSWORD_BCRYPT)
         : null;
@@ -69,9 +70,11 @@ try {
     }
 
     $db = null;
+    writeLog('POST /users', 'success', 'User created.', $logUsername);
     sendResponse(200, 'User added.');
 } catch (Exception $e) {
     $db = null;
-    sendResponse(500, 'There was an error.');
+    writeLog('POST /users', 'critical', $e->getMessage(), $logUsername);
+    sendResponse(500, 'There was an error.', [$e->getMessage()]);
     exit;
 }

@@ -38,8 +38,10 @@ try {
     }
 
     $db = null;
+    writeLog('GET /images/{section_name}', 'success', 'Images by section retrieved.', $decodedToken->user->username);
     sendResponse(200, null, $imagesResponse);
 } catch (Exception $e) {
     $db = null;
+    writeLog('GET /images/{section_name}', 'critical', $e->getMessage(), $decodedToken->user->username);
     sendResponse(500, 'There was an error.');
 }

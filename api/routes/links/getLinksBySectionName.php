@@ -31,8 +31,10 @@ try {
     }
 
     $db = null;
+    writeLog('GET /links/{section_name}', 'success', 'Links by section retrieved.', null);
     sendResponse(200, null, $linksResponse);
 } catch (Exception $e) {
     $db = null;
+    writeLog('GET /links/{section_name}', 'critical', $e->getMessage(), null);
     sendResponse(500, 'There was an error.');
 }

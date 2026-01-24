@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'b3d70bd52c1555914ef5d1d288b7ec314807b78b',
+        'reference' => 'aa6eef4c1be24f28e132af72c8f8c2c60912f259',
         'name' => '__root__',
         'dev' => true,
     ),
@@ -16,7 +16,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'b3d70bd52c1555914ef5d1d288b7ec314807b78b',
+            'reference' => 'aa6eef4c1be24f28e132af72c8f8c2c60912f259',
             'dev_requirement' => false,
         ),
         'firebase/php-jwt' => array(
@@ -29,12 +29,12 @@
             'dev_requirement' => false,
         ),
         'flightphp/core' => array(
-            'pretty_version' => 'v3.17.4',
-            'version' => '3.17.4.0',
+            'pretty_version' => 'v3.18.0',
+            'version' => '3.18.0.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../flightphp/core',
             'aliases' => array(),
-            'reference' => '183390718182b4ac958bf0642115432efb199228',
+            'reference' => '88d7032928c09b98e65ccd87b7f8a341a40cc3d2',
             'dev_requirement' => false,
         ),
         'graham-campbell/result-type' => array(

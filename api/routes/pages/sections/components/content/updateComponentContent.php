@@ -207,9 +207,11 @@ try {
     }
 
     $db = null;
+    writeLog('PATCH /pages_sections_components_content', 'success', 'Component content updated.', $decodedToken->user->username);
     sendResponse(200, null, $response);
 } catch (Exception $e) {
     $db = null;
+    writeLog('PATCH /pages_sections_components_content', 'critical', $e->getMessage(), $decodedToken->user->username);
     sendResponse(500, 'There was an error.');
     exit;
 }

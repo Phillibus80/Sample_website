@@ -194,6 +194,29 @@ CREATE TABLE REVOKED_TOKENS
     INDEX idx_jti_expires (JTI, EXPIRES_AT)
 );
 
+DROP TABLE IF EXISTS LOGS;
+CREATE TABLE LOGS
+(
+    ID         INT AUTO_INCREMENT PRIMARY KEY,
+    ENDPOINT   VARCHAR(255)                    NOT NULL,
+    LOG_LEVEL  ENUM ('success', 'critical')    NOT NULL,
+    USERNAME   VARCHAR(60)                     DEFAULT NULL,
+    MESSAGE    TEXT                             DEFAULT NULL,
+    CREATED_ON DATETIME                        DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_logs_created (CREATED_ON),
+    INDEX idx_logs_endpoint (ENDPOINT),
+    INDEX idx_logs_level (LOG_LEVEL),
+    INDEX idx_logs_username (USERNAME)
+);
+
+-- Purge log entries older than 90 days (runs daily)
+SET GLOBAL event_scheduler = ON;
+
+DROP EVENT IF EXISTS purge_old_logs;
+CREATE EVENT purge_old_logs
+    ON SCHEDULE EVERY 1 DAY
+    DO DELETE FROM LOGS WHERE CREATED_ON < NOW() - INTERVAL 90 DAY;
+
 -- mock data
 INSERT INTO ROLES (ROLE)
 VALUES ('USER'),

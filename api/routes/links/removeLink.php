@@ -21,8 +21,10 @@ try {
     $linkRemoveResults = runQuery($db, $linkRemoveQuery, [$link_id]);
 
     $db = null;
+    writeLog('DELETE /links', 'success', 'Link removed.', $decodedToken->user->username);
     sendResponse(200, 'Link:: ' . $link_id . ' removed.');
 } catch (Exception $e) {
     $db = null;
+    writeLog('DELETE /links', 'critical', $e->getMessage(), $decodedToken->user->username);
     sendResponse(500, 'There was an error.');
 }

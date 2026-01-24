@@ -111,8 +111,10 @@ try {
     );
 
     $db = null;
+    writeLog('POST /locations', 'success', 'Location created.', $decodedToken->user->username);
     sendResponse(200, 'Location created with id: ' . $locationId, []);
 } catch (Exception $e) {
     $db = null;
+    writeLog('POST /locations', 'critical', $e->getMessage(), $decodedToken->user->username);
     sendResponse(500, 'There was an error.');
 }

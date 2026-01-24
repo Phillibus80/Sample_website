@@ -1004,3 +1004,38 @@ function validatePatchRequestData(object|array $requestData, array $validationRu
 
     return $errors;
 }
+
+/**
+ * Writes a log entry to the LOGS table.
+ *
+ * Uses its own database connection so it does not interfere with route
+ * handlers that set $db = null before calling sendResponse. Silently
+ * catches all exceptions so a logging failure never breaks the main operation.
+ *
+ * @param string      $endpoint The API endpoint being logged (e.g., 'POST /pages').
+ * @param string      $level    The log level: 'success' or 'critical'.
+ * @param string|null $message  Optional message providing additional context.
+ * @param string|null $username Optional username of the actor (null for unauthenticated routes).
+ *
+ * @return void
+ */
+function writeLog(string $endpoint, string $level, ?string $message = null, ?string $username = null): void
+{
+    try {
+        $logDb = new PDO(
+            Flight::get('PDO_DSN'),
+            Flight::get('DB_USER'),
+            Flight::get('DB_PASS')
+        );
+        $logDb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $stmt = $logDb->prepare(
+            'INSERT INTO LOGS (ENDPOINT, LOG_LEVEL, MESSAGE, USERNAME) VALUES (?, ?, ?, ?)'
+        );
+        $stmt->execute([$endpoint, $level, $message, $username]);
+
+        $logDb = null;
+    } catch (Exception $e) {
+        // Silently fail - logging should never break the main operation
+    }
+}

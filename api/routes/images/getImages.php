@@ -16,11 +16,13 @@ try {
     }
 
     $db = null;
+    writeLog('GET /images', 'success', 'Images retrieved.', null);
     sendResponse(200, null, [
         'count' => count($response),
         'data' => $getImageResponse
     ]);
 } catch (Exception $e) {
     $db = null;
+    writeLog('GET /images', 'critical', $e->getMessage(), null);
     sendResponse(500, 'There was an error.');
 }

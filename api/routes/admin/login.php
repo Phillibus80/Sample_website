@@ -45,6 +45,7 @@ try {
         $jwt = createJwt($user, $expirationTime, Flight::get('secretKey'));
         $csrfToken = generateCSRFToken();
 
+        writeLog('POST /login', 'success', 'User signed in.', $userData['USERNAME']);
         sendResponse(200, 'Signed In', [
             'token' => $jwt,
             'csrfToken' => $csrfToken,
@@ -54,8 +55,10 @@ try {
         ]);
     } else {
         $db = null;
+        writeLog('POST /login', 'critical', 'Failed login attempt.', $username);
         unauthorizedResponse('Username and Password combination do not match.');
     }
 } catch (Exception $e) {
+    writeLog('POST /login', 'critical', $e->getMessage(), $username);
     sendResponse(500, 'There was an error.');
 }
