@@ -2,9 +2,6 @@
 
 require_once __DIR__ . '/../../utils.php';
 
-$decodedToken = requireAuth();
-if (!$decodedToken) return;
-
 $requestData = Flight::request()->data;
 try {
     $db = Flight::db();

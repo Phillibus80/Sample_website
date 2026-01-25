@@ -625,6 +625,92 @@ function retrieveDefaultContentIds(PDO $db): array|string
 }
 
 /**
+ * Validates a single value against a common type rule.
+ *
+ * Centralizes type-checking logic shared by validateRequestData,
+ * validatePathParams, and validatePatchRequestData.
+ *
+ * Supported types: email, int, float, bool, password, telephone,
+ * pageLink, imageLink, url, alphaNumeric.
+ *
+ * @param mixed  $value     The value to validate.
+ * @param string $type      The expected type/format.
+ * @param string $fieldName The field name, used in error messages.
+ *
+ * @return string|null An error message if validation fails, or null if valid.
+ */
+function validateType(mixed $value, string $type, string $fieldName): ?string
+{
+    switch ($type) {
+        case 'email':
+            if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                return "Invalid email format.";
+            }
+            return null;
+
+        case 'int':
+            if (filter_var($value, FILTER_VALIDATE_INT) === false) {
+                return "$fieldName must be a valid integer.";
+            }
+            return null;
+
+        case 'float':
+            if (!filter_var($value, FILTER_VALIDATE_FLOAT)) {
+                return "$fieldName must be a float.";
+            }
+            return null;
+
+        case 'bool':
+            if (filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) === null) {
+                return "$fieldName must be a boolean.";
+            }
+            return null;
+
+        case 'password':
+            if (!preg_match('/^[a-zA-Z0-9_.!@#$%&*]+$/', $value)) {
+                return "Value must be alphanumeric or one of ! @ # $ % & *.";
+            }
+            if (strlen($value) < 8) {
+                return "Password must be at least 8 characters.";
+            }
+            return null;
+
+        case 'telephone':
+            if (!preg_match('/^\(?\d{3}\)?[- ]?\d{3}[- ]?\d{4}$/', $value)) {
+                return "$fieldName doesn't match phone number format.";
+            }
+            return null;
+
+        case 'pageLink':
+            if (!preg_match('/^\/[a-zA-Z0-9]+$/', $value)) {
+                return "Value must be page link which starts with a /.";
+            }
+            return null;
+
+        case 'imageLink':
+            if (!preg_match('/^\/[a-zA-Z0-9.\/_-]+$/', $value)) {
+                return "Value must be image link which starts with a /.";
+            }
+            return null;
+
+        case 'url':
+            if (!filter_var($value, FILTER_VALIDATE_URL)) {
+                return "$fieldName must be a URL.";
+            }
+            return null;
+
+        case 'alphaNumeric':
+            if (!preg_match('/^[a-zA-Z0-9\-_]+$/', $value)) {
+                return "$fieldName must be alphanumeric.";
+            }
+            return null;
+
+        default:
+            return "$fieldName is not a valid type.";
+    }
+}
+
+/**
  * Validates incoming request data against a defined set of field names and expected types.
  *
  * This function checks that required fields exist and match their expected type/format.
@@ -685,93 +771,22 @@ function validateRequestData(object|array $requestData, array $fieldNameTypeArra
             continue;
         }
 
-        // Type checks
-        switch ($type) {
-            case 'string':
-                $sanitized = trim($value);
+        // 'string' type has unique validation rules for request data
+        if ($type === 'string') {
+            $sanitized = trim($value);
 
-                if (empty($sanitized)) {
-                    $errors[$field] = "Field cannot be empty.";
-                    break;
-                }
+            if (empty($sanitized)) {
+                $errors[$field] = "Field cannot be empty.";
+            } elseif (!preg_match('/^[a-zA-Z\-_,.!@#$%^&*\\s]+$/', $sanitized)) {
+                $errors[$field] = "Field contains invalid characters.";
+            }
+            continue;
+        }
 
-                if (!preg_match('/^[a-zA-Z\-_,.!@#$%^&*\\s]+$/', $sanitized)) {
-                    $errors[$field] = "Field contains invalid characters.";
-                    break;
-                }
-                break;
-
-            case 'email':
-                if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
-                    $errors[$field] = "Invalid email format.";
-                }
-                break;
-
-            case 'int':
-                if (!filter_var($value, FILTER_VALIDATE_INT)) {
-                    $errors[$field] = "$field must be an integer.";
-                }
-                break;
-
-            case 'float':
-                if (!filter_var($value, FILTER_VALIDATE_FLOAT)) {
-                    $errors[$field] = "$field must be a float.";
-                }
-                break;
-
-            case 'alphaNumeric':
-                if (!preg_match('/^[a-zA-Z0-9\-_]+$/', $value)) {
-                    $errors[$field] = "$field must be alphanumeric.";
-                }
-                break;
-
-            case 'url':
-                if (!filter_var($value, FILTER_VALIDATE_URL)) {
-                    $errors[$field] = "$field must be a URL.";
-                }
-                break;
-
-            case 'pageLink':
-                if (!preg_match('/^\/[a-zA-Z0-9]+$/', $value)) {
-                    $errors[] = "Value must be page link which starts with a /.";
-                }
-                break;
-
-            case 'bool':
-                $sanitized = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-
-                if ($sanitized === null) {
-                    $errors[$field] = "$field must be a boolean.";
-                }
-                break;
-
-            case 'password':
-                // Allow letters, numbers, and ! @ # $ % & * . _
-                if (!preg_match('/^[a-zA-Z0-9_.!@#$%&*]+$/', $value)) {
-                    $errors[] = "Value must be alphanumeric or one of ! @ # $ % & *.";
-                    break;
-                }
-
-                if (strlen($value) < 8) {
-                    $errors[$field] = "Password must be at least 8 characters.";
-                }
-                break;
-
-            case 'telephone':
-                if (!preg_match('/^\(?\d{3}\)?[- ]?\d{3}[- ]?\d{4}$/', $value)) {
-                    $errors[$field] = "$field doesn't match phone number format.";
-                }
-                break;
-
-            case 'imageLink':
-                if (!preg_match('/^\/[a-zA-Z0-9.\/_-]+$/', $value)) {
-                    $errors[] = "Value must be image link which starts with a /.";
-                }
-                break;
-
-            default:
-                $errors[$field] = "$field is not a valid type.";
-                break;
+        // Common type validation
+        $error = validateType($value, $type, $field);
+        if ($error !== null) {
+            $errors[$field] = $error;
         }
     }
 
@@ -798,51 +813,31 @@ function validatePathParams(array $params, array $paramTypes): array
             continue;
         }
 
-        switch ($type) {
-            case 'int':
-                if (filter_var($value, FILTER_VALIDATE_INT) === false) {
-                    $errors[$param] = "$param must be a valid integer.";
-                } else {
-                    $values[$param] = (int)$value;
-                }
-                break;
+        // 'string' type has unique validation rules for path params
+        if ($type === 'string') {
+            $sanitized = trim($value);
 
-            case 'string':
-                $sanitized = trim($value);
-
-                if ($sanitized === '') {
-                    $errors[$param] = "$param cannot be empty.";
-                    break;
-                }
-
-                if (!preg_match('/^[a-zA-Z-]+$/', $sanitized)) {
-                    $errors[$param] = "$param contains invalid characters.";
-                    break;
-                }
-
+            if ($sanitized === '') {
+                $errors[$param] = "$param cannot be empty.";
+            } elseif (!preg_match('/^[a-zA-Z-]+$/', $sanitized)) {
+                $errors[$param] = "$param contains invalid characters.";
+            } else {
                 $values[$param] = $sanitized;
-                break;
+            }
+            continue;
+        }
 
-            case 'alphaNumeric':
-                if (!preg_match('/^[a-zA-Z0-9\-_]+$/', $value)) {
-                    $errors[$param] = "$param must be alphanumeric.";
-                } else {
-                    $values[$param] = $value;
-                }
-                break;
-
-            case 'bool':
-                $sanitized = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-
-                if ($sanitized === null) {
-                    $errors[$param] = "$param must be a boolean.";
-                } else {
-                    $values[$param] = $sanitized;
-                }
-                break;
-
-            default:
-                $values[$param] = $value;
+        // Common type validation
+        $error = validateType($value, $type, $param);
+        if ($error !== null) {
+            $errors[$param] = $error;
+        } else {
+            // Cast validated values
+            $values[$param] = match ($type) {
+                'int' => (int) $value,
+                'bool' => filter_var($value, FILTER_VALIDATE_BOOLEAN),
+                default => $value,
+            };
         }
     }
 
@@ -898,50 +893,32 @@ function validatePatchRequestData(object|array $requestData, array $validationRu
 
         $value = $requestData->$field;
 
+        // Types with unique validation rules for patch data
         switch ($type) {
             case 'alpha':
                 if (!preg_match('/^[a-zA-Z\\s]+$/', $value)) {
                     $errors[$field] = "$field must contain only letters.";
                 }
-                break;
+                continue 2;
 
             case 'alphaNumeric':
                 if (!preg_match('/^[a-zA-Z0-9_\-\\s]+$/', $value)) {
                     $errors[$field] = "$field must contain only letters, numbers, hyphens, or underscores.";
                 }
-                break;
+                continue 2;
 
             case 'string':
                 $sanitized = trim($value);
 
                 if ($sanitized === '') {
                     $errors[$field] = "$field cannot be empty.";
-                    break;
                 }
-                break;
-
-            case 'email':
-                if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
-                    $errors[$field] = "Invalid email format.";
-                }
-                break;
-
-            case 'password':
-                // Allow letters, numbers, and ! @ # $ % & *
-                if (!preg_match('/^[a-zA-Z0-9_.!@#$%&*]+$/', $value)) {
-                    $errors[] = "Value must be alphanumeric or one of ! @ # $ % & *.";
-                    break;
-                }
-
-                if (strlen($value) < 8) {
-                    $errors[$field] = "Password must be at least 8 characters.";
-                }
-                break;
+                continue 2;
 
             case 'arrayOfRoles':
                 if (!is_array($value) || count($value) === 0) {
                     $errors[$field] = "$field must be a non-empty array.";
-                    break;
+                    continue 2;
                 }
 
                 $invalidItemFound = false;
@@ -956,49 +933,13 @@ function validatePatchRequestData(object|array $requestData, array $validationRu
                 if ($invalidItemFound) {
                     $errors[$field] = "$field contains invalid values.";
                 }
-                break;
+                continue 2;
+        }
 
-            case 'telephone':
-                if (!preg_match('/^\(?\d{3}\)?[- ]?\d{3}[- ]?\d{4}$/', $value)) {
-                    $errors[$field] = "$field doesn't match phone number format.";
-                }
-                break;
-
-            case 'int':
-                if (!filter_var($value, FILTER_VALIDATE_INT)) {
-                    $errors[$field] = "$field must be an integer.";
-                }
-                break;
-
-            case 'float':
-                if (!filter_var($value, FILTER_VALIDATE_FLOAT)) {
-                    $errors[$field] = "$field must be a float.";
-                }
-                break;
-
-            case 'pageLink':
-                if (!preg_match('/^\/[a-zA-Z0-9]+$/', $value)) {
-                    $errors[] = "Value must be page link which starts with a /.";
-                }
-                break;
-
-            case 'imageLink':
-                if (!preg_match('/^\/[a-zA-Z0-9.\/_-]+$/', $value)) {
-                    $errors[] = "Value must be image link which starts with a /.";
-                }
-                break;
-
-            case 'bool':
-                $sanitized = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-
-                if ($sanitized === null) {
-                    $errors[$field] = "$field must be a boolean.";
-                }
-                break;
-
-            default:
-                $errors[$field] = "$field is not a valid type.";
-                break;
+        // Common type validation
+        $error = validateType($value, $type, $field);
+        if ($error !== null) {
+            $errors[$field] = $error;
         }
     }
 

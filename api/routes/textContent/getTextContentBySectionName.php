@@ -29,7 +29,7 @@ try {
     foreach ($textContentResult as $row) {
         $textResponse['section'] = $row['NAME'];
 
-        $textResponse['text_content'][] = $row['TXT'] = [
+        $textResponse['text_content'][] = [
             'text' => $row['TXT']
         ];
     }

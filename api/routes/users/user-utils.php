@@ -299,7 +299,7 @@ function getUsersWithExclusionFilter($db, $filter, ?string $username = null): vo
                 SELECT u.id, u.first_name, u.last_name, u.email, u.username, u.password, u.created_on, u.updated_on
                 FROM USERS as u
                 JOIN USERS_ROLES as ur on u.ID = ur.USER_ID
-                JOIN ROLES as r on r.ID = ur.ROLE_ID = r.ID
+                JOIN ROLES as r on r.ID = ur.ROLE_ID
                 WHERE r.ROLE NOT LIKE ?
                 ORDER BY u.id
                 ';
