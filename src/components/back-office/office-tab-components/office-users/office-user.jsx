@@ -3,6 +3,8 @@ import {Spinner} from 'react-bootstrap';
 import {GrSubtractCircle} from 'react-icons/gr';
 
 import * as styles from './office-users.module.scss';
+import {ROLES} from '../../../../constants/constants.js';
+import {useAuth} from '../../../../hooks/auth/use-auth.jsx';
 import {useDeleteUser} from '../../../../hooks/users/user-hooks.js';
 
 /**
@@ -17,11 +19,24 @@ const OfficeUser = ({user, handleClick, isAdminRole}) => {
         mutateAsync: removeUser,
         isPending: removeUserLoading
     } = useDeleteUser();
+    const {
+        roles
+    } = useAuth();
 
     if (!user) return null;
 
+    const canRemoveUser = () => {
+        if (user.permissions.includes(ROLES.SUPER) && roles.includes(ROLES.SUPER)) {
+            return true;
+        } else if (!user.permissions.includes(ROLES.SUPER)) {
+            return true;
+        }
+
+        return false;
+    };
+
     return (
-        <tr key={user.email} className={styles.table_row} onClick={() => handleClick(user)}>
+        <tr className={styles.table_row} onClick={() => handleClick(user)}>
             <td className='text-black text-start p-3'>
                 {user.firstName}
             </td>
@@ -52,7 +67,9 @@ const OfficeUser = ({user, handleClick, isAdminRole}) => {
                         {new Date(user.lastModifiedOn).toDateString()}
                     </td>
 
-                    <td className='text-black text-center p-3'>
+                    {
+                        canRemoveUser()
+                        && <td className='text-black text-center p-3'>
                         {
                             removeUserLoading
                                 ? <Spinner style={{color: 'blue'}} animation='border'
@@ -67,6 +84,7 @@ const OfficeUser = ({user, handleClick, isAdminRole}) => {
                                 />
                         }
                     </td>
+                    }
                 </>
             }
         </tr>

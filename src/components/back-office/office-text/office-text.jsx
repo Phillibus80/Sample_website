@@ -9,19 +9,20 @@ import {GrSubtractCircle} from 'react-icons/gr';
 import * as styles from './office-text.module.scss';
 import {COMPONENTS} from '../../../constants/app-constants.js';
 import {PLACEHOLDER_TEXT, ROLES} from '../../../constants/constants.js';
+import {useAuth} from '../../../hooks/auth/use-auth.jsx';
 import {useRemoveComponentContent} from '../../../hooks/component-content/component-content-hooks.js';
-import {useAdminContext} from '../../../hooks/context/context-hooks.jsx';
 
 /**
- * The Back Office input field to update any text related component.
+ * The Back Office input field to update any text-related component.
  *
  * @param {string} componentName
  * @param {TextContentObject} textComponent
  * @param {string} [prefix] - Optional, can be added to the beginning of field names to namespace Fields
+ * @param {boolean} hideDeleteButton
  *
  * @return {React.ReactNode | null}
  */
-const OfficeText = ({componentName, textComponent, prefix = ''}) => {
+const OfficeText = ({componentName, textComponent, prefix = '', hideDeleteButton}) => {
     const fieldName = `${prefix ? `${prefix}_` : ''}text_${textComponent?.component_content_id}_text`;
 
     const inputRef = useRef(null);
@@ -34,7 +35,7 @@ const OfficeText = ({componentName, textComponent, prefix = ''}) => {
         handleBlur,
         setFieldValue
     } = useFormikContext();
-    const {roles} = useAdminContext();
+    const {roles} = useAuth();
     const {
         mutateAsync: removeContent,
         isPending
@@ -77,11 +78,17 @@ const OfficeText = ({componentName, textComponent, prefix = ''}) => {
                         isInvalid={touched[fieldName] && !!errors[fieldName]}
                         as={componentName === COMPONENTS.TEXT_CONTAINER ? 'textarea' : 'input'}
                     />
+                    <Form.Control.Feedback type='invalid'>
+                        {errors[fieldName]}
+                    </Form.Control.Feedback>
                 </div>
                 <InputGroup.Text style={{background: 'transparent', border: 'none'}}>
                     {isPending && <Spinner style={{color: 'blue'}} animation='border' role='status'/>}
                     {
-                        (!isPending && (roles.includes(ROLES.ADMIN) || roles.includes(ROLES.SUPER)))
+                        (
+                            (!isPending && (roles.includes(ROLES.ADMIN) || roles.includes(ROLES.SUPER)))
+                            && (!hideDeleteButton)
+                        )
                         && <GrSubtractCircle
                             className={`ms-3 ${styles.subtractCircle}`}
                             style={{fontSize: '1.5rem'}}
@@ -89,9 +96,6 @@ const OfficeText = ({componentName, textComponent, prefix = ''}) => {
                         />
                     }
                 </InputGroup.Text>
-                <Form.Control.Feedback type='invalid'>
-                    {errors[fieldName]}
-                </Form.Control.Feedback>
             </InputGroup>
         </Form.Group>
     );
@@ -105,7 +109,8 @@ OfficeText.propTypes = {
         text: PropTypes.string.isRequired,
         text_content_id: PropTypes.string.isRequired
     }).isRequired,
-    prefix: PropTypes.string
+    prefix: PropTypes.string,
+    hideDeleteButton: PropTypes.bool
 };
 
 export default OfficeText;

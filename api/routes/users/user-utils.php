@@ -174,11 +174,12 @@ function getUsersByRole($db, string $role_name, ?string $username = null): void
 {
     try {
         $get_users_statement = '
-                SELECT *
-                FROM USERS AS U
-                JOIN USERS_ROLES AS UR ON UR.USER_ID = U.ID
-                JOIN ROLES AS R ON R.ID = UR.ROLE_ID
-                WHERE R.ROLE = :role';
+            SELECT U.ID, U.FIRST_NAME, U.LAST_NAME, U.EMAIL, U.USERNAME, 
+                   U.CREATED_ON, U.UPDATED_ON, R.ROLE
+            FROM USERS AS U
+            JOIN USERS_ROLES AS UR ON UR.USER_ID = U.ID
+            JOIN ROLES AS R ON R.ID = UR.ROLE_ID
+            WHERE R.ROLE = :role';
 
         $statementResult = runQuery($db, $get_users_statement, [':role' => $role_name]);
         $response = buildUserResponse($statementResult);
@@ -301,6 +302,7 @@ function getUsersWithExclusionFilter($db, $filter, ?string $username = null): vo
                 JOIN USERS_ROLES as ur on u.ID = ur.USER_ID
                 JOIN ROLES as r on r.ID = ur.ROLE_ID
                 WHERE r.ROLE NOT LIKE ?
+                GROUP BY u.id, u.first_name, u.last_name, u.email, u.username, u.password, u.created_on, u.updated_on
                 ORDER BY u.id
                 ';
         $roleQuery = '

@@ -24,7 +24,6 @@ import ScrollTopButton from '../scroll-top-button/scroll-top-button.jsx';
  * @return {React.ReactNode|null}
  */
 const PageGenerator = ({pageName}) => {
-    // Get all the page's headerContent
     const {status, data} = useGetPageContent(pageName);
     const sectionsRef = useRef([]);
 
@@ -44,7 +43,6 @@ const PageGenerator = ({pageName}) => {
         return () => observer.disconnect();
     }, [data]);
 
-    // Utility function to generate the sections
     const generateSections = () => {
         const {sections} = data.data;
 

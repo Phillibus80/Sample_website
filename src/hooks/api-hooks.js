@@ -51,27 +51,22 @@ export const useGetAllPageContent = () => {
  * @return {import('@tanstack/react-query').UseMutationResult} - the response from the API */
 export const useSendEmail = () => {
     const queryClient = useQueryClient();
-    const {setToastMessage, setShowToast, setToastType} = useToastContext();
+    const {showToast} = useToastContext();
 
     return useMutation({
         mutationKey: ['sending-email'],
-        mutationFn: async newEmailToAdd =>
-            submitContactForm({email: newEmailToAdd}),
-        onSuccess: async () => Promise.all([
-            queryClient.invalidateQueries({
+        mutationFn: async newEmailToAdd => submitContactForm({email: newEmailToAdd}),
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({
                 queryKey: ['pageContent']
-            }),
-            setToastMessage('Email sent.'),
-            setToastType(TOAST_TYPES.PRIMARY),
-            setShowToast(true)
-        ]),
-        onError: async () => Promise.all([
-            queryClient.invalidateQueries({
+            });
+            showToast({message: 'Email sent.', type: TOAST_TYPES.PRIMARY});
+        },
+        onError: async () => {
+            await queryClient.invalidateQueries({
                 queryKey: ['pageContent']
-            }),
-            setToastMessage('Error sending email.'),
-            setToastType(TOAST_TYPES.ERROR),
-            setShowToast(true)
-        ])
+            });
+            showToast({message: 'Error sending email.', type: TOAST_TYPES.PRIMARY});
+        }
     });
 };

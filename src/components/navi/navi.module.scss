@@ -11,4 +11,11 @@
     width: 90%;
     margin: 0 auto;
   }
+
+  .logo_image {
+    max-height: 42px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
 }

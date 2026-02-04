@@ -9,7 +9,9 @@ import {
 } from '../../api-calls/components/component-calls.js';
 import {API_ROUTE_CONST, TOAST_TYPES} from '../../constants/constants.js';
 import {ROUTING_CONSTANTS} from '../../constants/routing-constants.js';
-import {useAdminContext, useToastContext} from '../context/context-hooks.jsx';
+import {clearAuthFromSessionStorage} from '../../utils/utils.js';
+import {useAuth} from '../auth/use-auth.jsx';
+import {useToastContext} from '../context/context-hooks.jsx';
 
 /**
  * A hook at that retrieves components based on the page.  If no page is provided, the
@@ -19,7 +21,7 @@ import {useAdminContext, useToastContext} from '../context/context-hooks.jsx';
  * @return {ReactQuerySectionResObject}
  */
 export const useGetComponents = (page) => {
-    const {bearerToken} = useAdminContext();
+    const {bearerToken} = useAuth();
     return (
         useSuspenseQuery({
             queryKey: [API_ROUTE_CONST.COMPONENTS.replace('/', '')],
@@ -34,8 +36,8 @@ export const useGetComponents = (page) => {
  * @return {import('@tanstack/react-query').UseMutationResult}
  */
 export const useCreateComponent = () => {
-    const {bearerToken, csrfToken} = useAdminContext();
-    const {setToastMessage, setShowToast, setToastType} = useToastContext();
+    const {bearerToken, csrfToken} = useAuth();
+    const {showToast} = useToastContext();
     const queryClient = useQueryClient();
     const navigate = useNavigate();
 
@@ -45,43 +47,40 @@ export const useCreateComponent = () => {
             mutationFn: ({componentName}) => createComponent({
                 component_name: componentName
             }, bearerToken, csrfToken),
-            onSuccess: async () => Promise.all([
-                queryClient.invalidateQueries({
+            onSuccess: async () => {
+                await queryClient.invalidateQueries({
                     queryKey: [API_ROUTE_CONST.COMPONENTS.replace('/', '')]
-                }),
-                queryClient.invalidateQueries({
+                });
+                await queryClient.invalidateQueries({
                     queryKey: ['pageContent']
-                }),
-                setToastMessage('Component created.'),
-                setToastType(TOAST_TYPES.PRIMARY),
-                setShowToast(true)
-            ]),
+                });
+                showToast({message: 'Component created.', type: TOAST_TYPES.PRIMARY});
+            },
             onError: async (e) => {
                 if (e?.status === 401) {
-                    return Promise.all([
-                        queryClient.invalidateQueries({
-                            queryKey: [API_ROUTE_CONST.COMPONENTS.replace('/', '')]
-                        }),
-                        queryClient.invalidateQueries({
-                            queryKey: ['pageContent']
-                        }),
-                        setToastMessage(`Error creating component. ${e?.response?.data?.message}`),
-                        setToastType(TOAST_TYPES.ERROR),
-                        setShowToast(true),
-                        navigate(ROUTING_CONSTANTS.LOGIN.URL)
-                    ]);
+                    await queryClient.invalidateQueries({
+                        queryKey: [API_ROUTE_CONST.COMPONENTS.replace('/', '')]
+                    });
+                    await queryClient.invalidateQueries({
+                        queryKey: ['pageContent']
+                    });
+                    showToast({
+                        message: `Error creating component. ${e?.response?.data?.message}`,
+                        type: TOAST_TYPES.ERROR
+                    });
+                    clearAuthFromSessionStorage();
+                    navigate(ROUTING_CONSTANTS.LOGIN.URL, {replace: true});
                 } else {
-                    return Promise.all([
-                        queryClient.invalidateQueries({
-                            queryKey: [API_ROUTE_CONST.COMPONENTS.replace('/', '')]
-                        }),
-                        queryClient.invalidateQueries({
-                            queryKey: ['pageContent']
-                        }),
-                        setToastMessage('Error creating component'),
-                        setToastType(TOAST_TYPES.ERROR),
-                        setShowToast(true)
-                    ]);
+                    await queryClient.invalidateQueries({
+                        queryKey: [API_ROUTE_CONST.COMPONENTS.replace('/', '')]
+                    });
+                    await queryClient.invalidateQueries({
+                        queryKey: ['pageContent']
+                    });
+                    showToast({
+                        message: `Error creating component. ${e?.response?.data?.message}`,
+                        type: TOAST_TYPES.ERROR
+                    });
                 }
             }
         })
@@ -94,8 +93,8 @@ export const useCreateComponent = () => {
  * @return {import('@tanstack/react-query').UseMutationResult} - the response from the API
  */
 export const useUpdateComponent = () => {
-    const {bearerToken, csrfToken} = useAdminContext();
-    const {setToastMessage, setShowToast, setToastType} = useToastContext();
+    const {bearerToken, csrfToken} = useAuth();
+    const {showToast} = useToastContext();
     const queryClient = useQueryClient();
     const navigate = useNavigate();
 
@@ -103,43 +102,37 @@ export const useUpdateComponent = () => {
         mutationKey: ['updateComponent'],
         mutationFn: async ({id, updates}) =>
             updateComponent(id, updates, bearerToken, csrfToken),
-        onSuccess: async () => Promise.all([
-            queryClient.invalidateQueries({
-                queryKey: [API_ROUTE_CONST.COMPONENTS.replace('/', '')]
-            }),
-            queryClient.invalidateQueries({
-                queryKey: ['pageContent']
-            }),
-            setToastMessage('Component updated.'),
-            setToastType(TOAST_TYPES.PRIMARY),
-            setShowToast(true)
-        ]),
+        onSuccess: async () => {
+            await Promise.all([
+                queryClient.invalidateQueries({queryKey: [API_ROUTE_CONST.COMPONENTS.replace('/', '')]}),
+                queryClient.invalidateQueries({queryKey: ['pageContent']})
+            ]);
+            showToast({message: 'Component updated.', type: TOAST_TYPES.PRIMARY});
+        },
         onError: async (e) => {
             if (e?.status === 401) {
-                return Promise.all([
-                    queryClient.invalidateQueries({
-                        queryKey: [API_ROUTE_CONST.COMPONENTS.replace('/', '')]
-                    }),
-                    queryClient.invalidateQueries({
-                        queryKey: ['pageContent']
-                    }),
-                    setToastMessage(`Error updating component.  ${e?.response?.data?.message}`),
-                    setToastType(TOAST_TYPES.ERROR),
-                    setShowToast(true),
-                    navigate(ROUTING_CONSTANTS.LOGIN.URL)
-                ]);
+                await queryClient.invalidateQueries({
+                    queryKey: [API_ROUTE_CONST.COMPONENTS.replace('/', '')]
+                });
+                await queryClient.invalidateQueries({
+                    queryKey: ['pageContent']
+                });
+                showToast({
+                    message: `Error updating component.  ${e?.response?.data?.message}`,
+                    type: TOAST_TYPES.ERROR
+                });
+                sessionStorage.removeItem('authToken');
+                navigate(ROUTING_CONSTANTS.LOGIN.URL, {replace: true});
             } else {
-                return Promise.all([
+                await Promise.all([
                     queryClient.invalidateQueries({
                         queryKey: [API_ROUTE_CONST.COMPONENTS.replace('/', '')]
                     }),
                     queryClient.invalidateQueries({
                         queryKey: ['pageContent']
-                    }),
-                    setToastMessage('Error updating component.'),
-                    setToastType(TOAST_TYPES.ERROR),
-                    setShowToast(true)
+                    })
                 ]);
+                showToast({message: 'Error updating component.', type: TOAST_TYPES.ERROR});
             }
         }
     });
@@ -151,8 +144,8 @@ export const useUpdateComponent = () => {
  * @return {import('@tanstack/react-query').UseMutationResult} - the response from the API
  */
 export const useRemoveComponent = () => {
-    const {bearerToken, csrfToken} = useAdminContext();
-    const {setToastMessage, setShowToast, setToastType} = useToastContext();
+    const {bearerToken, csrfToken} = useAuth();
+    const {showToast} = useToastContext();
     const queryClient = useQueryClient();
     const navigate = useNavigate();
 
@@ -160,34 +153,26 @@ export const useRemoveComponent = () => {
         mutationKey: ['removeComponent'],
         mutationFn: async ({id}) =>
             deleteComponent(id, bearerToken, csrfToken),
-        onSuccess: async () => Promise.all([
-            queryClient.invalidateQueries({
-                queryKey: [API_ROUTE_CONST.COMPONENTS.replace('/', '')]
-            }),
-            setToastMessage('Component removed.'),
-            setToastType(TOAST_TYPES.PRIMARY),
-            setShowToast(true)
-        ]),
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({queryKey: [API_ROUTE_CONST.COMPONENTS.replace('/', '')]});
+            showToast({message: 'Component removed.', type: TOAST_TYPES.PRIMARY});
+        },
         onError: async (error) => {
             if (error?.status === 401) {
-                return Promise.all([
-                    queryClient.invalidateQueries({
-                        queryKey: [API_ROUTE_CONST.COMPONENTS.replace('/', '')]
-                    }),
-                    setToastMessage(`Error removing component.  ${error?.response?.data?.message}`),
-                    setToastType(TOAST_TYPES.ERROR),
-                    setShowToast(true),
-                    navigate(ROUTING_CONSTANTS.LOGIN.URL)
-                ]);
+                await queryClient.invalidateQueries({
+                    queryKey: [API_ROUTE_CONST.COMPONENTS.replace('/', '')]
+                });
+                showToast({
+                    message: `Error removing component.  ${error?.response?.data?.message}`,
+                    type: TOAST_TYPES.ERROR
+                });
+                sessionStorage.removeItem('authToken');
+                navigate(ROUTING_CONSTANTS.LOGIN.URL, {replace: true});
             } else {
-                return Promise.all([
-                    queryClient.invalidateQueries({
-                        queryKey: [API_ROUTE_CONST.COMPONENTS.replace('/', '')]
-                    }),
-                    setToastMessage('Error removing component.'),
-                    setToastType(TOAST_TYPES.ERROR),
-                    setShowToast(true)
-                ]);
+                await queryClient.invalidateQueries({
+                    queryKey: [API_ROUTE_CONST.COMPONENTS.replace('/', '')]
+                });
+                showToast({message: 'Error removing component.', type: TOAST_TYPES.ERROR});
             }
         }
     });

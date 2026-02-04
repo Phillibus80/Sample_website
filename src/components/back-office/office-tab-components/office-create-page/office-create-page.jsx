@@ -33,6 +33,7 @@ const OfficeCreatePage = () => {
     return (
         <Container className={`text-start rounded-3 ${styles.page}`}>
             <Formik
+                enableReinitialize
                 initialValues={initValues}
                 validationSchema={yupSchema}
                 onSubmit={async (vals, {setErrors, resetForm}) =>
@@ -105,7 +106,7 @@ const OfficeCreatePage = () => {
                                 className='mb-sm-3 ms-md-5 rounded'
                                 variant='primary'
                                 type='submit'
-                                disabled={isPending}
+                                disabled={isPending || Object.keys(errors).length > 0}
                             >
                                 <div className='d-flex g-3 justify-content-center align-items-center'>
                                     <span>Create Page</span>

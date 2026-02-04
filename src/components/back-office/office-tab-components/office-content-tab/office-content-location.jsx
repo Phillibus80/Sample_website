@@ -40,9 +40,7 @@ const OfficeContentLocation = () => {
         isPending
     } = useUpdateLocation();
 
-    const handleFormSubmit = async (values, formikHelpers) => {
-        formikHelpers.setSubmitting(true);
-
+    const handleFormSubmit = async (values) => {
         const groupChanges = getFormValueChanges(initValues, values, namespacePrefix);
 
         if (groupChanges.location) {
@@ -58,8 +56,6 @@ const OfficeContentLocation = () => {
 
             await Promise.all(locationUpdates);
         }
-
-        formikHelpers.setSubmitting(false);
     };
 
     /**
@@ -80,6 +76,7 @@ const OfficeContentLocation = () => {
         <Container className={`mt-5`}>
             <h3 className='text-start'>Locations</h3>
             <Formik
+                enableReinitialize
                 initialValues={initValues}
                 validationSchema={generateYupSchema(initValues)}
                 onSubmit={handleFormSubmit}>

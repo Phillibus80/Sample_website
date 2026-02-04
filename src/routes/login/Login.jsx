@@ -7,15 +7,13 @@ import {useNavigate} from 'react-router';
 import * as Yup from 'yup';
 
 import styles from './Login.module.scss';
-import AppToast from '../../components/app-toast/app-toast.jsx';
 import HexPattern from '../../components/hex-pattern/hex-pattern.jsx';
 import {ROUTING_CONSTANTS} from '../../constants/routing-constants.js';
-import {useAuth, useLogin} from '../../hooks/auth/auth-hooks.js';
-import {useToastContext} from '../../hooks/context/context-hooks.jsx';
+import {useLogin} from '../../hooks/auth/auth-hooks.jsx';
+import {useAuth} from '../../hooks/auth/use-auth.jsx';
 import Header from '../../sections/header/header.jsx';
 
 const Login = () => {
-    const {showToast, setShowToast, toastMessage, toastType} = useToastContext();
     const navigate = useNavigate();
     const {login: authLogin, isAuthenticated} = useAuth();
 
@@ -27,19 +25,17 @@ const Login = () => {
         error: loginErrorData
     } = useLogin();
 
-    // Redirect if already authenticated
     useEffect(() => {
         if (isAuthenticated) {
             navigate(ROUTING_CONSTANTS.ADMIN.URL, {replace: true});
         }
     }, [isAuthenticated, navigate]);
 
-    // Handle successful login
     useEffect(() => {
         if (loginSuccess && loginData?.data) {
-            const {token, username, role} = loginData.data;
+            const {token, username, role, csrfToken} = loginData.data;
 
-            const loginSuccessful = authLogin(token, username, role);
+            const loginSuccessful = authLogin(token, username, role, csrfToken);
 
             if (loginSuccessful) {
                 navigate(ROUTING_CONSTANTS.ADMIN.URL, {
@@ -50,7 +46,6 @@ const Login = () => {
         }
     }, [loginSuccess, loginData, authLogin, navigate]);
 
-    // Handle login errors
     useEffect(() => {
         if (loginError) {
             console.error('Login error:', loginErrorData);
@@ -81,13 +76,6 @@ const Login = () => {
 
     return (
         <>
-            <AppToast
-                showToast={showToast}
-                setShowToast={setShowToast}
-                toastMessage={toastMessage}
-                variant={toastType}
-            />
-
             <Container className={`vh-100 w-75 ${styles.login}`}>
                 <Header pageName={ROUTING_CONSTANTS.HOME.LABEL}/>
 

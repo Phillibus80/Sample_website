@@ -149,13 +149,11 @@ export const decodeJWT = (token) => {
         /** @type {{user?: object, exp?: number, iat?: number, jti?: string, iss?: string, aud?: string}} */
         const decoded = jwtDecode(token);
 
-        // Validate token structure has expected properties
         if (!decoded.user || !decoded.exp) {
             console.error('Token missing required claims');
             return null;
         }
 
-        // Check if the token is expired (client-side check only - not security)
         const currentTime = Math.floor(Date.now() / 1000);
         if (decoded.exp < currentTime) {
             console.warn('Token is expired');
@@ -246,4 +244,41 @@ export const getFromSessionStorage = (key) => {
         console.error('Getting key from Session Storage returned with:: ', err);
         return null;
     }
+};
+
+export const clearAuthFromSessionStorage = () => {
+    sessionStorage.removeItem('authToken');
+    sessionStorage.removeItem('csrfToken');
+    sessionStorage.removeItem('loggedInUserName');
+    sessionStorage.removeItem('roles');
+    document.cookie = 'PHPSESSID=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+};
+
+/**
+ * Save authentication data to session storage
+ *
+ * @param {string} bearerToken
+ * @param {string} csrfToken
+ * @param {string} username
+ * @param {Array<string>} roles
+ */
+export const saveAuthToSessionStorage = (bearerToken, csrfToken, username, roles) => {
+    setSessionStorage('authToken', bearerToken);
+    setSessionStorage('csrfToken', csrfToken);
+    setSessionStorage('loggedInUserName', username);
+    setSessionStorage('roles', roles);
+};
+
+/**
+ * Get all authentication data from session storage
+ *
+ * @return {{bearerToken: string|null, csrfToken: string|null, username: string|null, roles: Array<string>}}
+ */
+export const getAuthFromSessionStorage = () => {
+    return {
+        bearerToken: getFromSessionStorage('authToken'),
+        csrfToken: getFromSessionStorage('csrfToken'),
+        username: getFromSessionStorage('loggedInUserName'),
+        roles: getFromSessionStorage('roles') || []
+    };
 };

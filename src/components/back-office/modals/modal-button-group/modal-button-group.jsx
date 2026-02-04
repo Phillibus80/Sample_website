@@ -1,3 +1,4 @@
+import {useFormikContext} from 'formik';
 import PropTypes from 'prop-types';
 import {ButtonGroup, Spinner} from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
@@ -12,6 +13,8 @@ import Button from 'react-bootstrap/Button';
  * @return {React.ReactNode|null}
  */
 const ModalButtonGroup = ({buttonLabel, setShowModal, isPending}) => {
+    const {errors} = useFormikContext();
+    
     if (!buttonLabel) return null;
 
     return (
@@ -28,7 +31,7 @@ const ModalButtonGroup = ({buttonLabel, setShowModal, isPending}) => {
                 className='ms-5 rounded'
                 variant='primary'
                 type='submit'
-                disabled={isPending}
+                disabled={isPending || Object.keys(errors).length > 0}
             >
                 <div className='d-flex g-3 justify-content-center align-items-center'>
                     <span>{buttonLabel}</span>

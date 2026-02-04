@@ -9,7 +9,7 @@ import {object, string} from 'yup';
 
 import OfficeContentRemoveSectionButton from './office-content-remove-section-button.jsx';
 import {ROLES} from '../../../../../constants/constants.js';
-import {useAdminContext} from '../../../../../hooks/context/context-hooks.jsx';
+import {useAuth} from '../../../../../hooks/auth/use-auth.jsx';
 import {useCreateSection, useGetSections} from '../../../../../hooks/sections/section-hooks.jsx';
 import {toTitleCase} from '../../../../../utils/utils.js';
 import OfficeAdditionButton from '../../../office-addition-button/office-addition-button.jsx';
@@ -25,7 +25,7 @@ const OfficeContentSection = () => {
         isPending: createSectionPending,
         isSuccess: createSectionSuccess
     } = useCreateSection();
-    const {roles} = useAdminContext();
+    const {roles} = useAuth();
     const [addedSections, setAddedSections] = useState([]);
 
     const sections = sectionSuccess ? sectionData.data?.data : [];
@@ -183,7 +183,7 @@ const OfficeContentSection = () => {
                                         <Button
                                             className='mt-3 mb-3 w-25'
                                             type='submit'
-                                            disabled={isPending}
+                                            disabled={isPending || Object.keys(errors).length > 0}
                                         >
                                             <div className='d-flex g-3 justify-content-center align-items-center'>
                                                 <span>Submit Changes</span>

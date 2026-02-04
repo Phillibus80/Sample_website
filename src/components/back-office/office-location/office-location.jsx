@@ -77,6 +77,9 @@ const OfficeLocation = ({locationObject, isDisabled = false, prefix = ''}) => {
                                 isInvalid={touched[`${fieldName}_location_name`] && !!errors[`${fieldName}_location_name`]}
                                 disabled={isDisabled}
                             />
+                            <Form.Control.Feedback type='invalid'>
+                                {errors[`${fieldName}_location_name`]}
+                            </Form.Control.Feedback>
                         </div>
 
                         <div className={`mt-3 ms-sm-0 ms-lg-2 flex-grow-1 d-flex flex-column w-100`}>
@@ -94,6 +97,9 @@ const OfficeLocation = ({locationObject, isDisabled = false, prefix = ''}) => {
                                 isInvalid={touched[`${fieldName}_location_address`] && !!errors[`${fieldName}_location_address`]}
                                 disabled={isDisabled}
                             />
+                            <Form.Control.Feedback type='invalid'>
+                                {errors[`${fieldName}_location_address`]}
+                            </Form.Control.Feedback>
                         </div>
 
                         <div className={`mt-3 ms-sm-0 ms-lg-2 flex-grow-1 d-flex flex-column w-100`}>
@@ -109,6 +115,9 @@ const OfficeLocation = ({locationObject, isDisabled = false, prefix = ''}) => {
                                 isInvalid={touched[`${fieldName}_location_city`] && !!errors[`${fieldName}_location_city`]}
                                 disabled={isDisabled}
                             />
+                            <Form.Control.Feedback type='invalid'>
+                                {errors[`${fieldName}_location_city`]}
+                            </Form.Control.Feedback>
                         </div>
                     </div>
 
@@ -126,6 +135,9 @@ const OfficeLocation = ({locationObject, isDisabled = false, prefix = ''}) => {
                                 isInvalid={touched[`${fieldName}_location_state`] && !!errors[`${fieldName}_location_state`]}
                                 disabled={isDisabled}
                             />
+                            <Form.Control.Feedback type='invalid'>
+                                {errors[`${fieldName}_location_state`]}
+                            </Form.Control.Feedback>
                         </div>
 
                         <div className={`mt-3 ms-sm-0 ms-lg-2 flex-grow-1 d-flex flex-column w-100`}>
@@ -141,6 +153,9 @@ const OfficeLocation = ({locationObject, isDisabled = false, prefix = ''}) => {
                                 isInvalid={touched[`${fieldName}_location_zip`] && !!errors[`${fieldName}_location_zip`]}
                                 disabled={isDisabled}
                             />
+                            <Form.Control.Feedback type='invalid'>
+                                {errors[`${fieldName}_location_zip`]}
+                            </Form.Control.Feedback>
                         </div>
 
                         <div className={`mt-3 ms-sm-0 ms-lg-2 flex-grow-1 d-flex flex-column w-100`}>
@@ -166,6 +181,9 @@ const OfficeLocation = ({locationObject, isDisabled = false, prefix = ''}) => {
                                 isInvalid={touched[`${fieldName}_location_telephone`] && !!errors[`${fieldName}_location_telephone`]}
                                 disabled={isDisabled}
                             />
+                            <Form.Control.Feedback type='invalid'>
+                                {errors[`${fieldName}_location_telephone`]}
+                            </Form.Control.Feedback>
                         </div>
 
                         <InputGroup.Text style={{background: 'transparent', border: 'none'}}>
@@ -182,10 +200,6 @@ const OfficeLocation = ({locationObject, isDisabled = false, prefix = ''}) => {
                         </InputGroup.Text>
                     </div>
                 </div>
-
-                <Form.Control.Feedback type='invalid'>
-                    {errors[fieldName]}
-                </Form.Control.Feedback>
             </InputGroup>
         </Form.Group>
     );

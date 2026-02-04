@@ -4,7 +4,7 @@ import {Accordion} from 'react-bootstrap';
 import OfficeEvent from './office-event.jsx';
 import {eventComponentPropType} from '../../../common/commonPropTypes.jsx';
 import {DEFAULT_CONTENT, PLACEHOLDER_TEXT, ROLES} from '../../../constants/constants.js';
-import {useAdminContext} from '../../../hooks/context/context-hooks.jsx';
+import {useAuth} from '../../../hooks/auth/use-auth.jsx';
 import OfficeAdditionButton from '../office-addition-button/office-addition-button.jsx';
 
 /**
@@ -28,7 +28,7 @@ const OfficeEventList = ({
                              prefix = '',
                              showAddon = true
                          }) => {
-    const {roles} = useAdminContext();
+    const {roles} = useAuth();
     const hasAdminRole = roles.includes(ROLES.ADMIN);
     const hasSuperRole = roles.includes(ROLES.SUPER);
 

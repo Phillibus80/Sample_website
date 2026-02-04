@@ -7,7 +7,9 @@ import Form from 'react-bootstrap/Form';
 import {GrSubtractCircle} from 'react-icons/gr';
 
 import * as styles from './office-image.module.scss';
-import {PLACEHOLDER_TEXT, ROLES} from '../../../constants/constants.js';
+import {imageComponentPropType} from '../../../common/commonPropTypes.jsx';
+import {DEFAULT_CONTENT, PLACEHOLDER_TEXT, ROLES} from '../../../constants/constants.js';
+import {useAuth} from '../../../hooks/auth/use-auth.jsx';
 import {useRemoveComponentContent} from '../../../hooks/component-content/component-content-hooks.js';
 import {useAdminContext} from '../../../hooks/context/context-hooks.jsx';
 import {useRemoveImage} from '../../../hooks/images/image-hooks.jsx';
@@ -17,6 +19,7 @@ import {useRemoveImage} from '../../../hooks/images/image-hooks.jsx';
  *
  * @param {ImageObject} imageObject
  * @param {boolean} isDisabled
+ * @param {Array<ImageObject>} [currentImages]
  * @param {boolean} [isSelectDisabled]
  * @param {string} [prefix] - Optional, can be added to the beginning of field names to namespace Fields
  * @param {boolean} [hideSubtractBtn] - Optional, hide subtract button
@@ -29,7 +32,8 @@ const OfficeImage = (
         isDisabled = false,
         isSelectDisabled = false,
         prefix = '',
-        hideSubtractBtn = false
+        hideSubtractBtn = false,
+        currentImages = []
     }
 ) => {
     const fieldName = `${prefix ? `${prefix}_` : ''}image_${imageObject.component_content_id ?? imageObject.image_id}`;
@@ -42,7 +46,8 @@ const OfficeImage = (
         values,
         setFieldValue
     } = useFormikContext();
-    const {images, roles} = useAdminContext();
+    const {images} = useAdminContext();
+    const {roles} = useAuth();
     const {
         mutateAsync: removeContent,
         isPending: removeContentIsPending
@@ -98,12 +103,22 @@ const OfficeImage = (
                             isInvalid={touched[`${fieldName}_image_url`] && !!errors[`${fieldName}_image_url`]}
                         >
                             <option value={PLACEHOLDER_TEXT} disabled={true}>Select an Image</option>
+                            <option value={DEFAULT_CONTENT.IMAGE.SRC} disabled={true}>
+                                {DEFAULT_CONTENT.IMAGE.SRC}
+                            </option>
                             {
                                 images?.length > 0 && images?.reduce((accum, image) => {
                                         !image.image_text.toLowerCase().includes(PLACEHOLDER_TEXT.toLowerCase())
-                                        && accum.push(<option key={image.src} value={image.src}>
-                                            {image.src}
-                                        </option>);
+                                        && !image.image_text.toLowerCase().includes(DEFAULT_CONTENT.IMAGE.LABEL.toLowerCase())
+                                        && accum.push(
+                                            <option
+                                                key={image.src}
+                                                value={image.src}
+                                                disabled={currentImages.some(img => img?.src === image?.src)}
+                                            >
+                                                {image.src}
+                                            </option>
+                                        );
 
                                         return accum;
                                     }
@@ -125,11 +140,14 @@ const OfficeImage = (
                             name={`${fieldName}_image_text`}
                             className='rounded'
                             type='input'
-                            defaultValue={imageObject.image_text === PLACEHOLDER_TEXT ? '' : imageObject.image_text}
+                            defaultValue={imageObject.image_text === PLACEHOLDER_TEXT || imageObject.image_text === DEFAULT_CONTENT.IMAGE.LABEL ? '' : imageObject.image_text}
                             onChange={handleChange}
                             onBlur={handleBlur}
                             isInvalid={touched[`${fieldName}_image_text`] && !!errors[`${fieldName}_image_text`]}
                         />
+                        <Form.Control.Feedback type='invalid'>
+                            {errors[`${fieldName}_image_text`]}
+                        </Form.Control.Feedback>
                     </div>
 
                     <div className='ms-sm-0 ms-lg-2 flex-grow-1 d-flex flex-column w-100'>
@@ -145,11 +163,14 @@ const OfficeImage = (
                             id={`${fieldName}_${imageObject.src ? imageObject.src : ''}_image_alt`}
                             className='rounded'
                             type='input'
-                            defaultValue={imageObject.alt === PLACEHOLDER_TEXT ? '' : imageObject.alt}
+                            defaultValue={imageObject.image_text === PLACEHOLDER_TEXT || imageObject.image_text === DEFAULT_CONTENT.IMAGE.ALT ? '' : imageObject.alt}
                             onChange={handleChange}
                             onBlur={handleBlur}
                             isInvalid={touched[`${fieldName}_image_alt`] && !!errors[`${fieldName}_image_alt`]}
                         />
+                        <Form.Control.Feedback type='invalid'>
+                            {errors[`${fieldName}_image_alt`]}
+                        </Form.Control.Feedback>
                     </div>
 
                     <InputGroup.Text
@@ -174,10 +195,6 @@ const OfficeImage = (
                             />
                         }
                     </InputGroup.Text>
-
-                    <Form.Control.Feedback type='invalid'>
-                        {errors[fieldName]}
-                    </Form.Control.Feedback>
                 </InputGroup>
             </Form.Group>
 
@@ -192,18 +209,13 @@ const OfficeImage = (
 };
 
 OfficeImage.propTypes = {
-    imageObject: PropTypes.shape({
-        component_content_id: PropTypes.string,
-        alt: PropTypes.string.isRequired,
-        image_id: PropTypes.string.isRequired,
-        image_text: PropTypes.string.isRequired,
-        page_section_component_id: PropTypes.string,
-        src: PropTypes.string.isRequired
-    }).isRequired,
+    imageObject: imageComponentPropType.isRequired,
     isDisabled: PropTypes.bool,
     isSelectDisabled: PropTypes.bool,
     prefix: PropTypes.string,
-    hideSubtractBtn: PropTypes.bool
+    hideSubtractBtn: PropTypes.bool,
+    optionDisabled: PropTypes.bool,
+    currentImages: PropTypes.arrayOf(imageComponentPropType)
 };
 
 export default OfficeImage;

@@ -20,7 +20,7 @@ const whiteDoubleHoneyDipperTitle = ({titleContent, imageList, titleFontSize, sh
         ? {
             fontSize: `${titleFontSize}`
         }
-        : '';
+        : {};
 
     const {src: honeyDipperImage} = imageList?.at(0) ?? {src: ''};
 

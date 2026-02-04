@@ -459,11 +459,9 @@ function createNewHeaderSection(
     $defaultContent = retrieveDefaultContentIds($db);
     $component_id = getRecordId($db, 'COMPONENTS', ['NAME' => 'Menu']);
     $page_section_components_id = getPageSectionComponentId($db, $pages_sections_id, $component_id);
-
-    // Find the Home link
     $home_link_id = getRecordId($db, 'LINKS', ['LINK_TEXT' => 'HOME']);
 
-    try {// Insert the Menu Text
+    try {
         $header_text_query = "
             INSERT INTO COMPONENT_CONTENT(PAGE_SECTION_COMPONENTS_ID, TEXT_CONTENT_ID)
             VALUES (?, ?)

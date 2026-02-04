@@ -15,7 +15,7 @@ const cursiveTitle = ({strContent, titleFontSize}) => {
         ? {
             fontSize: `${titleFontSize}`
         }
-        : '';
+        : {};
 
     return (
         <div style={{...dynamicFontSize}} className={`${styles.textStyle} mt-sm-1`}>

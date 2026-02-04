@@ -4,7 +4,7 @@ import OfficeText from './office-text.jsx';
 import {textComponentPropType} from '../../../common/commonPropTypes.jsx';
 import {COMPONENTS} from '../../../constants/app-constants.js';
 import {PLACEHOLDER_TEXT, ROLES} from '../../../constants/constants.js';
-import {useAdminContext} from '../../../hooks/context/context-hooks.jsx';
+import {useAuth} from '../../../hooks/auth/use-auth.jsx';
 import OfficeAdditionButton from '../office-addition-button/office-addition-button.jsx';
 
 /**
@@ -19,7 +19,7 @@ import OfficeAdditionButton from '../office-addition-button/office-addition-butt
  * @return {Array<React.ReactNode> || React.ReactNode}
  */
 const OfficeTextList = ({component, handleClick, componentContentId, prefix = ''}) => {
-    const {roles} = useAdminContext();
+    const {roles} = useAuth();
 
     const hasSuperPermissions = roles.includes(ROLES.SUPER);
     const hasAdminPermissions = roles.includes(ROLES.ADMIN);
@@ -41,12 +41,13 @@ const OfficeTextList = ({component, handleClick, componentContentId, prefix = ''
     return <div>
         {
             component?.textContent?.map(
-                (tc, index) => <div key={index}>
+                (tc) => <div key={tc.component_content_id}>
                     <OfficeText
                         componentName={component.component_name}
                         fieldName={`text_${tc.component_content_id}`}
                         textComponent={tc}
                         prefix={prefix}
+                        hideDeleteButton={!hasSuperPermissions && component?.textContent?.length < 2}
                     />
                 </div>
             )

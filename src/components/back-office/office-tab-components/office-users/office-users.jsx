@@ -6,7 +6,7 @@ import Container from 'react-bootstrap/Container';
 
 import OfficeUser from './office-user.jsx';
 import {ROLES} from '../../../../constants/constants.js';
-import {useAdminContext} from '../../../../hooks/context/context-hooks.jsx';
+import {useAuth} from '../../../../hooks/auth/use-auth.jsx';
 import {useGetUsers} from '../../../../hooks/users/user-hooks.js';
 import ScrollTopButton from '../../../scroll-top-button/scroll-top-button.jsx';
 import OfficeUserModal from '../../modals/user-modal/office-user-modal.jsx';
@@ -17,9 +17,9 @@ const OfficeUsers = () => {
     const {
         data: userData,
         isSuccess
-    } = useGetUsers(null, ROLES.EMAIL);
+    } = useGetUsers(null, ROLES.EMAIL.toLowerCase());
 
-    const {roles} = useAdminContext();
+    const {roles} = useAuth();
     const isAdminRole = (roles.includes(ROLES.SUPER) || roles.includes(ROLES.ADMIN));
 
     /**

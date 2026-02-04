@@ -67,24 +67,25 @@ const OfficeTabAddSection = (
             >
                 <option value={PLACEHOLDER_TEXT} disabled={true}>Select a Section</option>
                 {
-                    availableSections.map(
-                        /**
-                         * @param {SectionObject} section
-                         * @param {number} index
-                         * @return {@React.ReactNode}
-                         */
-                        (section, index) =>
-                            <option
-                                key={`${section.NAME}_${index}`}
-                                value={section.NAME}
-                                disabled={
-                                    currentSections.some(({section_name: name}) => name === section.NAME)
-                                    || Object.values(values).some(val => val === section.NAME)
-                                }
-                            >
-                                {section.NAME}
-                            </option>
-                    )
+                    availableSections
+                        ? availableSections?.map(
+                            /**
+                             * @param {SectionObject} section
+                             * @param {number} index
+                             * @return {@React.ReactNode}
+                             */
+                            (section, index) =>
+                                <option
+                                    key={`${section.NAME}_${index}`}
+                                    value={section.NAME}
+                                    disabled={
+                                        currentSections?.some(({section_name: name}) => name === section.NAME)
+                                        || Object.values(values).some(val => val === section.NAME)
+                                    }
+                                >
+                                    {section.NAME}
+                                </option>
+                        ) : []
                 }
             </Form.Select>
 

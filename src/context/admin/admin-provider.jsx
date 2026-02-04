@@ -1,9 +1,8 @@
-import {useState} from 'react';
+import {useMemo, useState} from 'react';
 
 import PropTypes from 'prop-types';
 
 import AdminContext from './admin-context.jsx';
-import {getFromSessionStorage} from '../../utils/utils.js';
 
 /**
  * A Context provider for the Admin section of the application.
@@ -19,34 +18,24 @@ export const AdminProvider = ({children}) => {
     const [images, setImages] = useState([]);
     const [events, setEvents] = useState([]);
     const [locations, setLocations] = useState([]);
-    const [bearerToken, setBearerToken] = useState(getFromSessionStorage('authToken') || '');
-    const [loggedInUserName, setLoggedInUser] = useState('');
-    const [roles, setRoles] = useState([]);
-    const [csrfToken, setCsrfToken] = useState('');
+
+    const value = useMemo(() => ({
+        pages,
+        setPages,
+        links,
+        setLinks,
+        images,
+        setImages,
+        pageContent,
+        setPageContent,
+        events,
+        setEvents,
+        locations,
+        setLocations
+    }), [pages, pageContent, links, images, events, locations]);
 
     return (
-        <AdminContext.Provider value={{
-            pages,
-            setPages,
-            links,
-            setLinks,
-            images,
-            setImages,
-            bearerToken,
-            loggedInUserName,
-            setLoggedInUser,
-            setBearerToken,
-            pageContent,
-            setPageContent,
-            events,
-            setEvents,
-            locations,
-            setLocations,
-            roles,
-            setRoles,
-            csrfToken,
-            setCsrfToken
-        }}>
+        <AdminContext.Provider value={value}>
             {children}
         </AdminContext.Provider>
     );
