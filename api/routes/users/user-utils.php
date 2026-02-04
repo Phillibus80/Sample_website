@@ -105,7 +105,7 @@ function getUser($db, string $user_id): ?array
 {
     try {
         $get_user_statement = '
-            SELECT U.ID, U.FIRST_NAME, U.LAST_NAME, U.EMAIL, U.USERNAME, U.PASSWORD, U.CREATED_ON, U.UPDATED_ON, R.ROLE 
+            SELECT U.ID, U.FIRST_NAME, U.LAST_NAME, U.EMAIL, U.USERNAME, U.CREATED_ON, U.UPDATED_ON, R.ROLE 
             FROM USERS AS U
             JOIN USERS_ROLES AS UR ON UR.USER_ID = U.ID
             JOIN ROLES AS R ON R.ID = UR.ROLE_ID
@@ -135,7 +135,7 @@ function getUserByEmail($db, string $emailAddress, string $roleName = ''): ?arra
     try {
         if (isset($roleName)) {
             $user_check_statement = '
-            SELECT U.ID, U.FIRST_NAME, U.LAST_NAME, U.EMAIL, U.USERNAME, U.PASSWORD, U.CREATED_ON, U.UPDATED_ON, R.ROLE 
+            SELECT U.ID, U.FIRST_NAME, U.LAST_NAME, U.EMAIL, U.USERNAME, U.CREATED_ON, U.UPDATED_ON, R.ROLE 
             FROM USERS AS U
             JOIN USERS_ROLES AS UR ON UR.USER_ID = U.ID
             JOIN ROLES AS R ON R.ID = UR.ROLE_ID
@@ -146,7 +146,7 @@ function getUserByEmail($db, string $emailAddress, string $roleName = ''): ?arra
 
         } else {
             $email_check_statement = '
-            SELECT U.ID, U.FIRST_NAME, U.LAST_NAME, U.EMAIL, U.USERNAME, U.PASSWORD, U.CREATED_ON, U.UPDATED_ON, R.ROLE 
+            SELECT U.ID, U.FIRST_NAME, U.LAST_NAME, U.EMAIL, U.USERNAME, U.CREATED_ON, U.UPDATED_ON, R.ROLE 
             FROM USERS AS U
             JOIN USERS_ROLES AS UR ON UR.USER_ID = U.ID
             JOIN ROLES AS R ON R.ID = UR.ROLE_ID
@@ -297,7 +297,7 @@ function getUsersWithExclusionFilter($db, $filter, ?string $username = null): vo
 {
     try {
         $userQuery = '
-                SELECT u.id, u.first_name, u.last_name, u.email, u.username, u.password, u.created_on, u.updated_on
+                SELECT u.id, u.first_name, u.last_name, u.email, u.username, u.created_on, u.updated_on
                 FROM USERS as u
                 JOIN USERS_ROLES as ur on u.ID = ur.USER_ID
                 JOIN ROLES as r on r.ID = ur.ROLE_ID
