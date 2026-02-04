@@ -2,6 +2,8 @@ import PropTypes from 'prop-types';
 import {Accordion} from 'react-bootstrap';
 
 import {imageComponentPropType, linkComponentPropType} from '../../../common/commonPropTypes.jsx';
+import {ROLES} from '../../../constants/constants.js';
+import {useAuth} from '../../../hooks/auth/use-auth.jsx';
 import OfficeImage from '../office-image/office-image.jsx';
 import OfficeLink from '../office-link/office-link.jsx';
 
@@ -16,6 +18,8 @@ import OfficeLink from '../office-link/office-link.jsx';
  * @return {React.JSX.Element|null}
  */
 const OfficeMenuImageLink = ({imageObject, linkObject, prefix = ''}) => {
+    const {roles} = useAuth();
+
     if (
         !imageObject
         || Object.values(imageObject)?.length === 0
@@ -39,6 +43,7 @@ const OfficeMenuImageLink = ({imageObject, linkObject, prefix = ''}) => {
                         imageObject={imageObject}
                         isDisabled={true}
                         prefix={prefix}
+                        hideSubtractBtn={!roles.includes(ROLES.SUPER)}
                     />
                 </Accordion.Body>
             </Accordion.Item>

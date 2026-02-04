@@ -17,7 +17,6 @@ export const getPageContent = async (pageName) => {
         : axios.get(urlBuilder(apiURL, '/pages', []));
 };
 
-// Contact Us
 /**
  * An API call to add a person to the email list and sends an email to the owner of the site.
  * @param {{email: string}} postBody

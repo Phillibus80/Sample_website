@@ -38,8 +38,7 @@ const OfficeTab = ({pageName}) => {
     const currentPageContent = pageContent.find(({page}) => page === pageName);
     const {
         mutateAsync: addSectionToPage,
-        isPending: updatingSectionsPending,
-        isSuccess: addingSectionSuccess
+        isPending: updatingSectionsPending
     } = useCreatePageSection();
     const {
         data: sectionData,
@@ -52,7 +51,6 @@ const OfficeTab = ({pageName}) => {
     const [showNewSections, setShowNewSections] = useState(false);
     const [addedSections, setAddedSections] = useState([{sectionKey: 0}]);
 
-    // Form Validation
     const initValues = {
         sectionSelection0: PLACEHOLDER_TEXT
     };
@@ -88,7 +86,6 @@ const OfficeTab = ({pageName}) => {
                 )
             }
 
-            {/*Shows the section of the page that allows for the addition of sections*/}
             {
                 !showNewSections
                 && <OfficeAdditionButton
@@ -109,20 +106,25 @@ const OfficeTab = ({pageName}) => {
                                     if (!value || value === PLACEHOLDER_TEXT) {
                                         accum[key] = FORM_ERROR_TEXT.CREATE_PAGE_SECTION_SELECTION_TEXT;
                                     }
-
                                     return accum;
                                 }, {}
                             );
-                            if (isEmpty(selectionErrors)) {
-                                await Promise.all(Object.values(vals).map(val => addSectionToPage({
-                                    pageName,
-                                    sectionName: val
-                                })));
 
-                                if (addingSectionSuccess) {
+                            if (isEmpty(selectionErrors)) {
+                                try {
+                                    await Promise.all(Object.values(vals).map(val =>
+                                        addSectionToPage({
+                                            pageName,
+                                            sectionName: val
+                                        })
+                                    ));
+
                                     formikHelpers.resetForm();
                                     setShowNewSections(false);
                                     setAddedSections([{sectionKey: 0}]);
+                                } catch (error) {
+                                    console.error('Error adding sections:', error);
+                                    throw error;
                                 }
                             } else {
                                 formikHelpers.setErrors(selectionErrors);
@@ -132,7 +134,8 @@ const OfficeTab = ({pageName}) => {
                         {({
                               handleSubmit,
                               resetForm,
-                              setFieldValue
+                              setFieldValue,
+                              errors
                           }) => (
                             <Form className='mt-3 mb-3' onSubmit={handleSubmit}>
                                 {
@@ -170,7 +173,6 @@ const OfficeTab = ({pageName}) => {
                                     )
                                 }
 
-                                {/*Add a section button*/}
                                 <OfficeAdditionButton
                                     txt='Add section(s)'
                                     handleOnClick={() => {
@@ -200,7 +202,7 @@ const OfficeTab = ({pageName}) => {
                                         className='mb-sm-3 ms-md-5 rounded'
                                         variant='primary'
                                         type='submit'
-                                        disabled={isPending}
+                                        disabled={isPending || Object.keys(errors).length > 0}
                                     >
                                         <div className='d-flex g-3 justify-content-center align-items-center'>
                                             <span>Add Section(s)</span>
@@ -227,4 +229,3 @@ OfficeTab.propTypes = {
 };
 
 export default OfficeTab;
-

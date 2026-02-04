@@ -1,3 +1,7 @@
+import L from 'leaflet';
+import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import PropTypes from 'prop-types';
 import {Row} from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
@@ -6,10 +10,19 @@ import {FiMapPin, FiPhone} from 'react-icons/fi';
 import {MapContainer, Marker, Popup, TileLayer} from 'react-leaflet';
 
 import 'leaflet/dist/leaflet.css';
+
 import * as styles from './leaflet-events.module.scss';
 import {PLACEHOLDER_TEXT} from '../../../constants/constants.js';
 import {formatPhoneNumber} from '../../../utils/utils.js';
 import HexPattern from '../../hex-pattern/hex-pattern.jsx';
+
+// Fix Leaflet's default icon path issues with Vite
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+    iconUrl: markerIcon,
+    iconRetinaUrl: markerIcon2x,
+    shadowUrl: markerShadow,
+});
 
 /**
  * Event list that shows the map from Leaflet for each event list item.

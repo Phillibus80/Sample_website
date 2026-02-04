@@ -8,15 +8,15 @@ import OfficeTabsLoader
     from '../../components/back-office/office-tab-components/office-tab-list/office-tabs-loader.jsx';
 import OfficeTabs from '../../components/back-office/office-tab-components/office-tab-list/office-tabs.jsx';
 import {ROUTING_CONSTANTS} from '../../constants/routing-constants.js';
-import {useAuth, useLogOut, useTokenMonitor} from '../../hooks/auth/auth-hooks.js';
+import {useLogOut, useTokenMonitor} from '../../hooks/auth/auth-hooks.jsx';
+import {useAuth} from '../../hooks/auth/use-auth.jsx';
 import Header from '../../sections/header/header.jsx';
 
 const Admin = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const {username, token, role} = location.state || {};
+    const {username, token, role, csrfToken} = location.state || {};
 
-    // Use the new auth hook
     const {
         login,
         logout,
@@ -27,30 +27,26 @@ const Admin = () => {
         mutateAsync: logoutMutation
     } = useLogOut();
 
-    // Monitor token expiration
     const {timeRemaining} = useTokenMonitor({
         warningThreshold: 300, // 5-minute warning
         checkInterval: 60000   // Check every minute
     });
 
-    // Handle initial authentication from the login redirect
     useEffect(() => {
         if (token && username && role && !isAuthenticated) {
-            const loginSuccess = login(token, username, role);
+            const loginSuccess = login(token, username, role, csrfToken);
 
             if (loginSuccess) {
-                // Clear the state from location to prevent re-processing
                 navigate(location.pathname, {replace: true});
             } else {
                 navigate(ROUTING_CONSTANTS.LOGIN.URL, {replace: true});
             }
         }
 
-        // Redirect to log in if no token and not authenticated
         if (!token && !isAuthenticated) {
             navigate(ROUTING_CONSTANTS.LOGIN.URL, {replace: true});
         }
-    }, [token, username, role, isAuthenticated, login, navigate, location.pathname]);
+    }, [token, username, role, csrfToken, isAuthenticated, login, navigate, location.pathname]);
 
     const handleLogout = async () => {
         try {
@@ -58,12 +54,10 @@ const Admin = () => {
             logout();
         } catch (error) {
             console.error('Logout error:', error);
-            // Still logout on client side even if server call fails
             logout();
         }
     };
 
-    // Show loading while authenticating
     if (!isAuthenticated) {
         return <div>Authenticating...</div>;
     }

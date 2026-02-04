@@ -62,8 +62,7 @@ const Navi = ({headerContent}) => {
             <Container className='d-flex'>
                 <Navbar.Brand href={logoLink?.link_url}>
                     <Image
-                        className='object-fit-cover'
-                        style={{width: '100%', maxHeight: '725px'}}
+                        className={styles.logo_image}
                         src={imageURL}
                         alt={image_alt}
                         fluid

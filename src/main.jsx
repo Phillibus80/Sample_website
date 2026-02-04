@@ -5,9 +5,12 @@ import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
 import {createRoot} from 'react-dom/client';
 
 import './index.scss';
+import {setupAxiosInterceptors} from './api-calls/axios-interceptor.js';
 import App from './App.jsx';
 
 import '@fontsource/pinyon-script';
+
+setupAxiosInterceptors();
 
 const queryClient = new QueryClient();
 

@@ -1,13 +1,13 @@
-import {useEffect, useRef} from 'react';
-
-import {useFormikContext} from 'formik';
+import {Field, useFormikContext} from 'formik';
 import PropTypes from 'prop-types';
 import {InputGroup, Spinner} from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 import {GrSubtractCircle} from 'react-icons/gr';
 
 import * as styles from './office-event.module.scss';
+import {eventComponentPropType} from '../../../common/commonPropTypes.jsx';
 import {PLACEHOLDER_TEXT, ROLES} from '../../../constants/constants.js';
+import {useAuth} from '../../../hooks/auth/use-auth.jsx';
 import {useRemoveComponentContent} from '../../../hooks/component-content/component-content-hooks.js';
 import {useAdminContext} from '../../../hooks/context/context-hooks.jsx';
 import {useRemoveEvent} from '../../../hooks/events/event-hooks.js';
@@ -27,18 +27,14 @@ import Calendar from '../../calendar/calendar.jsx';
 const OfficeEvent = ({eventObject, isDisabled = false, prefix = ''}) => {
     const fieldName = `${prefix ? `${prefix}_` : ''}event_${eventObject?.component_content_id ?? eventObject?.event_id}`;
 
-    const locationRef = useRef(null);
-    const telephoneRef = useRef(eventObject?.event_telephone ?? null);
     const {
-        touched,
         errors,
+        touched,
         handleChange,
-        handleBlur,
-        setFieldValue,
-        initialValues,
-        values
+        setFieldValue
     } = useFormikContext();
-    const {locations, roles} = useAdminContext();
+    const {locations} = useAdminContext();
+    const {roles} = useAuth();
     const {
         mutateAsync: removeContent,
         isPending: removeContentIsPending
@@ -47,31 +43,6 @@ const OfficeEvent = ({eventObject, isDisabled = false, prefix = ''}) => {
         mutateAsync: removeEvent,
         isPending: removeEventIsPending
     } = useRemoveEvent();
-
-    useEffect(() => {
-        if (
-            !!locationRef?.current?.value
-            && (locationRef?.current?.value !== values[locationRef?.current?.name])
-        ) {
-            // values[`${fieldName}_event_location`] = locationRef?.current?.value;
-            setFieldValue(`${fieldName}_event_location`, locationRef?.current?.value).then(
-                () => {
-                    initialValues[`${fieldName}_event_location`] = values[`${fieldName}_event_location`];
-                    values[`${fieldName}_event_location`] = locationRef?.current?.value;
-                });
-        }
-
-        if (
-            !!telephoneRef?.current?.value
-            && (telephoneRef?.current?.value !== values[`${fieldName}_event_telephone`])
-        ) {
-            setFieldValue(fieldName, telephoneRef?.current?.value).then(
-                () => {
-                    initialValues[`${fieldName}_event_telephone`] = values[`${fieldName}_event_telephone`];
-                    values[`${fieldName}_event_telephone`] = formatPhoneNumber(telephoneRef?.current?.value);
-                });
-        }
-    }, [fieldName, handleChange, initialValues, setFieldValue, values]);
 
     if (!eventObject) return null;
     const hasAdminRole = roles.includes(ROLES.ADMIN);
@@ -94,14 +65,16 @@ const OfficeEvent = ({eventObject, isDisabled = false, prefix = ''}) => {
                         >
                             Location Name:
                         </Form.Label>
-                        <Form.Select
-                            ref={locationRef}
+                        <Field
+                            as={Form.Select}
                             id={`${fieldName}_event_location`}
                             name={`${fieldName}_event_location`}
-                            defaultValue={`${eventObject?.event_location}`}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            isInvalid={touched[`${fieldName}_event_location`] && !!errors[`${fieldName}_event_location`]}
+                            onChange={e => {
+                                const matchingLocation = locations.find(location => location.location_name === e.target.value);
+                                setFieldValue(`${fieldName}_event_telephone`, formatPhoneNumber(matchingLocation.location_telephone));
+
+                                handleChange(e);
+                            }}
                             disabled={isDisabled}
                         >
                             <option value={PLACEHOLDER_TEXT} disabled={true}>Select a Location</option>
@@ -118,61 +91,69 @@ const OfficeEvent = ({eventObject, isDisabled = false, prefix = ''}) => {
                                         </option>
                                 )
                             }
-                        </Form.Select>
+                        </Field>
                     </div>
 
                     <div className={`ms-sm-0 ms-lg-2 flex-grow-1 d-flex flex-column w-100`}>
                         <Form.Label htmlFor={`${fieldName}_event_title`} column={true}>Event
                             title:</Form.Label>
-                        <Form.Control
+                        <Field
+                            as={Form.Control}
                             id={`${fieldName}_event_title`}
                             name={`${fieldName}_event_title`}
                             className='rounded'
                             type='input'
-                            defaultValue={eventObject.event_title === PLACEHOLDER_TEXT ? '' : eventObject.event_title}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            isInvalid={touched[`${fieldName}_event_title`] && !!errors[`${fieldName}_event_title`]}
                             disabled={false}
+                            isInvalid={touched[`${fieldName}_event_title`] && !!errors[`${fieldName}_event_title`]}
                         />
+                        {errors[`${fieldName}_event_title`] && touched[`${fieldName}_event_title`] && (
+                            <Form.Control.Feedback type='invalid' style={{display: 'block'}}>
+                                {errors[`${fieldName}_event_title`]}
+                            </Form.Control.Feedback>
+                        )}
                     </div>
 
                     <div className={`ms-sm-0 ms-lg-2 flex-grow-1 d-flex flex-column w-100`}>
                         <Form.Label htmlFor={`${fieldName}_event_description`} column={true}>Event
                             Description:</Form.Label>
-                        <Form.Control
+                        <Field
+                            as={Form.Control}
                             id={`${fieldName}_event_description`}
                             name={`${fieldName}_event_description`}
                             className='rounded'
-                            as='textarea'
-                            defaultValue={eventObject.event_description === PLACEHOLDER_TEXT ? '' : eventObject.event_description}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            isInvalid={touched[`${fieldName}_event_description`] && !!errors[`${fieldName}_event_description`]}
+                            component={'textarea'}
                             disabled={false}
+                            style={{
+                                border: 'var(--bs-border-width) solid var(--bs-border-color)',
+                                color: 'black',
+                                backgroundColor: 'white'
+                            }}
+                            invalid={touched[`${fieldName}_event_description`] && !!errors[`${fieldName}_event_description`]}
                         />
+                        {errors[`${fieldName}_event_description`] && touched[`${fieldName}_event_description`] && (
+                            <Form.Control.Feedback type='invalid' style={{display: 'block'}}>
+                                {errors[`${fieldName}_event_description`]}
+                            </Form.Control.Feedback>
+                        )}
                     </div>
 
                     <div className={`ms-sm-0 ms-lg-2 flex-grow-1 d-flex flex-column w-100`}>
                         <Form.Label htmlFor={`${fieldName}_event_telephone`} column={true}>Event
                             telephone:</Form.Label>
-                        <Form.Control
-                            ref={telephoneRef}
+                        <Field
+                            as={Form.Control}
                             id={`${fieldName}_event_telephone`}
                             name={`${fieldName}_event_telephone`}
                             className='rounded'
                             type='tel'
-                            defaultValue={formatPhoneNumber(eventObject.event_telephone)}
-                            onChange={async (e) => {
-                                const formatted = formatPhoneNumber(e.target.value);
-
-                                await setFieldValue(`${fieldName}_event_telephone`, formatted);
-                                telephoneRef.current.value = formatted;
-                            }}
-                            onBlur={handleBlur}
-                            isInvalid={touched[`${fieldName}_event_telephone`] && !!errors[`${fieldName}_event_telephone`]}
                             disabled={false}
+                            isInvalid={touched[`${fieldName}_event_telephone`] && !!errors[`${fieldName}_event_telephone`]}
                         />
+                        {errors[`${fieldName}_event_telephone`] && touched[`${fieldName}_event_telephone`] && (
+                            <Form.Control.Feedback type='invalid' style={{display: 'block'}}>
+                                {errors[`${fieldName}_event_telephone`]}
+                            </Form.Control.Feedback>
+                        )}
                     </div>
                 </div>
 
@@ -217,22 +198,7 @@ const OfficeEvent = ({eventObject, isDisabled = false, prefix = ''}) => {
 };
 
 OfficeEvent.propTypes = {
-    eventObject: PropTypes.shape({
-        component_content_id: PropTypes.string,
-        page_section_component_id: PropTypes.string,
-        event_id: PropTypes.string.isRequired,
-        event_title: PropTypes.string.isRequired,
-        event_description: PropTypes.string.isRequired,
-        event_location: PropTypes.string.isRequired,
-        event_address: PropTypes.string.isRequired,
-        event_city: PropTypes.string.isRequired,
-        event_state: PropTypes.string.isRequired,
-        event_zip: PropTypes.string.isRequired,
-        event_telephone: PropTypes.string.isRequired,
-        event_lat: PropTypes.number.isRequired,
-        event_lng: PropTypes.number.isRequired,
-        event_time: PropTypes.string.isRequired
-    }).isRequired,
+    eventObject: eventComponentPropType,
     isDisabled: PropTypes.bool,
     prefix: PropTypes.string
 };

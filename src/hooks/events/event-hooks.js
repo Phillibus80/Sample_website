@@ -4,7 +4,9 @@ import {useNavigate} from 'react-router';
 import {createEvent, getEvents, removeEvent, updateEvent} from '../../api-calls/events/event-calls.js';
 import {TOAST_TYPES} from '../../constants/constants.js';
 import {ROUTING_CONSTANTS} from '../../constants/routing-constants.js';
-import {useAdminContext, useToastContext} from '../context/context-hooks.jsx';
+import {clearAuthFromSessionStorage} from '../../utils/utils.js';
+import {useAuth} from '../auth/use-auth.jsx';
+import {useToastContext} from '../context/context-hooks.jsx';
 
 /**
  * A hook that retrieves all events from the database.
@@ -51,8 +53,8 @@ export const useGetEvents = () => {
  * @return {import('@tanstack/react-query').UseMutationResult}
  */
 export const useCreateEvent = () => {
-    const {bearerToken, csrfToken} = useAdminContext();
-    const {setToastMessage, setShowToast, setToastType} = useToastContext();
+    const {bearerToken, csrfToken} = useAuth();
+    const {showToast} = useToastContext();
     const queryClient = useQueryClient();
     const navigate = useNavigate();
 
@@ -61,44 +63,36 @@ export const useCreateEvent = () => {
             mutationKey: ['createEvent'],
             mutationFn: (requestBody) => createEvent(requestBody, bearerToken, csrfToken),
             onSuccess: async () => {
-                return Promise.all([
-                    queryClient.invalidateQueries({
-                        queryKey: ['events']
-                    }),
-                    queryClient.invalidateQueries({
-                        queryKey: ['pageContent']
-                    }),
-                    setToastMessage('Event created.'),
-                    setToastType(TOAST_TYPES.PRIMARY),
-                    setShowToast(true)
+                await Promise.all([
+                    queryClient.invalidateQueries({queryKey: ['events']}),
+                    queryClient.invalidateQueries({queryKey: ['pageContent']})
                 ]);
+                showToast({message: 'Event created.', type: TOAST_TYPES.PRIMARY});
             },
             onError: async (error) => {
                 if (error?.status === 401) {
-                    return Promise.all([
-                        queryClient.invalidateQueries({
-                            queryKey: ['events']
-                        }),
-                        queryClient.invalidateQueries({
-                            queryKey: ['pageContent']
-                        }),
-                        setToastMessage(`Error creating event. ${error?.response?.data?.message}`),
-                        setToastType(TOAST_TYPES.ERROR),
-                        setShowToast(true),
-                        navigate(ROUTING_CONSTANTS.LOGIN.URL)
-                    ]);
+                    await queryClient.invalidateQueries({
+                        queryKey: ['events']
+                    });
+                    await queryClient.invalidateQueries({
+                        queryKey: ['pageContent']
+                    });
+                    showToast({
+                        message: `Error creating event. ${error?.response?.data?.message}`,
+                        type: TOAST_TYPES.ERROR
+                    });
+                    clearAuthFromSessionStorage();
+                    navigate(ROUTING_CONSTANTS.LOGIN.URL, {replace: true});
                 } else {
-                    return Promise.all([
+                    await Promise.all([
                         queryClient.invalidateQueries({
                             queryKey: ['events']
                         }),
                         queryClient.invalidateQueries({
                             queryKey: ['pageContent']
                         }),
-                        setToastMessage('Error creating event'),
-                        setToastType(TOAST_TYPES.ERROR),
-                        setShowToast(true)
                     ]);
+                    showToast({message: 'Error creating event', type: TOAST_TYPES.ERROR});
                 }
             }
         })
@@ -111,8 +105,8 @@ export const useCreateEvent = () => {
  * @return {import('@tanstack/react-query').UseMutationResult} - the response from the API
  */
 export const useUpdateEvent = () => {
-    const {bearerToken, csrfToken} = useAdminContext();
-    const {setToastMessage, setShowToast, setToastType} = useToastContext();
+    const {bearerToken, csrfToken} = useAuth();
+    const {showToast} = useToastContext();
     const queryClient = useQueryClient();
     const navigate = useNavigate();
 
@@ -120,43 +114,35 @@ export const useUpdateEvent = () => {
         mutationKey: ['updateEvent'],
         mutationFn: async ({id, updates}) =>
             updateEvent(id, updates, bearerToken, csrfToken),
-        onSuccess: async () => Promise.all([
-            queryClient.invalidateQueries({
-                queryKey: ['events']
-            }),
-            queryClient.invalidateQueries({
-                queryKey: ['pageContent']
-            }),
-            setToastMessage('Event updated.'),
-            setToastType(TOAST_TYPES.PRIMARY),
-            setShowToast(true)
-        ]),
+        onSuccess: async () => {
+            await Promise.all([
+                queryClient.invalidateQueries({queryKey: ['events']}),
+                queryClient.invalidateQueries({queryKey: ['pageContent']})
+            ]);
+            showToast({message: 'Event updated.', type: TOAST_TYPES.PRIMARY});
+        },
         onError: async (error) => {
             if (error?.status === 401) {
-                return Promise.all([
-                    queryClient.invalidateQueries({
-                        queryKey: ['events']
-                    }),
-                    queryClient.invalidateQueries({
-                        queryKey: ['pageContent']
-                    }),
-                    setToastMessage(`Error updating event. ${error?.response?.data?.message}`),
-                    setToastType(TOAST_TYPES.ERROR),
-                    setShowToast(true),
-                    navigate(ROUTING_CONSTANTS.LOGIN.URL)
-                ]);
+                await queryClient.invalidateQueries({
+                    queryKey: ['events']
+                });
+                await queryClient.invalidateQueries({
+                    queryKey: ['pageContent']
+                });
+                showToast({
+                    message: `Error updating event. ${error?.response?.data?.message}`,
+                    type: TOAST_TYPES.ERROR
+                });
+                sessionStorage.removeItem('authToken');
+                navigate(ROUTING_CONSTANTS.LOGIN.URL, {replace: true});
             } else {
-                return Promise.all([
-                    queryClient.invalidateQueries({
-                        queryKey: ['events']
-                    }),
-                    queryClient.invalidateQueries({
-                        queryKey: ['pageContent']
-                    }),
-                    setToastMessage('Error updating event.'),
-                    setToastType(TOAST_TYPES.ERROR),
-                    setShowToast(true)
-                ]);
+                await queryClient.invalidateQueries({
+                    queryKey: ['events']
+                });
+                await queryClient.invalidateQueries({
+                    queryKey: ['pageContent']
+                });
+                showToast({message: 'Error updating event.', type: TOAST_TYPES.ERROR});
             }
         }
     });
@@ -168,8 +154,8 @@ export const useUpdateEvent = () => {
  * @return {import('@tanstack/react-query').UseMutationResult} - the response from the API
  */
 export const useRemoveEvent = () => {
-    const {bearerToken, csrfToken} = useAdminContext();
-    const {setToastMessage, setShowToast, setToastType} = useToastContext();
+    const {bearerToken, csrfToken} = useAuth();
+    const {showToast} = useToastContext();
     const queryClient = useQueryClient();
     const navigate = useNavigate();
 
@@ -177,34 +163,26 @@ export const useRemoveEvent = () => {
         mutationKey: ['removeEvent'],
         mutationFn: async ({id}) =>
             removeEvent(id, bearerToken, csrfToken),
-        onSuccess: async () => Promise.all([
-            queryClient.invalidateQueries({
-                queryKey: ['events']
-            }),
-            setToastMessage(`Event removed.`),
-            setToastType(TOAST_TYPES.PRIMARY),
-            setShowToast(true)
-        ]),
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({queryKey: ['events']});
+            showToast({message: `Event removed.`, type: TOAST_TYPES.PRIMARY});
+        },
         onError: async (error) => {
             if (error?.status === 401) {
-                return Promise.all([
-                    queryClient.invalidateQueries({
-                        queryKey: ['events']
-                    }),
-                    setToastMessage(`Error removing event. ${error?.response?.data?.message}`),
-                    setToastType(TOAST_TYPES.ERROR),
-                    setShowToast(true),
-                    navigate(ROUTING_CONSTANTS.LOGIN.URL)
-                ]);
+                await queryClient.invalidateQueries({
+                    queryKey: ['events']
+                });
+                showToast({
+                    message: `Error removing event. ${error?.response?.data?.message}`,
+                    type: TOAST_TYPES.ERROR
+                });
+                sessionStorage.removeItem('authToken');
+                navigate(ROUTING_CONSTANTS.LOGIN.URL, {replace: true});
             } else {
-                return Promise.all([
-                    queryClient.invalidateQueries({
-                        queryKey: ['events']
-                    }),
-                    setToastMessage('Error removing event.'),
-                    setToastType(TOAST_TYPES.ERROR),
-                    setShowToast(true)
-                ]);
+                await queryClient.invalidateQueries({
+                    queryKey: ['events']
+                });
+                showToast({message: 'Error removing event.', type: TOAST_TYPES.ERROR});
             }
         }
     });

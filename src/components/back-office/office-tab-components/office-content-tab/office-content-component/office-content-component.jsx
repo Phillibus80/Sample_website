@@ -9,8 +9,8 @@ import {object, string} from 'yup';
 
 import OfficeContentRemoveComponentButton from './office-content-remove-component-button.jsx';
 import {ROLES} from '../../../../../constants/constants.js';
+import {useAuth} from '../../../../../hooks/auth/use-auth.jsx';
 import {useCreateComponent, useGetComponents} from '../../../../../hooks/components/component-hooks.jsx';
-import {useAdminContext} from '../../../../../hooks/context/context-hooks.jsx';
 import {toTitleCase} from '../../../../../utils/utils.js';
 import OfficeAdditionButton from '../../../office-addition-button/office-addition-button.jsx';
 import * as styles from '../office-content.module.scss';
@@ -25,7 +25,7 @@ const OfficeContentComponent = () => {
         isPending: createComponentPending,
         isSuccess: createComponentSuccess
     } = useCreateComponent();
-    const {roles} = useAdminContext();
+    const {roles} = useAuth();
     const [addedComponents, setAddedComponents] = useState([]);
 
     const components = componentSuccess ? componentData.data?.data : [];
@@ -183,7 +183,7 @@ const OfficeContentComponent = () => {
                                         <Button
                                             className='mt-3 mb-3 w-25'
                                             type='submit'
-                                            disabled={isPending}
+                                            disabled={isPending || Object.keys(errors).length > 0}
                                         >
                                             <div className='d-flex g-3 justify-content-center align-items-center'>
                                                 <span>Submit Changes</span>

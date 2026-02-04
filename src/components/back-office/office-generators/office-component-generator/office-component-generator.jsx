@@ -13,6 +13,7 @@ import {
     getPageSectionComponentId
 } from './utils/utils.jsx';
 import {componentCommonPropType} from '../../../../common/commonPropTypes.jsx';
+import {COMPONENTS} from '../../../../constants/app-constants.js';
 import {
     useCreateComponentContent,
     useUpdateComponentContent
@@ -70,7 +71,7 @@ const OfficeComponentGenerator = ({component}) => {
                     }
                 >
                     {
-                        ({handleSubmit}) => (
+                        ({handleSubmit, errors}) => (
                             <Accordion className='mb-5'>
                                 <Accordion.Item eventKey='11'>
                                     <Accordion.Header>{component.component_name}</Accordion.Header>
@@ -90,12 +91,14 @@ const OfficeComponentGenerator = ({component}) => {
                                             />
                                             <br/>
                                             <OfficeLinkList
+                                                component={component}
                                                 linkContent={links}
                                                 handleClick={createComponentContent}
                                                 componentContentId={pageSectionComponentId}
                                                 isLinkTextInputDisabled={true}
                                                 isSelectDisabled={true}
                                                 prefix={customPrefix}
+                                                isMenu={component.component_name === COMPONENTS.MENU}
                                             />
                                             <br/>
                                             <OfficeImageList
@@ -115,8 +118,11 @@ const OfficeComponentGenerator = ({component}) => {
                                                 prefix={customPrefix}
                                             />
 
-                                            <Button className='mt-3 mb-3' type='submit'
-                                                    disabled={updateContentIsPending}>
+                                            <Button
+                                                className='mt-3 mb-3'
+                                                type='submit'
+                                                disabled={updateContentIsPending || Object.keys(errors).length > 0}
+                                            >
                                                 <div className='d-flex g-3 justify-content-center align-items-center'>
                                                     <span>Submit</span>
                                                     {updateContentIsPending ?

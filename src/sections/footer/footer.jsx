@@ -1,4 +1,5 @@
 import {Formik} from 'formik';
+import {Spinner} from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
@@ -22,7 +23,10 @@ import {extractComponentsFromSection} from '../../utils/utils.js';
  * @return {React.ReactNode|null}
  */
 const Footer = ({content}) => {
-    const {mutateAsync: sendEmail} = useSendEmail();
+    const {
+        mutate: sendEmail,
+        isPending
+    } = useSendEmail();
 
     if (!content) return null;
 
@@ -63,15 +67,15 @@ const Footer = ({content}) => {
                 {
                     hasEmailField &&
                     <Formik
+                        enableReinitialize
                         initialValues={{[emailFieldName]: ''}}
                         validationSchema={object().shape({
                             [emailFieldName]: string().matches(emailRegExp, 'Please enter a valid email').required('Email cannot be blank.')
                         })}
-                        onSubmit={async (values, formikHelpers) => {
-                            formikHelpers.setSubmitting(true);
-
-                            await sendEmail(values.contact_email);
-                            formikHelpers.setSubmitting(false);
+                        onSubmit={(values, formikHelpers) => {
+                            sendEmail(values.contact_email, {
+                                onSuccess: () => formikHelpers.resetForm()
+                            });
                         }}
                     >
                         {({
@@ -108,8 +112,11 @@ const Footer = ({content}) => {
                                     className={`${styles.footer_form_btn} mt-3`}
                                     variant='primary'
                                     type='submit'
+                                    disabled={isPending || Object.keys(errors).length > 0}
                                 >
                                     {btnText}
+                                    {(isPending) ?
+                                        <Spinner className='ms-3' animation='border' role='statue'/> : ''}
                                 </Button>
                             </Form>
                         }

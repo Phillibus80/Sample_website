@@ -7,8 +7,10 @@ import Form from 'react-bootstrap/Form';
 import {GrSubtractCircle} from 'react-icons/gr';
 
 import * as styles from './office-link.module.scss';
+import {linkComponentPropType} from '../../../common/commonPropTypes.jsx';
 import {DEFAULT_CONTENT, PLACEHOLDER_TEXT, ROLES} from '../../../constants/constants.js';
 import {ROUTING_CONSTANTS} from '../../../constants/routing-constants.js';
+import {useAuth} from '../../../hooks/auth/use-auth.jsx';
 import {useRemoveComponentContent} from '../../../hooks/component-content/component-content-hooks.js';
 import {useAdminContext} from '../../../hooks/context/context-hooks.jsx';
 import {useRemoveLink} from '../../../hooks/links/link-hooks.js';
@@ -21,6 +23,7 @@ import {useRemoveLink} from '../../../hooks/links/link-hooks.js';
  * @param {boolean} [isSelectDisabled]
  * @param {string} [prefix] - Optional, can be added to the beginning of field names to namespace Fields
  * @param {boolean} [hideSubtractBtn] - Optional, hide subtract button completely
+ * @param {boolean} [isMenuLink] - indicates if the link is for a menu component
  *
  * @return {React.ReactNode | null}
  */
@@ -29,7 +32,8 @@ const OfficeLink = ({
                         isSelectDisabled = false,
                         isDisabled = false,
                         prefix = '',
-                        hideSubtractBtn = false
+                        hideSubtractBtn = false,
+                        isMenuLink = false
                     }) => {
     const fieldName = `${prefix ? `${prefix}_` : ''}link_${linkObject.component_content_id ?? linkObject.link_id}`;
 
@@ -45,7 +49,9 @@ const OfficeLink = ({
         values,
         setFieldValue
     } = useFormikContext();
-    const {links, roles} = useAdminContext();
+    const {links} = useAdminContext();
+    const {roles} = useAuth();
+
     const {
         mutateAsync: removeContent,
         isPending: removeContentIsPending
@@ -122,6 +128,7 @@ const OfficeLink = ({
                                             <option
                                                 key={`${url}_${index}`}
                                                 value={url}
+                                                disabled={isMenuLink ? !url.startsWith('/') : false}
                                             >
                                                 {url}
                                             </option>
@@ -153,6 +160,9 @@ const OfficeLink = ({
                         isInvalid={touched[`${fieldName}_link_text`] && !!errors[`${fieldName}_link_text`]}
                         disabled={isDisabled}
                     />
+                    <Form.Control.Feedback type='invalid'>
+                        {errors[`${fieldName}_link_text`]}
+                    </Form.Control.Feedback>
                 </div>
 
                 {
@@ -164,27 +174,18 @@ const OfficeLink = ({
                         }
                         {showSubtractCircle()}
                     </InputGroup.Text>}
-
-                <Form.Control.Feedback type='invalid'>
-                    {errors[fieldName]}
-                </Form.Control.Feedback>
             </InputGroup>
         </Form.Group>
     );
 };
 
 OfficeLink.propTypes = {
-    linkObject: PropTypes.shape({
-        component_content_id: PropTypes.string.isRequired,
-        link_id: PropTypes.string.isRequired,
-        link_text: PropTypes.string.isRequired,
-        link_url: PropTypes.string.isRequired,
-        page_section_component_id: PropTypes.string.isRequired
-    }).isRequired,
+    linkObject: linkComponentPropType.isRequired,
     isSelectDisabled: PropTypes.bool,
     isDisabled: PropTypes.bool,
     prefix: PropTypes.string,
-    hideSubtractBtn: PropTypes.bool
+    hideSubtractBtn: PropTypes.bool,
+    isMenuLink: PropTypes.bool
 };
 
 export default OfficeLink;

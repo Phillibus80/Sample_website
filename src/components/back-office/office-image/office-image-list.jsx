@@ -3,8 +3,8 @@ import {Accordion} from 'react-bootstrap';
 
 import OfficeImage from './office-image.jsx';
 import {imageComponentPropType} from '../../../common/commonPropTypes.jsx';
-import {DEFAULT_CONTENT, IMAGE_SRC_PLACEHOLDER_TEXT, PLACEHOLDER_TEXT, ROLES} from '../../../constants/constants.js';
-import {useAdminContext} from '../../../hooks/context/context-hooks.jsx';
+import {DEFAULT_CONTENT, IMAGE_SRC_PLACEHOLDER_TEXT, ROLES} from '../../../constants/constants.js';
+import {useAuth} from '../../../hooks/auth/use-auth.jsx';
 import OfficeAdditionButton from '../office-addition-button/office-addition-button.jsx';
 
 /**
@@ -32,15 +32,15 @@ const OfficeImageList = (
         showAddon = true
     }
 ) => {
-    const {roles} = useAdminContext();
+    const {roles} = useAuth();
     const hasAdminRole = roles.includes(ROLES.ADMIN);
     const hasSuperRole = roles.includes(ROLES.SUPER);
 
     const handleAddImageEvent = async () => {
         const requestBody = {
-            image_text: PLACEHOLDER_TEXT,
-            image_src: IMAGE_SRC_PLACEHOLDER_TEXT,
-            image_alt: PLACEHOLDER_TEXT
+            image_text: DEFAULT_CONTENT.IMAGE.LABEL,
+            image_src: DEFAULT_CONTENT.IMAGE.SRC,
+            image_alt: DEFAULT_CONTENT.IMAGE.ALT
         };
 
         await handleClick({componentContentId: componentContentId, requestBody: requestBody});
@@ -59,8 +59,10 @@ const OfficeImageList = (
 
         return showAddon
             ? imageContent.map((content, index) =>
-                <div key={`${prefix ? prefix + '_' : ''}${content?.src}_${index}`}>
+                <div
+                    key={`${prefix ? prefix + '_' : ''}${content?.src === DEFAULT_CONTENT.IMAGE.SRC ? `default_${index}` : content?.src}`}>
                     <OfficeImage
+                        currentImages={imageContent}
                         imageObject={content}
                         isDisabled={isDisabled}
                         prefix={prefix}
@@ -70,8 +72,10 @@ const OfficeImageList = (
             : imageContent.reduce((accum, content, index) => {
                 content.src !== IMAGE_SRC_PLACEHOLDER_TEXT
                 && content.src !== DEFAULT_CONTENT.IMAGE.SRC
-                && accum.push(<div key={`${prefix ? prefix + '_' : ''}${content?.src}_${index}`}>
+                && accum.push(<div
+                    key={`${prefix ? prefix + '_' : ''}${content?.src === DEFAULT_CONTENT.IMAGE.SRC ? `default_${index}` : content?.src}`}>
                     <OfficeImage
+                        currentImages={imageContent}
                         imageObject={content}
                         isDisabled={isDisabled}
                         isSelectDisabled={isSelectDisabled}

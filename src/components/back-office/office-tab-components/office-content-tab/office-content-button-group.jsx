@@ -1,3 +1,4 @@
+import {useFormikContext} from 'formik';
 import PropTypes from 'prop-types';
 import {Spinner} from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
@@ -12,6 +13,8 @@ import Button from 'react-bootstrap/Button';
  * @return {React.ReactNode|null}
  */
 const OfficeContentButtonGroup = ({buttonLabel, setShowModal, isPending}) => {
+    const {errors} = useFormikContext();
+
     if (!buttonLabel) return null;
 
     return <div className='mt-5 d-flex justify-content-between'>
@@ -23,7 +26,7 @@ const OfficeContentButtonGroup = ({buttonLabel, setShowModal, isPending}) => {
             {buttonLabel}
         </Button>
 
-        <Button className='mt-3 mb-3' type='submit' disabled={isPending}>
+        <Button className='mt-3 mb-3' type='submit' disabled={isPending || Object.keys(errors).length > 0}>
             <div className='d-flex g-3 justify-content-center align-items-center'>
                 <span>Submit Changes</span>
                 {isPending ? <Spinner className='ms-3' animation='border'

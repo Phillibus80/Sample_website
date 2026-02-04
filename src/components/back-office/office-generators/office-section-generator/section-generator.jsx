@@ -8,7 +8,7 @@ import {GrSubtractCircle} from 'react-icons/gr';
 import * as styles from './sectionGenerator.module.scss';
 import {componentContentWithEvents} from '../../../../common/commonPropTypes.jsx';
 import {ROLES} from '../../../../constants/constants.js';
-import {useAdminContext} from '../../../../hooks/context/context-hooks.jsx';
+import {useAuth} from '../../../../hooks/auth/use-auth.jsx';
 import {useRemovePageSection, useUpdatePageSection} from '../../../../hooks/page/page-hooks.jsx';
 import OfficeComponentGenerator from '../office-component-generator/office-component-generator.jsx';
 
@@ -30,7 +30,7 @@ const SectionGenerator = ({section}) => {
         mutateAsync: removeSection,
         isPending: removePending
     } = useRemovePageSection();
-    const {roles} = useAdminContext();
+    const {roles} = useAuth();
 
     if (!section) return null;
 
@@ -122,7 +122,8 @@ const SectionGenerator = ({section}) => {
                             /**
                              * @type {Array<React.ReactNode>}
                              */
-                            section.components.map((component, index) =>
+                            !!section?.components
+                            && section?.components?.map((component, index) =>
                                 <div key={`${component?.component_name}_${index}`}>
                                     <OfficeComponentGenerator component={component}/>
                                 </div>)

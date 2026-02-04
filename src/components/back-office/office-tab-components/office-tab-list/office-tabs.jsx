@@ -2,6 +2,8 @@ import {Tab, Tabs} from 'react-bootstrap';
 import {GrAddCircle} from 'react-icons/gr';
 
 import {ROLES} from '../../../../constants/constants.js';
+import {ROUTING_CONSTANTS} from '../../../../constants/routing-constants.js';
+import {useAuth} from '../../../../hooks/auth/use-auth.jsx';
 import {useAdminContext, useToastContext} from '../../../../hooks/context/context-hooks.jsx';
 import {toTitleCase} from '../../../../utils/utils.js';
 import AppToast from '../../../app-toast/app-toast.jsx';
@@ -18,7 +20,8 @@ import OfficeUsers from '../office-users/office-users.jsx';
  * @return {React.ReactNode | Array}
  */
 const OfficeTabs = () => {
-    const {pages, roles} = useAdminContext();
+    const {pages} = useAdminContext();
+    const {roles} = useAuth();
     const {showToast, setShowToast, toastMessage, toastType} = useToastContext();
 
     const hasAdminAccess = roles?.includes(ROLES.SUPER) || roles?.includes(ROLES.ADMIN);
@@ -71,7 +74,7 @@ const OfficeTabs = () => {
     const generateTabs = (pagesArray) => {
         const adminFilteredOutPages = pagesArray
             ?.reduce((accum, page) => {
-                if (page.NAME !== 'admin') {
+                if (page.NAME !== ROUTING_CONSTANTS.ADMIN.LABEL.toLowerCase()) {
                     accum.push(
                         <Tab
                             title={toTitleCase(page.NAME)}

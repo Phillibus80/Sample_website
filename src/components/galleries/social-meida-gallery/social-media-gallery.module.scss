@@ -1,6 +1,12 @@
 @use '../../../scss/main' as main;
 
 .social_gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+
   &_title {
     font-family: main.$type-title-font;
     color: white;
@@ -13,8 +19,26 @@
   }
 
   &_image {
-    object-fit: cover;
-    height: 200px;
-    width: 200px;
+    flex: 0 0 calc(33.333% - 1rem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+
+    a {
+      display: block;
+      width: 100%;
+    }
+
+    figure {
+      display: flex;
+      justify-content: center;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
   }
 }

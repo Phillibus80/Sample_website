@@ -633,8 +633,8 @@ function retrieveDefaultContentIds(PDO $db): array|string
  * Supported types: email, int, float, bool, password, telephone,
  * pageLink, imageLink, url, alphaNumeric.
  *
- * @param mixed  $value     The value to validate.
- * @param string $type      The expected type/format.
+ * @param mixed $value The value to validate.
+ * @param string $type The expected type/format.
  * @param string $fieldName The field name, used in error messages.
  *
  * @return string|null An error message if validation fails, or null if valid.
@@ -834,7 +834,7 @@ function validatePathParams(array $params, array $paramTypes): array
         } else {
             // Cast validated values
             $values[$param] = match ($type) {
-                'int' => (int) $value,
+                'int' => (int)$value,
                 'bool' => filter_var($value, FILTER_VALIDATE_BOOLEAN),
                 default => $value,
             };
@@ -953,9 +953,9 @@ function validatePatchRequestData(object|array $requestData, array $validationRu
  * handlers that set $db = null before calling sendResponse. Silently
  * catches all exceptions so a logging failure never breaks the main operation.
  *
- * @param string      $endpoint The API endpoint being logged (e.g., 'POST /pages').
- * @param string      $level    The log level: 'success' or 'critical'.
- * @param string|null $message  Optional message providing additional context.
+ * @param string $endpoint The API endpoint being logged (e.g., 'POST /pages').
+ * @param string $level The log level: 'success' or 'critical'.
+ * @param string|null $message Optional message providing additional context.
  * @param string|null $username Optional username of the actor (null for unauthenticated routes).
  *
  * @return void

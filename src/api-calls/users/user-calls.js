@@ -6,7 +6,7 @@ import {urlBuilder} from '../utils.js';
 /**
  * An API call to retrieve all users.  Can be filtered by role as a query param.
  *
- * @param {Role} [role] - Optional, returns the users matching this role.  Cannot be used with the filter
+ * @param {Role|null} [role] - Optional, returns the users matching this role.  Cannot be used with the filter
  * @param {Role} [filter] - Optional, returns all Users with roles other than the filter.  Cannot be used with the role
  * @param {object} bearerToken
  * @return {Promise<axios.AxiosResponse<any>>}

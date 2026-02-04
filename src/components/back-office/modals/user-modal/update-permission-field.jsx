@@ -2,7 +2,7 @@ import {Field, useFormikContext} from 'formik';
 import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
 
-import UserRoleCheckboxes from './UserRoleCheckboxes.jsx';
+import UserRoleCheckboxes from './user-roles-checkboxes.jsx';
 import * as styles from '../../office-tab-components/office-users/office-users.module.scss';
 
 /**

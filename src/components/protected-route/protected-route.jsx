@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import {Navigate, useLocation} from 'react-router-dom';
 
 import {ROUTING_CONSTANTS} from '../../constants/routing-constants.js';
-import {useAuth} from '../../hooks/auth/auth-hooks.js';
+import {useAuth} from '../../hooks/auth/use-auth.jsx';
 
 /**
  * Component to protect routes requiring authentication
@@ -20,7 +20,6 @@ const ProtectedRoute = ({
     const {isAuthenticated, hasRole, hasAnyRole} = useAuth();
     const location = useLocation();
 
-    // Check authentication
     if (!isAuthenticated) {
         return (
             <Navigate
@@ -31,7 +30,6 @@ const ProtectedRoute = ({
         );
     }
 
-    // Check role requirements
     if (requiredRole) {
         const isAuthorized = Array.isArray(requiredRole)
             ? hasAnyRole(requiredRole)

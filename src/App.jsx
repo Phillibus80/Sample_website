@@ -4,6 +4,7 @@ import {lazy, Suspense} from 'react';
 import {ErrorBoundary} from 'react-error-boundary';
 import {BrowserRouter, Route, Routes} from 'react-router';
 
+import AppToast from './components/app-toast/app-toast.jsx';
 import LoadingSkeleton from './components/loading-skeleton/loading-skeleton.jsx';
 import PageGenerator from './components/page-generator/page-generator.jsx';
 import ProtectedRoute from './components/protected-route/protected-route.jsx';
@@ -11,6 +12,7 @@ import {SECTIONS} from './constants/app-constants.js';
 import {ROLES} from './constants/constants.js';
 import {ROUTING_CONSTANTS} from './constants/routing-constants.js';
 import {AdminProvider} from './context/admin/admin-provider.jsx';
+import {AuthProvider} from './context/auth/auth-provider.jsx';
 import {ToastProvider} from './context/toast/toast-provider.jsx';
 import {useGetSiteLinksBySectionName} from './hooks/links/link-hooks.js';
 import AboutUs from './routes/about-us/about-us.jsx';
@@ -61,21 +63,24 @@ const App = () => {
 
     return (
         <ToastProvider>
+            <AppToast/>
             <BrowserRouter>
-                <ErrorBoundary fallback={<Error/>}>
-                    <Routes>
-                        {
-                            links.map(({title, url}) =>
-                                <Route
-                                    key={url}
-                                    path={url}
-                                    element={getPage(title)}
-                                />
-                            )
-                        }
-                        <Route path='*' element={<NotFound/>}/>
-                    </Routes>
-                </ErrorBoundary>
+                <AuthProvider>
+                    <ErrorBoundary fallback={<Error/>}>
+                        <Routes>
+                            {
+                                links.map(({title, url}) =>
+                                    <Route
+                                        key={url}
+                                        path={url}
+                                        element={getPage(title)}
+                                    />
+                                )
+                            }
+                            <Route path='*' element={<NotFound/>}/>
+                        </Routes>
+                    </ErrorBoundary>
+                </AuthProvider>
             </BrowserRouter>
         </ToastProvider>
     );

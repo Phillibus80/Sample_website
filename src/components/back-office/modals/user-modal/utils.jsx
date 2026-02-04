@@ -11,8 +11,6 @@ import * as styles from '../../office-tab-components/office-users/office-users.m
  * generates the form fields to update.
  *
  * @param {UserResObject} currentUser
- * @param {function} handleChange
- * @param {function} handleBlur
  * @param {object} errors
  * @param {object} touched
  *
@@ -20,8 +18,6 @@ import * as styles from '../../office-tab-components/office-users/office-users.m
  */
 export const generateUserUpdateFields = (
     currentUser,
-    handleChange,
-    handleBlur,
     errors,
     touched
 ) => (currentUser !== null)

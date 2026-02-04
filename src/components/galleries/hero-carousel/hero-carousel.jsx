@@ -20,14 +20,14 @@ const Hero = ({content}) => {
     return (images && images?.length > 0)
         ? (<Carousel className={`mb-1 shadow-sm ${styles.carousel}`} fade>
             {
-                images.map(({src: image_url, alt: image_alt}) => (
+                images.map(({src: image_url, alt: image_alt, image_text}) => (
                     <Carousel.Item key={image_url} className={styles.carousel_image_container}>
                         <CarouselImage
                             imageSrc={`${image_url}`}
                             altText={image_alt}
                         />
                         <Carousel.Caption>
-                            <p>{image_alt}</p>
+                            <p>{image_text}</p>
                         </Carousel.Caption>
                     </Carousel.Item>)
                 )

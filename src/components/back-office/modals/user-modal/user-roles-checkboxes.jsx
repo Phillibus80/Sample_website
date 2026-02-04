@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import {InputGroup} from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 
+import {ROLES} from '../../../../constants/constants.js';
+import {useAuth} from '../../../../hooks/auth/use-auth.jsx';
 import {useGetUsers} from '../../../../hooks/users/user-hooks.js';
 
 /**
@@ -14,6 +16,18 @@ import {useGetUsers} from '../../../../hooks/users/user-hooks.js';
 const UserRoleCheckboxes = ({form, disabled}) => {
     const {data, isSuccess} = useGetUsers('all');
     const {setFieldValue} = useFormikContext();
+    const {
+        roles
+    } = useAuth();
+
+    /**
+     *
+     * @param {Role} role
+     * @return {boolean}
+     */
+    const canRemovePermission = (role) => {
+        return !(!roles.includes(ROLES.SUPER) && role === ROLES.SUPER);
+    };
 
     return isSuccess
         ? <InputGroup className='d-flex flex-column'>
@@ -32,7 +46,7 @@ const UserRoleCheckboxes = ({form, disabled}) => {
                                 ? setFieldValue('permissions', form.values.permissions.filter(permission => permission !== role))
                                 : setFieldValue('permissions', [...form.values.permissions, role]);
                         }}
-                        disabled={disabled}
+                        disabled={disabled || !canRemovePermission(role)}
                     />)
             }
         </InputGroup>

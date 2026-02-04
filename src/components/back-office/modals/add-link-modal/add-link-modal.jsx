@@ -43,15 +43,11 @@ const AddLinkModal = ({showModal, setShowModal}) => {
             <Formik
                 initialValues={initValues}
                 validationSchema={yupSchema}
-                onSubmit={async ({linkText, linkUrl}, formikHelpers) => {
-                    formikHelpers.setSubmitting(true);
-
+                onSubmit={async ({linkText, linkUrl}) => {
                     await createLink({
                         link_text: linkText,
                         link_url: linkUrl
                     });
-
-                    formikHelpers.setSubmitting(false);
                     setShowModal(false);
                 }}
             >

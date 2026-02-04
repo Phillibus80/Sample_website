@@ -8,7 +8,7 @@ import {object, ref, string} from 'yup';
 import TypicalUserInputField from './typical-user-input-field.jsx';
 import {generateUserUpdateFields} from './utils.jsx';
 import {ROLES} from '../../../../constants/constants.js';
-import {useAdminContext} from '../../../../hooks/context/context-hooks.jsx';
+import {useAuth} from '../../../../hooks/auth/use-auth.jsx';
 import {useCreateUser, useUpdateUser} from '../../../../hooks/users/user-hooks.js';
 
 /**
@@ -29,7 +29,7 @@ const OfficeUserModal = ({showModal, setShowModal, currentUser}) => {
         mutateAsync: updateUser,
         isPending: updateUserIsPending
     } = useUpdateUser();
-    const {loggedInUserName, roles} = useAdminContext();
+    const {loggedInUserName, roles} = useAuth();
 
     const isNewUser = !currentUser?.id;
     const isAdmin = roles.includes(ROLES.ADMIN) || roles.includes(ROLES.SUPER);
@@ -51,7 +51,7 @@ const OfficeUserModal = ({showModal, setShowModal, currentUser}) => {
                     lastName: currentUser?.lastName || '',
                     email: currentUser?.email || '',
                     username: currentUser?.username || '',
-                    permissions: currentUser?.permissions || '',
+                    permissions: currentUser?.permissions || [],
                     password: '',
                     newPassword: ''
                 }}
@@ -103,17 +103,12 @@ const OfficeUserModal = ({showModal, setShowModal, currentUser}) => {
                             const changes =
                                 Object.keys(values).reduce((accum, currentKey) => {
                                     if (currentKey === 'permissions') {
-                                        if (values[currentKey].length !== currentUser[currentKey].length) {
-                                            accum[currentKey] = values[currentKey];
-                                        } else {
-                                            const hasChanged = !values[currentKey].every(role => currentUser[currentKey].includes(role));
-
-                                            if (hasChanged) accum[currentKey] = values[currentKey];
-                                        }
+                                        const sortedCurrent = [...(currentUser[currentKey] || [])].sort();
+                                        const sortedNew = [...(values[currentKey] || [])].sort();
+                                        const hasChanged = JSON.stringify(sortedCurrent) !== JSON.stringify(sortedNew);
+                                        if (hasChanged) accum[currentKey] = values[currentKey];
                                     } else if (currentKey === 'password' || currentKey === 'newPassword') {
-                                        if (!values[currentKey] || values[currentKey] === '') {
-                                            return accum;
-                                        } else {
+                                        if (values[currentKey] && values[currentKey] !== '') {
                                             accum[currentKey] = values[currentKey];
                                         }
                                     } else if (values[currentKey] !== currentUser[currentKey]) {
@@ -186,7 +181,7 @@ const OfficeUserModal = ({showModal, setShowModal, currentUser}) => {
                                     type='submit'
                                     className='ms-5 rounded'
                                     variant='primary'
-                                    disabled={isPending || updateUserIsPending}
+                                    disabled={isPending || updateUserIsPending || Object.keys(errors).length > 0}
                                 >
                                     <div className='d-flex g-3 justify-content-center align-items-center'>
                                         <span>{`${isNewUser ? 'Create User' : 'Update User'}`}</span>
