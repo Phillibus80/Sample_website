@@ -10,6 +10,7 @@ try {
     $user_search_query = 'SELECT * FROM USERS WHERE ID = ?';
     $user_search_results = runQuery($db, $user_search_query, [$user_id]);
     if (!$user_search_results) {
+        writeLog('DELETE /users', 'critical', 'User not found.', $decodedToken->user->username);
         sendResponse(404, 'User not found');
     }
 

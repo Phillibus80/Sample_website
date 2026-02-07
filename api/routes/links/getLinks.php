@@ -13,6 +13,7 @@ if (isset($filter_page_links)) {
         $filterPageLinksParamTypes
     );
     if (count($filterPageLinksValidationResult['errors']) > 0) {
+        writeLog('GET /links', 'warning', 'Invalid query parameter.');
         sendResponse(400, 'Error with Page Link filter.', $filterPageLinksValidationResult['errors']);
         exit;
     }

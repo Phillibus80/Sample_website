@@ -18,6 +18,7 @@ try {
 
     $updateErrors = validatePatchRequestData($requestData, $validationRules);
     if (count($updateErrors) > 0) {
+        writeLog('PATCH /users', 'warning', 'Validation failed.', $decodedToken->user->username);
         sendResponse(400, 'Bad request', $updateErrors);
         exit();
     }
@@ -63,6 +64,7 @@ try {
             $values[] = password_hash($requestData['newPassword'], PASSWORD_BCRYPT);
         } else {
             $db = null;
+            writeLog('PATCH /users', 'warning', 'Password verification failed.', $decodedToken->user->username);
             unauthorizedResponse('Username and Password combination do not match.');
         }
     }
@@ -101,6 +103,7 @@ try {
     }
 
     if (empty($requestData['permissions']) && empty($fields)) {
+        writeLog('PATCH /users', 'warning', 'No updatable fields sent.', $decodedToken->user->username);
         sendResponse(400, 'Bad Request: No updatable fields sent.');
     }
 

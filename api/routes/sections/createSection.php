@@ -15,6 +15,7 @@ $validationErrors = validateRequestData(
 
 // Missing required fields
 if (count($validationErrors) > 0) {
+    writeLog('POST /sections', 'warning', 'Validation failed.', $decodedToken->user->username);
     sendResponse(422, 'All fields are required: section_name.', $validationErrors);
 }
 
@@ -30,6 +31,7 @@ try {
         ';
     $section_check_result = runQuery($db, $section_check_query, [$new_section_name]);
     if ($section_check_result) {
+        writeLog('POST /sections', 'critical', 'Section already exists.', $decodedToken->user->username);
         sendResponse(409, 'Section already exists.');
     }
 

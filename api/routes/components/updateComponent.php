@@ -11,6 +11,7 @@ try {
 
     $updateErrors = validatePatchRequestData($requestData, $validationRules);
     if (count($updateErrors) > 0) {
+        writeLog('PATCH /components', 'warning', 'Validation failed.', $decodedToken->user->username);
         sendResponse(400, 'Bad request', $updateErrors);
         exit();
     }
@@ -34,6 +35,7 @@ try {
     }
 
     if (empty($fields)) {
+        writeLog('PATCH /components', 'warning', 'No updatable fields sent.', $decodedToken->user->username);
         sendResponse(400, 'Bad Request: No updatable fields sent.');
     }
 

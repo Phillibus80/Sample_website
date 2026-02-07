@@ -10,6 +10,7 @@ try {
     $image_search_query = 'SELECT * FROM IMAGES WHERE ID = ?';
     $image_search_results = runQuery($db, $image_search_query, [$imageId]);
     if (!$image_search_results) {
+        writeLog('DELETE /images', 'critical', 'Image not found.', $decodedToken->user->username);
         sendResponse(404, 'Image not found');
     }
 

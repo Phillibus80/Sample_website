@@ -20,6 +20,7 @@ try {
 
     // Check that the section exists
     if (!$statementResult) {
+        writeLog('GET /images/{section_name}', 'critical', 'Section not found.', $decodedToken->user->username);
         sendResponse(404, 'Section not found');
     }
 

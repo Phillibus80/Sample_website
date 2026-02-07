@@ -451,7 +451,11 @@ function validateDependentFields(mixed $parentField, array $requiredFields, stri
 {
     if ($parentField) {
         foreach ($requiredFields as $field) {
-            if (empty($field)) sendResponse(400, $errorMessage);
+            if (empty($field)) {
+                $endpoint = Flight::request()->method . ' ' . Flight::request()->url;
+                writeLog($endpoint, 'warning', $errorMessage);
+                sendResponse(400, $errorMessage);
+            }
         }
     }
 }

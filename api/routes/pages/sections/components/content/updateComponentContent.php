@@ -19,6 +19,7 @@ $validationRules = [
 // of request entries
 $updateErrors = validatePatchRequestData($requestData, $validationRules);
 if (count($updateErrors) > 0) {
+    writeLog('PATCH /pages_sections_components_content', 'warning', 'Validation failed.', $decodedToken->user->username);
     sendResponse(422, 'Bad request', $updateErrors);
     exit();
 }
@@ -31,6 +32,7 @@ try {
     $search_results = runQuery($db, $search_query, [$pathParam]);
 
     if (!$search_results) {
+        writeLog('PATCH /pages_sections_components_content', 'critical', 'Component content not found.', $decodedToken->user->username);
         sendResponse(404, 'Component content not found');
     }
 
@@ -40,6 +42,7 @@ try {
     if (isset($requestData['link_url'])) {
         $linkId = getRecordId($db, 'LINKS', ['URL' => $requestData['link_url']]);
         if (!$linkId) {
+            writeLog('PATCH /pages_sections_components_content', 'critical', 'Link url: ' . $requestData['link_url'] . ' not found.', $decodedToken->user->username);
             sendResponse(404, 'Link url: ' . $requestData['link_url'] . ' not found');
         }
 
@@ -55,6 +58,7 @@ try {
             ['TXT' => $requestData['text_content']]
         );
         if (!$textContentId) {
+            writeLog('PATCH /pages_sections_components_content', 'critical', 'Component Content ID: ' . $pathParam . ' not found.', $decodedToken->user->username);
             sendResponse(404, 'Component Content ID: ' . $pathParam . ' not found');
         }
 
@@ -65,6 +69,7 @@ try {
     if (isset($requestData['image_url'])) {
         $imageId = getRecordId($db, 'IMAGES', ['SRC' => $requestData['image_url']]);
         if (!$imageId) {
+            writeLog('PATCH /pages_sections_components_content', 'critical', 'Image url: ' . $requestData['image_url'] . ' not found.', $decodedToken->user->username);
             sendResponse(404, 'Image url: ' . $requestData['image_url'] . ' not found');
         }
 
@@ -75,6 +80,7 @@ try {
     if (isset($requestData['event_title'])) {
         $eventId = $search_results[0]['EVENT_ID'];
         if (!$eventId) {
+            writeLog('PATCH /pages_sections_components_content', 'critical', 'Event title: ' . $requestData['event_title'] . ' not found.', $decodedToken->user->username);
             sendResponse(404, 'Event title: ' . $requestData['event_title'] . ' not found');
         }
 
@@ -97,6 +103,7 @@ try {
             ['TXT' => $requestData['event_description']]
         );
         if (!$eventDesId) {
+            writeLog('PATCH /pages_sections_components_content', 'critical', 'Event description: ' . $requestData['event_description'] . ' not found.', $decodedToken->user->username);
             sendResponse(404, 'Event description: ' . $requestData['event_description'] . ' not found');
         }
 
@@ -114,6 +121,7 @@ try {
         $eventId = $search_results[0]['EVENT_ID'];
         $eventLocationId = getRecordId($db, 'LOCATIONS', ['NAME' => $requestData['event_location']]);
         if (!$eventLocationId) {
+            writeLog('PATCH /pages_sections_components_content', 'critical', 'Event location: ' . $requestData['event_location'] . ' not found.', $decodedToken->user->username);
             sendResponse(404, 'Event location: ' . $requestData['event_location'] . ' not found');
         }
 
@@ -130,6 +138,7 @@ try {
     if (isset($requestData['event_time'])) {
         $eventId = $search_results[0]['EVENT_ID'];
         if (!$eventId) {
+            writeLog('PATCH /pages_sections_components_content', 'critical', 'Event ID: ' . $pathParam . ' not found.', $decodedToken->user->username);
             sendResponse(404, 'Event ID: ' . $pathParam . ' not found');
         }
 
@@ -152,6 +161,7 @@ try {
             ', [$eventId]);
 
         if (!$locationId[0]['LOCATION_ID']) {
+            writeLog('PATCH /pages_sections_components_content', 'critical', 'Location associated with Event ID: ' . $eventId . ' not found.', $decodedToken->user->username);
             sendResponse(404, 'Location associated with Event ID: ' . $eventId . ' not found');
         }
 
@@ -166,6 +176,7 @@ try {
     }
 
     if (empty($fields)) {
+        writeLog('PATCH /pages_sections_components_content', 'warning', 'No updatable fields sent.', $decodedToken->user->username);
         sendResponse(400, 'Bad Request: No updatable fields sent.');
     }
 

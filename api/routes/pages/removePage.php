@@ -10,6 +10,7 @@ try {
     $page_search_query = 'SELECT * FROM PAGES WHERE ID = ?';
     $page_search_results = runQuery($db, $page_search_query, [$page_id]);
     if (!$page_search_results) {
+        writeLog('DELETE /pages', 'critical', 'Page not found.', $decodedToken->user->username);
         sendResponse(404, 'Page not found');
     }
 

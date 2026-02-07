@@ -17,6 +17,7 @@ $username = Flight::request()->data->username ?? '';
 $password = Flight::request()->data->password ?? '';
 
 if (empty($username) || empty($password)) {
+    writeLog('POST /login', 'warning', 'Missing username or password.', $username ?: null);
     unauthorizedResponse('Username and/or Password field(s) are required.');
 }
 

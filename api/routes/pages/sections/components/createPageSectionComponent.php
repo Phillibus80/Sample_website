@@ -16,6 +16,7 @@ $validationErrors = validateRequestData(
 
 // Missing required fields
 if (count($validationErrors) > 0) {
+    writeLog('POST /pages_sections_components', 'warning', 'Validation failed.', $decodedToken->user->username);
     sendResponse(422, 'All fields are required: page_section_id, and component_id.', $validationErrors);
 }
 
@@ -28,6 +29,7 @@ try {
         ';
     $page_section_check_result = runQuery($db, $page_section_check_query, [$request_data['page_section_id']]);
     if (!$page_section_check_result) {
+        writeLog('POST /pages_sections_components', 'critical', 'Page section not found.', $decodedToken->user->username);
         sendResponse(404, 'Page Section not found.');
     }
 
@@ -37,6 +39,7 @@ try {
         ';
     $components_check_result = runQuery($db, $components_check_query, [$request_data['component_id']]);
     if (!$components_check_result) {
+        writeLog('POST /pages_sections_components', 'critical', 'Component not found.', $decodedToken->user->username);
         sendResponse(404, 'Component not found.');
     }
 

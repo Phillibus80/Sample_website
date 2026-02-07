@@ -10,6 +10,7 @@ try {
     $search_query = 'SELECT * FROM PAGE_SECTION_COMPONENTS WHERE ID = ?';
     $search_results = runQuery($db, $search_query, [$psc_id]);
     if (!$search_results) {
+        writeLog('DELETE /pages_sections_components', 'critical', 'Page section component not found.', $decodedToken->user->username);
         sendResponse(404, 'Page Section Component not found');
     }
 

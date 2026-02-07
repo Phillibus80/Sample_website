@@ -17,6 +17,7 @@ $validationErrors = validateRequestData(
 
 // Missing required fields
 if (count($validationErrors) > 0) {
+    writeLog('POST /links', 'warning', 'Validation failed.', $decodedToken->user->username);
     sendResponse(422, 'All fields are required: link_text, and url.', $validationErrors);
 }
 

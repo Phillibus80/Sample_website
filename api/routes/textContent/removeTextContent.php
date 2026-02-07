@@ -10,6 +10,7 @@ try {
     $text_search_query = 'SELECT * FROM TEXT_CONTENT WHERE ID = ?';
     $text_search_results = runQuery($db, $text_search_query, [$pathParam]);
     if (!$text_search_results) {
+        writeLog('DELETE /textcontent', 'critical', 'Text content not found.', $decodedToken->user->username);
         sendResponse(404, 'Text Content not found');
     }
 

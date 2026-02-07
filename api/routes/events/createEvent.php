@@ -17,6 +17,7 @@ $validationErrors = validateRequestData(
 
 // Missing required fields
 if (count($validationErrors) > 0) {
+    writeLog('POST /events', 'warning', 'Validation failed.', $decodedToken->user->username);
     sendResponse(422, 'All fields are required: title, location, lat, and lng.', $validationErrors);
 }
 
@@ -70,6 +71,7 @@ try {
     }
 
     if (empty($eventInsertFields) && empty($locationInsertFields)) {
+        writeLog('POST /events', 'warning', 'No valid fields provided.', $decodedToken->user->username);
         sendResponse(400, 'No valid fields provided.');
     }
 

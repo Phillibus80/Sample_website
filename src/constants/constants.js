@@ -13,6 +13,7 @@ export const API_ROUTE_CONST = {
     LOGIN: '/login',
     LOGOUT: '/logout',
     IMAGES: '/images',
+    LOGS: '/logs',
     SEND_EMAIL: '/send_email',
 };
 

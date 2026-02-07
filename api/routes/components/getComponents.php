@@ -14,6 +14,7 @@ if (isset($page_name)) {
         $getComponentsParamTypes
     );
     if (count($getComponentByPageNameValidationResult['errors']) > 0) {
+        writeLog('GET /components', 'warning', 'Invalid query parameter.');
         sendResponse(400, 'Error with Component Name.');
         exit;
     }

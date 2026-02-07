@@ -12,6 +12,7 @@ try {
 
     $updateErrors = validatePatchRequestData($requestData, $validationRules);
     if (count($updateErrors) > 0) {
+        writeLog('PATCH /sections', 'warning', 'Validation failed.', $decodedToken->user->username);
         sendResponse(400, 'Bad request', $updateErrors);
         exit();
     }
@@ -22,6 +23,7 @@ try {
     $section_search_query = 'SELECT * FROM SECTIONS WHERE ID = ?';
     $section_search_results = runQuery($db, $section_search_query, [$pathParam]);
     if (!$section_search_results) {
+        writeLog('PATCH /sections', 'critical', 'Section not found.', $decodedToken->user->username);
         sendResponse(404, 'Section not found');
     }
 
@@ -35,6 +37,7 @@ try {
     }
 
     if (empty($section_fields)) {
+        writeLog('PATCH /sections', 'warning', 'No updatable fields sent.', $decodedToken->user->username);
         sendResponse(400, 'Bad Request: No updatable fields sent.');
     }
 

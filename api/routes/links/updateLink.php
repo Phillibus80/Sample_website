@@ -12,6 +12,7 @@ $validationRules = [
 
 $updateErrors = validatePatchRequestData($requestData, $validationRules);
 if (count($updateErrors) > 0) {
+    writeLog('PATCH /links', 'warning', 'Validation failed.', $decodedToken->user->username);
     sendResponse(400, 'Bad request', $updateErrors);
     exit();
 }
@@ -23,6 +24,7 @@ try {
     $link_search_query = 'SELECT * FROM LINKS WHERE ID = ?';
     $link_search_results = runQuery($db, $link_search_query, [$pathParam]);
     if (!$link_search_results) {
+        writeLog('PATCH /links', 'critical', 'Link not found.', $decodedToken->user->username);
         sendResponse(404, 'Link not found');
     }
 
@@ -40,6 +42,7 @@ try {
     }
 
     if (empty($fields)) {
+        writeLog('PATCH /links', 'warning', 'No updatable fields sent.', $decodedToken->user->username);
         sendResponse(400, 'Bad Request: No updatable fields sent.');
     }
 

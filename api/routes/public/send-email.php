@@ -18,6 +18,7 @@ $validationErrors = validateRequestData(
 
 // Missing required fields
 if (count($validationErrors) > 0) {
+    writeLog('POST /send_email', 'warning', 'Validation failed.');
     sendResponse(422, 'All fields are required: email.', $validationErrors);
 }
 

@@ -160,6 +160,8 @@ function requireAuth(): ?stdClass
     $token = $authHeader ? str_replace('Bearer ', '', $authHeader) : null;
 
     if (!$token) {
+        $endpoint = Flight::request()->method . ' ' . Flight::request()->url;
+        writeLog($endpoint, 'warning', 'Missing authentication token.');
         unauthorizedResponse('Please sign in.');
         return null;
     }
@@ -167,6 +169,8 @@ function requireAuth(): ?stdClass
     $decodedToken = validateToken($token, Flight::get('secretKey'));
 
     if (!$decodedToken) {
+        $endpoint = Flight::request()->method . ' ' . Flight::request()->url;
+        writeLog($endpoint, 'warning', 'Invalid or expired token.');
         unauthorizedResponse('Please sign in.');
         return null;
     }

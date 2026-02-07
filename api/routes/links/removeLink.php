@@ -10,6 +10,7 @@ try {
     $link_search_query = 'SELECT * FROM LINKS WHERE ID = ?';
     $link_search_results = runQuery($db, $link_search_query, [$link_id]);
     if (!$link_search_results) {
+        writeLog('DELETE /links', 'critical', 'Link not found.', $decodedToken->user->username);
         sendResponse(404, 'Link not found');
     }
 
