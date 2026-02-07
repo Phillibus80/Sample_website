@@ -4,9 +4,8 @@ import {GrAddCircle} from 'react-icons/gr';
 import {ROLES} from '../../../../constants/constants.js';
 import {ROUTING_CONSTANTS} from '../../../../constants/routing-constants.js';
 import {useAuth} from '../../../../hooks/auth/use-auth.jsx';
-import {useAdminContext, useToastContext} from '../../../../hooks/context/context-hooks.jsx';
+import {useAdminContext} from '../../../../hooks/context/context-hooks.jsx';
 import {toTitleCase} from '../../../../utils/utils.js';
-import AppToast from '../../../app-toast/app-toast.jsx';
 import * as styles from '../../office-addition-button/office-addition-button.module.scss';
 import OfficeContentTab from '../office-content-tab/office-content-tab.jsx';
 import OfficeCreatePage from '../office-create-page/office-create-page.jsx';
@@ -22,7 +21,6 @@ import OfficeUsers from '../office-users/office-users.jsx';
 const OfficeTabs = () => {
     const {pages} = useAdminContext();
     const {roles} = useAuth();
-    const {showToast, setShowToast, toastMessage, toastType} = useToastContext();
 
     const hasAdminAccess = roles?.includes(ROLES.SUPER) || roles?.includes(ROLES.ADMIN);
 
@@ -100,12 +98,6 @@ const OfficeTabs = () => {
 
     return defActiveKey && (
         <>
-            <AppToast
-                showToast={showToast}
-                setShowToast={setShowToast}
-                toastMessage={toastMessage}
-                variant={toastType}
-            />
             <Tabs defaultActiveKey={`${defActiveKey}`} fill>
                 {generateTabs(pages)}
             </Tabs>
