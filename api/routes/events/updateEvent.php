@@ -21,6 +21,7 @@ $validationRules = [
 
 $updateErrors = validatePatchRequestData($requestData, $validationRules);
 if (count($updateErrors) > 0) {
+    writeLog('PATCH /events', 'warning', 'Validation failed.', $decodedToken->user->username);
     sendResponse(422, 'Bad request', $updateErrors);
     exit();
 }
@@ -32,6 +33,7 @@ try {
     $search_query = 'SELECT * FROM EVENTS WHERE ID = ?';
     $search_results = runQuery($db, $search_query, [$pathParam]);
     if (!$search_results) {
+        writeLog('PATCH /events', 'critical', 'Event not found.', $decodedToken->user->username);
         sendResponse(404, 'Event not found');
     }
 
@@ -112,6 +114,7 @@ try {
     }
 
     if (empty($eventFields) && empty($locationFields)) {
+        writeLog('PATCH /events', 'warning', 'No updatable fields sent.', $decodedToken->user->username);
         sendResponse(400, 'Bad Request: No updatable fields sent.');
     }
 

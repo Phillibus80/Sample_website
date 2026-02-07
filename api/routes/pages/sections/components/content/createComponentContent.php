@@ -24,6 +24,7 @@ $validationRules = [
 // of request entries
 $updateErrors = validatePatchRequestData($requestData, $validationRules);
 if (count($updateErrors) > 0) {
+    writeLog('POST /pages_sections_components_content', 'warning', 'Validation failed.', $decodedToken->user->username);
     sendResponse(422, 'Bad request', $updateErrors);
     exit();
 }

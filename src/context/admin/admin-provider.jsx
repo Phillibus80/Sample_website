@@ -18,6 +18,7 @@ export const AdminProvider = ({children}) => {
     const [images, setImages] = useState([]);
     const [events, setEvents] = useState([]);
     const [locations, setLocations] = useState([]);
+    const [logs, setLogs] = useState([]);
 
     const value = useMemo(() => ({
         pages,
@@ -31,8 +32,10 @@ export const AdminProvider = ({children}) => {
         events,
         setEvents,
         locations,
-        setLocations
-    }), [pages, pageContent, links, images, events, locations]);
+        setLocations,
+        logs,
+        setLogs
+    }), [pages, pageContent, links, images, events, locations, logs]);
 
     return (
         <AdminContext.Provider value={value}>

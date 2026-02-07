@@ -17,6 +17,7 @@ try {
 
     // Check that the section exists
     if (!$statementResult) {
+        writeLog('GET /links/{section_name}', 'critical', 'Section not found.', null);
         sendResponse(404, 'Section not found');
     }
 

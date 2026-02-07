@@ -29,6 +29,7 @@ try {
         sendResponse(200, null, ['user' => $userResponse]);
     } else {
         $db = null;
+        writeLog('GET /users/{username}', 'critical', 'User not found.', $decodedToken->user->username);
         sendResponse(400, 'User not found.');
     }
 } catch (Exception $e) {

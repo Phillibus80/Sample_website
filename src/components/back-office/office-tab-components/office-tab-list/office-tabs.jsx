@@ -10,6 +10,7 @@ import * as styles from '../../office-addition-button/office-addition-button.mod
 import OfficeContentTab from '../office-content-tab/office-content-tab.jsx';
 import OfficeCreatePage from '../office-create-page/office-create-page.jsx';
 import OfficeEmailUserTab from '../office-email-users-tab/office-email-user-tab.jsx';
+import OfficeLogs from '../office-logs/office-logs.jsx';
 import OfficeTab from '../office-tab/office-tab.jsx';
 import OfficeUsers from '../office-users/office-users.jsx';
 
@@ -19,7 +20,7 @@ import OfficeUsers from '../office-users/office-users.jsx';
  * @return {React.ReactNode | Array}
  */
 const OfficeTabs = () => {
-    const {pages} = useAdminContext();
+    const {pages, logs} = useAdminContext();
     const {roles} = useAuth();
 
     const hasAdminAccess = roles?.includes(ROLES.SUPER) || roles?.includes(ROLES.ADMIN);
@@ -27,6 +28,14 @@ const OfficeTabs = () => {
     if (!pages) return [];
 
     const predefinedTabs = [
+        <Tab
+            title={'Audit Logs'}
+            key={'audit-logs'}
+            eventKey={'audit-logs'}
+        >
+            <h2 className='mt-5'>Audit Logs</h2>
+            <OfficeLogs logs={logs}/>
+        </Tab>,
         <Tab
             title={'User List'}
             key={'user-list'}

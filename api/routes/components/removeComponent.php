@@ -9,6 +9,7 @@ try {
     $component_search_query = 'SELECT * FROM COMPONENTS WHERE ID = ?';
     $component_search_results = runQuery($db, $component_search_query, [$component_id]);
     if (!$component_search_results) {
+        writeLog('DELETE /components', 'critical', 'Component not found.', $decodedToken->user->username);
         sendResponse(404, 'Component not found');
     }
 

@@ -10,6 +10,7 @@ try {
     $location_search_query = 'SELECT * FROM LOCATIONS WHERE ID = ?';
     $location_search_results = runQuery($db, $location_search_query, [$pathParam]);
     if (!$location_search_results) {
+        writeLog('DELETE /locations', 'critical', 'Location not found.', $decodedToken->user->username);
         sendResponse(404, 'Location not found');
     }
 

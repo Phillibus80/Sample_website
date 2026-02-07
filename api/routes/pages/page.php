@@ -31,6 +31,7 @@ try {
         $page = $page_check_statement->fetch(PDO::FETCH_ASSOC);
 
         if (!$page) {
+            writeLog('GET /pages', 'critical', 'Page not found.', null);
             sendResponse(404, 'Page not found');
         }
 

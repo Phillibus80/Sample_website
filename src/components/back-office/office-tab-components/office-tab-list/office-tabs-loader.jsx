@@ -3,6 +3,7 @@ import {useEffect} from 'react';
 import PropTypes from 'prop-types';
 
 import {useGetAllPageContent, useGetPageContent} from '../../../../hooks/api-hooks.js';
+import {useGetLogs} from '../../../../hooks/api-logging/api-logging-hooks.js';
 import {useAdminContext} from '../../../../hooks/context/context-hooks.jsx';
 import {useGetEvents} from '../../../../hooks/events/event-hooks.js';
 import {useGetImages} from '../../../../hooks/images/image-hooks.jsx';
@@ -23,6 +24,7 @@ const OfficeTabsLoader = ({children}) => {
     const {isSuccess: imageSuccess, data: imageData} = useGetImages();
     const {isSuccess: eventSuccess, data: events} = useGetEvents();
     const {isSuccess: locationSuccess, data: locations} = useGetLocations();
+    const {isSuccess: logsSuccess, data: logsData} = useGetLogs();
 
     const {
         setLinks,
@@ -30,7 +32,8 @@ const OfficeTabsLoader = ({children}) => {
         setImages,
         setEvents,
         setPageContent,
-        setLocations
+        setLocations,
+        setLogs
     } = useAdminContext();
 
     useEffect(() => {
@@ -55,6 +58,9 @@ const OfficeTabsLoader = ({children}) => {
         if (locationSuccess && locations) {
             setLocations(locations);
         }
+        if (logsSuccess && logsData) {
+            setLogs(logsData?.data?.data ?? []);
+        }
     }, [
         allContentSuccess,
         allPageContent,
@@ -62,7 +68,10 @@ const OfficeTabsLoader = ({children}) => {
         eventSuccess,
         locations,
         locationSuccess,
+        logsData,
+        logsSuccess,
         setLocations,
+        setLogs,
         imageData?.data?.data,
         imageSuccess,
         linkResData,

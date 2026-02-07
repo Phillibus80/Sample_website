@@ -6,6 +6,7 @@ require_once __DIR__ . '/../../utils.php';
 $requestData = Flight::request()->data;
 
 if (!isset($requestData['name'])) {
+    writeLog('POST /locations', 'warning', 'Missing required field: name.', $decodedToken->user->username);
     sendResponse(400, 'All fields are required: name.');
 }
 
@@ -25,6 +26,7 @@ $validationRules = [
 // then geocode that address.
 $updateErrors = validatePatchRequestData($requestData, $validationRules);
 if (count($updateErrors) > 0) {
+    writeLog('POST /locations', 'warning', 'Validation failed.', $decodedToken->user->username);
     sendResponse(422, 'Bad request', $updateErrors);
     exit();
 }
@@ -69,6 +71,7 @@ try {
     }
 
     if (empty($insertFields)) {
+        writeLog('POST /locations', 'warning', 'No valid fields provided.', $decodedToken->user->username);
         sendResponse(400, 'No valid fields provided.');
     }
 

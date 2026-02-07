@@ -15,6 +15,7 @@ $validationErrors = validateRequestData(
 
 // Missing required fields
 if (count($validationErrors) > 0) {
+    writeLog('POST /textcontent', 'warning', 'Validation failed.', $decodedToken->user->username);
     sendResponse(422, 'All fields are required: text_content.', $validationErrors);
 }
 

@@ -15,6 +15,7 @@ $validationErrors = validateRequestData(
 
 // Missing required fields
 if (count($validationErrors) > 0) {
+    writeLog('POST /pages', 'warning', 'Validation failed.', $decodedToken->user->username);
     sendResponse(422, 'All fields are required: page_name.', $validationErrors);
 }
 

@@ -10,6 +10,7 @@ try {
     $section_search_query = 'SELECT * FROM SECTIONS WHERE ID = ?';
     $section_search_results = runQuery($db, $section_search_query, [$section_id]);
     if (!$section_search_results) {
+        writeLog('DELETE /sections', 'critical', 'Section not found.', $decodedToken->user->username);
         sendResponse(404, 'Section not found');
     }
 

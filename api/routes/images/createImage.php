@@ -18,9 +18,11 @@ if (isset($_FILES['image_file'])) {
 
     // Missing required fields
     if (count($validationErrors) > 0) {
+        writeLog('POST /images', 'warning', 'Validation failed.', $decodedToken->user->username);
         sendResponse(422, 'All fields are required: image_text and alt, and file binaries..', $validationErrors);
     }
 } else {
+    writeLog('POST /images', 'warning', 'Missing image file.', $decodedToken->user->username);
     sendResponse(400, 'All fields are required: image_text, and alt.');
 }
 
@@ -38,19 +40,23 @@ try {
 
     $check = getimagesize($_FILES['image_file']['tmp_name']);
     if ($check === false) {
+        writeLog('POST /images', 'warning', 'Uploaded file is not an image.', $decodedToken->user->username);
         sendResponse(400, 'File is not an image.');
     }
 
     if (file_exists($target_file)) {
+        writeLog('POST /images', 'critical', 'File already exists.', $decodedToken->user->username);
         sendResponse(400, 'Sorry, file already exists.');
     }
 
     if ($_FILES['image_file']['size'] > 500000) {
+        writeLog('POST /images', 'warning', 'Uploaded file is too large.', $decodedToken->user->username);
         sendResponse(400, 'Sorry, your file is too large.');
     }
 
     $allowedFileTypes = ['jpg', 'jpeg', 'png', 'gif', 'ico', 'webp'];
     if (!in_array($imageFileType, $allowedFileTypes)) {
+        writeLog('POST /images', 'warning', 'Invalid file type.', $decodedToken->user->username);
         sendResponse(400, 'Sorry, only JPG, JPEG, PNG, ICO, WEBP & GIF files are allowed.');
     }
 

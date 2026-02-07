@@ -126,6 +126,8 @@ function requireCsrfToken(): void
     error_log('Token in session: ' . ($_SESSION['csrf_token'] ?? 'NULL'));
 
     if (!validateCsrfToken($token)) {
+        $endpoint = Flight::request()->method . ' ' . Flight::request()->url;
+        writeLog($endpoint, 'warning', 'Invalid or missing CSRF token.');
         sendResponse(401, 'Invalid or missing CSRF token', [
             'error' => 'CSRF_TOKEN_INVALID'
         ]);

@@ -14,6 +14,7 @@ $validationErrors = validateRequestData(
 
 // Missing required fields
 if (count($validationErrors) > 0) {
+    writeLog('POST /components', 'warning', 'Validation failed.', $decodedToken->user->username);
     sendResponse(422, 'All fields are required: component_name.', $validationErrors);
 }
 
@@ -28,6 +29,7 @@ try {
         ';
     $component_check_result = runQuery($db, $component_check_query, [$new_component_name]);
     if ($component_check_result) {
+        writeLog('POST /components', 'critical', 'Component already exists.', $decodedToken->user->username);
         sendResponse(409, 'Component already exists.');
     }
 

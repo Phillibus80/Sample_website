@@ -18,6 +18,7 @@ $validationRules = [
 
 $updateErrors = validatePatchRequestData($requestData, $validationRules);
 if (count($updateErrors) > 0) {
+    writeLog('PATCH /locations', 'warning', 'Validation failed.', $decodedToken->user->username);
     sendResponse(400, 'Bad request', $updateErrors);
     exit();
 }
@@ -78,6 +79,7 @@ try {
     }
 
     if (empty($locationFields)) {
+        writeLog('PATCH /locations', 'warning', 'No updatable fields sent.', $decodedToken->user->username);
         sendResponse(400, 'Bad Request: No updatable fields sent.');
     }
 

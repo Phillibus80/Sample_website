@@ -10,6 +10,7 @@ try {
     $search_query = 'SELECT * FROM COMPONENT_CONTENT WHERE ID = ?';
     $search_results = runQuery($db, $search_query, [$pathParam]);
     if (!$search_results) {
+        writeLog('DELETE /pages_sections_components_content', 'critical', 'Component content not found.', $decodedToken->user->username);
         sendResponse(404, 'Component Content not found');
     }
 

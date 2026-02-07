@@ -13,6 +13,7 @@ $validationRules = [
 
 $updateErrors = validatePatchRequestData($requestData, $validationRules);
 if (count($updateErrors) > 0) {
+    writeLog('PATCH /pages_sections', 'warning', 'Validation failed.', $decodedToken->user->username);
     sendResponse(400, 'Bad request', $updateErrors);
     exit();
 }
@@ -24,6 +25,7 @@ try {
     $pages_section_search_query = 'SELECT * FROM PAGES_SECTIONS WHERE ID = ?';
     $pages_section_search_results = runQuery($db, $pages_section_search_query, [$pathParam]);
     if (!$pages_section_search_results) {
+        writeLog('PATCH /pages_sections', 'critical', 'Page section not found.', $decodedToken->user->username);
         sendResponse(404, 'Page Section not found');
     }
 
@@ -40,6 +42,7 @@ try {
         $kebab_case_page_name = toKebabCase($requestData['page_name']);
         $page_search_results = runQuery($db, $page_search_query, [$kebab_case_page_name]);
         if (!$page_search_results) {
+            writeLog('PATCH /pages_sections', 'critical', 'Page: ' . $requestData['page_name'] . ' not found.', $decodedToken->user->username);
             sendResponse(404, 'Page: ' . $requestData['page_name'] . ' not found');
         }
 
@@ -57,6 +60,7 @@ try {
         $section_search_query = 'SELECT * FROM SECTIONS WHERE NAME = ?';
         $section_search_results = runQuery($db, $section_search_query, [$requestData['section_name']]);
         if (!$section_search_results) {
+            writeLog('PATCH /pages_sections', 'critical', 'Section: ' . $requestData['section_name'] . ' not found.', $decodedToken->user->username);
             sendResponse(404, 'Section: ' . $requestData['section_name'] . ' not found');
         }
 
@@ -80,6 +84,7 @@ try {
     }
 
     if (empty($fields)) {
+        writeLog('PATCH /pages_sections', 'warning', 'No updatable fields sent.', $decodedToken->user->username);
         sendResponse(400, 'Bad Request: No updatable fields sent.');
     }
 

@@ -9,6 +9,7 @@ try {
     $event_search_query = 'SELECT * FROM EVENTS WHERE ID = ?';
     $event_search_results = runQuery($db, $event_search_query, [$pathParam]);
     if (!$event_search_results) {
+        writeLog('DELETE /events', 'critical', 'Event not found.', $decodedToken->user->username);
         sendResponse(404, 'Event not found');
     }
 

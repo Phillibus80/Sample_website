@@ -12,6 +12,7 @@ try {
 
     $updateErrors = validatePatchRequestData($requestData, $validationRules);
     if (count($updateErrors) > 0) {
+        writeLog('PATCH /textcontent', 'warning', 'Validation failed.', $decodedToken->user->username);
         sendResponse(400, 'Bad request', $updateErrors);
         exit();
     }
@@ -22,6 +23,7 @@ try {
     $search_query = 'SELECT * FROM TEXT_CONTENT WHERE ID = ?';
     $search_results = runQuery($db, $search_query, [$pathParam]);
     if (!$search_results) {
+        writeLog('PATCH /textcontent', 'critical', 'Text content not found.', $decodedToken->user->username);
         sendResponse(404, 'Text Content not found');
     }
 
@@ -34,6 +36,7 @@ try {
     }
 
     if (empty($fields)) {
+        writeLog('PATCH /textcontent', 'warning', 'No updatable fields sent.', $decodedToken->user->username);
         sendResponse(400, 'Bad Request: No updatable fields sent.');
     }
 

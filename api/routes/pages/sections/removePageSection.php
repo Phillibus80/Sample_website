@@ -10,6 +10,7 @@ try {
     $search_query = 'SELECT * FROM PAGES_SECTIONS WHERE ID = ?';
     $search_results = runQuery($db, $search_query, [$pathParam]);
     if (!$search_results) {
+        writeLog('DELETE /pages_sections', 'critical', 'Page section not found.', $decodedToken->user->username);
         sendResponse(404, 'Page Section not found');
     }
 

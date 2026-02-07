@@ -14,6 +14,7 @@ $validationErrors = validateRequestData(
 
 // Missing required fields
 if (count($validationErrors) > 0) {
+    writeLog('POST /pages_sections', 'warning', 'Validation failed.', $decodedToken->user->username);
     sendResponse(422, 'All fields are required: section_name, and page_name.', $validationErrors);
 }
 
@@ -50,6 +51,7 @@ try {
     $section_check_result = $section_search_query->execute([$new_page_section_section_name]);
     $section_id = $section_search_query->fetchColumn();
     if (!$section_id) {
+        writeLog('POST /pages_sections', 'critical', 'Section not found.', $decodedToken->user->username);
         sendResponse(404, 'Section not found.');
     }
 
@@ -60,6 +62,7 @@ try {
     $page_search_query = runQuery($db, $page_check_query, [$new_page_section_page_name]);
     $page_id = $page_search_query[0]['ID'];
     if (!$page_id) {
+        writeLog('POST /pages_sections', 'critical', 'Page not found.', $decodedToken->user->username);
         sendResponse(404, 'Page not found.');
     }
 

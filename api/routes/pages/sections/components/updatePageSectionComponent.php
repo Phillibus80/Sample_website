@@ -12,6 +12,7 @@ $validationRules = [
 
 $updateErrors = validatePatchRequestData($requestData, $validationRules);
 if (count($updateErrors) > 0) {
+    writeLog('PATCH /pages_sections_components', 'warning', 'Validation failed.', $decodedToken->user->username);
     sendResponse(422, 'Bad request', $updateErrors);
     exit();
 }
@@ -23,6 +24,7 @@ try {
     $search_query = 'SELECT * FROM PAGE_SECTION_COMPONENTS WHERE PAGE_SECTION_ID = ? AND COMPONENT_ID = ?';
     $search_results = runQuery($db, $search_query, [$pathParam, $oldComponentPathParam]);
     if (!$search_results) {
+        writeLog('PATCH /pages_sections_components', 'critical', 'Page section component not found.', $decodedToken->user->username);
         sendResponse(404, 'Page Section Component not found');
     }
 
@@ -33,6 +35,7 @@ try {
     $search_component_query = 'SELECT * FROM COMPONENTS WHERE ID = ?';
     $search_component_results = runQuery($db, $search_component_query, [$requestData['component_id']]);
     if (!$search_component_results) {
+        writeLog('PATCH /pages_sections_components', 'critical', 'Component not found.', $decodedToken->user->username);
         sendResponse(404, 'Component not found');
     }
 
@@ -53,6 +56,7 @@ try {
     }
 
     if (empty($fields)) {
+        writeLog('PATCH /pages_sections_components', 'warning', 'No updatable fields sent.', $decodedToken->user->username);
         sendResponse(400, 'Bad Request: No updatable fields sent.');
     }
 
