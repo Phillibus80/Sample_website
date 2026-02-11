@@ -3,10 +3,12 @@ import {useState} from 'react';
 import PropTypes from 'prop-types';
 
 import * as styles from './pie-chart.module.scss';
+import {capitalize} from '../../utils/utils.js';
 
 const CX = 100;
 const CY = 100;
 const RADIUS = 75;
+
 
 /**
  * Converts polar coordinates (angle in degrees) to Cartesian x/y.
@@ -55,12 +57,11 @@ const buildSlicePath = (startAngle, endAngle) => {
  * A responsive SVG pie chart component.
  *
  * @param {Array<{label: string, value: number}>} series - Aggregated data items to display.
- * @param {Object<string, string>} colors - Map of label to hex color string.
  * @param {string} title - Label displayed above the chart.
  *
  * @return {React.JSX.Element}
  */
-const PieChart = ({series, colors, title}) => {
+const PieChart = ({series, title}) => {
     const [hoveredIndex, setHoveredIndex] = useState(null);
 
     const total = series.reduce((sum, item) => sum + item.value, 0);
@@ -106,8 +107,7 @@ const PieChart = ({series, colors, title}) => {
                     <path
                         key={slice.label}
                         d={buildSlicePath(slice.startAngle, slice.endAngle)}
-                        fill={colors[slice.label] ?? 'var(--chart-fallback)'}
-                        className={styles.slice}
+                        className={`${styles.slice} ${styles[`slice${capitalize(slice.label)}`]}`}
                         onMouseEnter={() => setHoveredIndex(slice.index)}
                         onMouseLeave={() => setHoveredIndex(null)}
                     />
@@ -139,8 +139,7 @@ const PieChart = ({series, colors, title}) => {
                 {slices.map((slice) => (
                     <div key={slice.label} className={styles.legendItem}>
                         <span
-                            className={styles.legendColor}
-                            style={{backgroundColor: colors[slice.label] ?? 'var(--chart-fallback)'}}
+                            className={`${styles.legendColor} ${styles[`legend${capitalize(slice.label)}`]}`}
                         />
                         <span className={styles.legendLabel}>{slice.label}</span>
                     </div>
@@ -157,12 +156,10 @@ PieChart.propTypes = {
             value: PropTypes.number.isRequired
         })
     ).isRequired,
-    colors: PropTypes.objectOf(PropTypes.string),
     title: PropTypes.string
 };
 
 PieChart.defaultProps = {
-    colors: {},
     title: ''
 };
 

@@ -86,11 +86,13 @@ export const LOG_LEVELS = {
 };
 
 /**
- * Time-grouping units available in the log activity line chart.
- * @type {{DAY: string, WEEK: string, MONTH: string}}
+ * Time-window options shared by the log activity line chart and bar chart.
+ * @type {{TODAY: string, PAST_7: string, PAST_30: string, PAST_60: string, PAST_90: string}}
  */
 export const LOG_CHART_TIME_UNITS = {
-    DAY: 'day',
-    WEEK: 'week',
-    MONTH: 'month'
+    TODAY:   'today',
+    PAST_7:  'past_7',
+    PAST_30: 'past_30',
+    PAST_60: 'past_60',
+    PAST_90: 'past_90',
 };

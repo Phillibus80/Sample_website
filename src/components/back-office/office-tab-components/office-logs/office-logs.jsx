@@ -7,15 +7,11 @@ import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 
+import {extractBaseRoute, formatBaseRoute} from '../../../../utils/utils.js';
+import BarChart from '../../../bar-chart/bar-chart.jsx';
 import DataTable from '../../../data-table/DataTable.jsx';
 import LineChart from '../../../line-chart/line-chart.jsx';
 import PieChart from '../../../pie-chart/pie-chart.jsx';
-
-const LOG_COLORS = {
-    success: 'var(--log-success)',
-    warning: 'var(--log-warning)',
-    critical: 'var(--log-critical)'
-};
 
 const LG_PER_ROW = 4;
 const MD_PER_ROW = 3;
@@ -38,33 +34,10 @@ const LOG_TABLE_FILTER_COLUMNS = [
     'created_on'
 ];
 
-/**
- * Extracts the base route name from a full endpoint string.
- * e.g. "PATCH /images/@image_id" -> "images"
- *
- * @param {string} endpoint
- * @return {string}
- */
-const extractBaseRoute = (endpoint) => {
-    const parts = endpoint.split(' ');
-    if (parts.length < 2) return endpoint;
-    const segments = parts[1].split('/').filter(Boolean);
-    return segments[0] ?? endpoint;
-};
-
-/**
- * Formats a base route name for display.
- * e.g. "pages_sections" -> "Pages Sections"
- *
- * @param {string} route
- * @return {string}
- */
-const formatBaseRoute = (route) =>
-    route.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 
 /**
  * Displays audit log data as:
- *  1. A line chart of success / warning / critical counts over time.
+ *  1. A line chart and bar chart of log activity, side-by-side on large screens.
  *  2. Pie charts grouped by endpoint (with search and route-filter controls).
  *  3. A sortable, paginated, filterable data table of all log records.
  *
@@ -122,11 +95,14 @@ const OfficeLogs = ({logs}) => {
     return (
         <Container className='mt-5'>
 
-            <LineChart
-                logs={logs}
-                colors={LOG_COLORS}
-                title='Log Activity Over Time'
-            />
+            <Row className='mb-4 g-3'>
+                <Col xs={12} lg={6}>
+                    <LineChart logs={logs} title='Log Activity Over Time' />
+                </Col>
+                <Col xs={12} lg={6}>
+                    <BarChart logs={logs} title='Log Counts by Endpoint' />
+                </Col>
+            </Row>
 
             {allChartData.length === 0 ? (
                 <p className='text-muted text-center'>No logs available.</p>
@@ -230,9 +206,6 @@ const OfficeLogs = ({logs}) => {
                                                                     <PieChart
                                                                         series={
                                                                             chart.series
-                                                                        }
-                                                                        colors={
-                                                                            LOG_COLORS
                                                                         }
                                                                         title={
                                                                             chart.endpoint

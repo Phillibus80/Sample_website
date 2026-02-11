@@ -23,10 +23,28 @@
   min-width: 160px;
 }
 
+.scrollContainer {
+  overflow-x: auto;
+  position: relative;
+
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: main.$colors-grey-text;
+    border-radius: 3px;
+  }
+
+  scrollbar-width: thin;
+}
+
 .svg {
-  width: 100%;
   display: block;
-  overflow: visible;
 }
 
 .gridLine {
@@ -45,13 +63,18 @@
   fill: main.$colors-grey-text;
 }
 
-.line {
-  pointer-events: none;
+.bar {
+  transition: opacity 0.15s ease;
+
+  &:hover {
+    opacity: 0.8;
+  }
 }
 
-.dot {
-  pointer-events: none;
-}
+// Per-level bar fill classes
+.barSuccess  { fill: var(--log-success);  }
+.barWarning  { fill: var(--log-warning);  }
+.barCritical { fill: var(--log-critical); }
 
 .crosshair {
   stroke: #bbb;
@@ -79,6 +102,21 @@
   text-transform: capitalize;
 }
 
+// Per-level tooltip swatch fill classes
+.tipSuccess  { fill: var(--log-success);  }
+.tipWarning  { fill: var(--log-warning);  }
+.tipCritical { fill: var(--log-critical); }
+
+.fadeMask {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 48px;
+  background: linear-gradient(to right, transparent, main.$colors-primary-background);
+  pointer-events: none;
+}
+
 .legend {
   display: flex;
   flex-wrap: wrap;
@@ -96,11 +134,16 @@
 
 .legendColor {
   display: inline-block;
-  width: 28px;
-  height: 3px;
-  border-radius: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
   flex-shrink: 0;
 }
+
+// Per-level legend background classes
+.legendSuccess  { background-color: var(--log-success);  }
+.legendWarning  { background-color: var(--log-warning);  }
+.legendCritical { background-color: var(--log-critical); }
 
 .legendLabel {
   color: main.$colors-grey-text;
@@ -119,20 +162,3 @@
   fill: main.$colors-grey-text;
   font-style: italic;
 }
-
-// Per-level colour classes — used instead of inline style/fill props
-.lineSuccess  { stroke: var(--log-success);  }
-.lineWarning  { stroke: var(--log-warning);  }
-.lineCritical { stroke: var(--log-critical); }
-
-.dotSuccess   { fill: var(--log-success);  }
-.dotWarning   { fill: var(--log-warning);  }
-.dotCritical  { fill: var(--log-critical); }
-
-.legendSuccess  { background-color: var(--log-success);  }
-.legendWarning  { background-color: var(--log-warning);  }
-.legendCritical { background-color: var(--log-critical); }
-
-.tipSuccess   { fill: var(--log-success);  }
-.tipWarning   { fill: var(--log-warning);  }
-.tipCritical  { fill: var(--log-critical); }

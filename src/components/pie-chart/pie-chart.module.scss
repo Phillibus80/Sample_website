@@ -78,3 +78,12 @@
 .legendLabel {
     text-transform: capitalize;
 }
+
+// Per-level colour classes — used instead of inline fill/style props
+.sliceSuccess   { fill: var(--log-success);  }
+.sliceWarning   { fill: var(--log-warning);  }
+.sliceCritical  { fill: var(--log-critical); }
+
+.legendSuccess  { background-color: var(--log-success);  }
+.legendWarning  { background-color: var(--log-warning);  }
+.legendCritical { background-color: var(--log-critical); }

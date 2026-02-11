@@ -5,6 +5,12 @@ import Form from 'react-bootstrap/Form';
 
 import * as styles from './line-chart.module.scss';
 import {LOG_CHART_TIME_UNITS, LOG_LEVELS} from '../../constants/constants.js';
+import {
+    capitalize,
+    filterLogsByWindow,
+    getLocalTodayString,
+    LOG_CHART_TIME_UNIT_OPTIONS,
+} from '../../utils/utils.js';
 
 /** SVG coordinate-space dimensions. */
 const VIEWBOX_WIDTH = 800;
@@ -26,59 +32,53 @@ const TOOLTIP_WIDTH = 145;
 const TOOLTIP_LINE_HEIGHT = 20;
 const TOOLTIP_PADDING = 10;
 
-/** Dropdown options for the time-grouping selector. */
-const TIME_UNIT_OPTIONS = [
-    {value: LOG_CHART_TIME_UNITS.DAY, label: 'By Day'},
-    {value: LOG_CHART_TIME_UNITS.WEEK, label: 'Past 7 Days'},
-    {value: LOG_CHART_TIME_UNITS.MONTH, label: 'By Month'}
-];
-
-/**
- * Returns a YYYY-MM-DD date string for N days before today,
- * using the local calendar (not UTC) to avoid off-by-one timezone errors.
- *
- * @param {number} daysAgo
- * @returns {string}
- */
-const getLocalDateNDaysAgo = (daysAgo) => {
-    const d = new Date();
-    d.setDate(d.getDate() - daysAgo);
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-};
 
 /**
  * Derives a sortable bucket key from a "YYYY-MM-DD HH:mm:ss" date string.
+ * For TODAY: returns "YYYY-MM-DD HH" (hour bucket).
+ * For all others: returns "YYYY-MM-DD" (day bucket).
  *
  * @param {string} dateStr
- * @param {'day'|'week'|'month'} timeUnit
+ * @param {string} timeUnit
  * @returns {string}
  */
 const toBucketKey = (dateStr, timeUnit) => {
-    const datePart = dateStr.split(' ')[0]; // "YYYY-MM-DD"
-    return timeUnit === LOG_CHART_TIME_UNITS.MONTH ? datePart.slice(0, 7) : datePart;
+    const [datePart, timePart] = dateStr.split(' ');
+    if (timeUnit === LOG_CHART_TIME_UNITS.TODAY) {
+        const hour = timePart ? timePart.slice(0, 2) : '00';
+        return `${datePart} ${hour}`;
+    }
+    return datePart;
 };
 
 /**
  * Formats a bucket key into a human-readable label.
- * For day/week views the year is omitted by default; pass includeYear = true
- * to append it (used on the first axis tick, on year-boundary ticks, and in
- * the hover tooltip).  Month view always embeds the year.
+ * For TODAY keys ("YYYY-MM-DD HH"): returns time label like "2 PM";
+ *   with includeYear=true returns full date+time.
+ * For day keys ("YYYY-MM-DD"): returns date label; includeYear adds year.
  *
- * @param {string}              key
- * @param {'day'|'week'|'month'} timeUnit
- * @param {boolean}             [includeYear=false]
+ * @param {string}  key
+ * @param {string}  timeUnit
+ * @param {boolean} [includeYear=false]
  * @returns {string}
  */
 const formatBucketLabel = (key, timeUnit, includeYear = false) => {
-    if (timeUnit === LOG_CHART_TIME_UNITS.MONTH) {
-        const [year, month] = key.split('-').map(Number);
-        return new Date(year, month - 1, 1).toLocaleString('default', {
-            month: 'short',
-            year: 'numeric'
-        });
+    if (timeUnit === LOG_CHART_TIME_UNITS.TODAY) {
+        const [datePart, hourPart] = key.split(' ');
+        const [year, month, day] = datePart.split('-').map(Number);
+        const hour = parseInt(hourPart ?? '0', 10);
+        const d = new Date(year, month - 1, day, hour);
+        if (includeYear) {
+            return d.toLocaleString('default', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true,
+            });
+        }
+        return d.toLocaleString('default', {hour: 'numeric', hour12: true});
     }
     const [year, month, day] = key.split('-').map(Number);
     return new Date(year, month - 1, day).toLocaleString('default', {
@@ -89,9 +89,24 @@ const formatBucketLabel = (key, timeUnit, includeYear = false) => {
 };
 
 /**
+ * Fills all 24 hour buckets for a given date string so that gaps in log
+ * activity are represented as zero-count points rather than absent.
+ *
+ * @param {Object<string, {success: number, warning: number, critical: number}>} agg
+ * @param {string} dateStr  "YYYY-MM-DD"
+ */
+const fillHourGaps = (agg, dateStr) => {
+    for (let h = 0; h < 24; h++) {
+        const key = `${dateStr} ${String(h).padStart(2, '0')}`;
+        if (!agg[key]) {
+            agg[key] = {success: 0, warning: 0, critical: 0};
+        }
+    }
+};
+
+/**
  * Fills in every calendar day between the first and last key in agg so that
- * gaps in log activity are represented as zero-count points rather than being
- * absent from the chart entirely.
+ * gaps in log activity are represented as zero-count points.
  *
  * @param {Object<string, {success: number, warning: number, critical: number}>} agg
  */
@@ -117,52 +132,14 @@ const fillDayGaps = (agg) => {
 };
 
 /**
- * Fills in every calendar month between the first and last key in agg.
- *
- * @param {Object<string, {success: number, warning: number, critical: number}>} agg
- */
-const fillMonthGaps = (agg) => {
-    const keys = Object.keys(agg).sort();
-    if (keys.length < 2) return;
-
-    const [sy, sm] = keys[0].split('-').map(Number);
-    const [ey, em] = keys[keys.length - 1].split('-').map(Number);
-
-    let y = sy;
-    let m = sm;
-
-    while (y < ey || (y === ey && m <= em)) {
-        const key = `${y}-${String(m).padStart(2, '0')}`;
-        if (!agg[key]) {
-            agg[key] = {success: 0, warning: 0, critical: 0};
-        }
-        m += 1;
-        if (m > 12) {
-            m = 1;
-            y += 1;
-        }
-    }
-};
-
-/**
  * Aggregates raw log entries into time-bucketed counts per severity level.
- * For "day" and "month" views, gaps between active dates are filled with
- * zero-count buckets so the chart accurately shows quiet periods.
  *
- * @param {Array} logs
- * @param {'day'|'week'|'month'} timeUnit
+ * @param {Array}  logs
+ * @param {string} timeUnit
  * @returns {{buckets: string[], series: Object<string, number[]>}}
  */
 const aggregateLogs = (logs, timeUnit) => {
-    let filtered = logs;
-
-    if (timeUnit === LOG_CHART_TIME_UNITS.WEEK) {
-        const cutoff = getLocalDateNDaysAgo(6);
-        filtered = logs.filter((log) => {
-            const datePart = log.created_on?.split(' ')[0];
-            return datePart != null && datePart >= cutoff;
-        });
-    }
+    const filtered = filterLogsByWindow(logs, timeUnit);
 
     /** @type {Object<string, {success: number, warning: number, critical: number}>} */
     const agg = {};
@@ -178,11 +155,10 @@ const aggregateLogs = (logs, timeUnit) => {
         }
     }
 
-    // Fill calendar gaps between the earliest and latest active bucket.
-    if (timeUnit === LOG_CHART_TIME_UNITS.DAY) {
+    if (timeUnit === LOG_CHART_TIME_UNITS.TODAY) {
+        fillHourGaps(agg, getLocalTodayString());
+    } else {
         fillDayGaps(agg);
-    } else if (timeUnit === LOG_CHART_TIME_UNITS.MONTH) {
-        fillMonthGaps(agg);
     }
 
     const buckets = Object.keys(agg).sort();
@@ -195,20 +171,15 @@ const aggregateLogs = (logs, timeUnit) => {
 };
 
 /**
- * A responsive SVG line chart that displays success, warning, and critical
- * log counts over time. Supports three time-grouping views via a dropdown:
- * "By Day" (default), "Past 7 Days", and "By Month".
+ * A responsive SVG line chart displaying success, warning, and critical
+ * log counts over time. Supports five time-window views via a dropdown.
  *
- * The SVG uses a fixed viewBox so it scales naturally with its container.
- * Line colours are fully configurable via the `colors` prop.
- *
- * @param {Array}              logs   - Raw log objects from the admin context.
- * @param {Object<string,string>} colors - Map of severity level → CSS colour.
- * @param {string}             [title] - Optional chart title.
+ * @param {Array}  logs   - Raw log objects from the admin context.
+ * @param {string} [title] - Optional chart title.
  * @returns {JSX.Element}
  */
-const LineChart = ({logs, colors, title}) => {
-    const [timeUnit, setTimeUnit] = useState(LOG_CHART_TIME_UNITS.DAY);
+const LineChart = ({logs, title}) => {
+    const [timeUnit, setTimeUnit] = useState(LOG_CHART_TIME_UNITS.PAST_7);
     const [hoveredBucket, setHoveredBucket] = useState(null);
     const svgRef = useRef(null);
 
@@ -221,7 +192,7 @@ const LineChart = ({logs, colors, title}) => {
 
     const maxCount = useMemo(() => {
         const allValues = Object.values(LOG_LEVELS).flatMap((level) => series[level]);
-        return Math.max(...allValues, 1); // at least 1 avoids division by zero
+        return Math.max(...allValues, 1);
     }, [series]);
 
     const hasSeriesData = useMemo(
@@ -258,8 +229,8 @@ const LineChart = ({logs, colors, title}) => {
     const xLabels = useMemo(() => {
         const result = {};
         xTickIndices.forEach((i, pos) => {
-            if (timeUnit === LOG_CHART_TIME_UNITS.MONTH) {
-                result[i] = formatBucketLabel(buckets[i], timeUnit);
+            if (timeUnit === LOG_CHART_TIME_UNITS.TODAY) {
+                result[i] = formatBucketLabel(buckets[i], timeUnit, false);
                 return;
             }
             const year = buckets[i].slice(0, 4);
@@ -314,9 +285,9 @@ const LineChart = ({logs, colors, title}) => {
                     setHoveredBucket(null);
                 }}
                 className={styles.select}
-                aria-label='Select time grouping'
+                aria-label='Select time window'
             >
-                {TIME_UNIT_OPTIONS.map((opt) => (
+                {LOG_CHART_TIME_UNIT_OPTIONS.map((opt) => (
                     <option key={opt.value} value={opt.value}>
                         {opt.label}
                     </option>
@@ -414,11 +385,10 @@ const LineChart = ({logs, colors, title}) => {
                                     .map((count, i) => `${getX(i)},${getY(count)}`)
                                     .join(' ')}
                                 fill='none'
-                                stroke={colors[level] ?? 'var(--chart-fallback)'}
                                 strokeWidth='2'
                                 strokeLinejoin='round'
                                 strokeLinecap='round'
-                                className={styles.line}
+                                className={`${styles.line} ${styles[`line${capitalize(level)}`]}`}
                             />
                         ))}
 
@@ -429,8 +399,7 @@ const LineChart = ({logs, colors, title}) => {
                                     cx={getX(i)}
                                     cy={getY(count)}
                                     r='3.5'
-                                    fill={colors[level] ?? 'var(--chart-fallback)'}
-                                    className={styles.dot}
+                                    className={`${styles.dot} ${styles[`dot${capitalize(level)}`]}`}
                                 />
                             ))
                         )}
@@ -471,11 +440,7 @@ const LineChart = ({logs, colors, title}) => {
                             y={tooltip.TY + TOOLTIP_PADDING + TOOLTIP_LINE_HEIGHT * 0.75}
                             className={styles.tooltipDate}
                         >
-                            {formatBucketLabel(
-                                buckets[hoveredBucket],
-                                timeUnit,
-                                timeUnit !== LOG_CHART_TIME_UNITS.MONTH
-                            )}
+                            {formatBucketLabel(buckets[hoveredBucket], timeUnit, true)}
                         </text>
 
                         {Object.values(LOG_LEVELS).map((level, li) => (
@@ -491,7 +456,7 @@ const LineChart = ({logs, colors, title}) => {
                                     width={10}
                                     height={10}
                                     rx={2}
-                                    fill={colors[level] ?? '#ccc'}
+                                    className={styles[`tip${capitalize(level)}`]}
                                 />
                                 <text
                                     x={tooltip.TX + TOOLTIP_PADDING + 16}
@@ -515,8 +480,7 @@ const LineChart = ({logs, colors, title}) => {
                 {Object.values(LOG_LEVELS).map((level) => (
                     <div key={`legend-${level}`} className={styles.legendItem}>
                         <span
-                            className={styles.legendColor}
-                            style={{backgroundColor: colors[level] ?? '#ccc'}}
+                            className={`${styles.legendColor} ${styles[`legend${capitalize(level)}`]}`}
                         />
                         <span className={styles.legendLabel}>{level}</span>
                     </div>
@@ -538,14 +502,11 @@ LineChart.propTypes = {
             created_on: PropTypes.string
         })
     ).isRequired,
-    /** Map of severity level name to a CSS colour string. */
-    colors: PropTypes.objectOf(PropTypes.string),
     /** Optional title displayed above the chart. */
     title: PropTypes.string
 };
 
 LineChart.defaultProps = {
-    colors: {},
     title: ''
 };
 
