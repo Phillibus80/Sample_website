@@ -1,5 +1,7 @@
 import {jwtDecode} from 'jwt-decode';
 
+import {LOG_CHART_TIME_UNITS} from '../constants/constants.js';
+
 /**
  * A utility function to convert a string into title case
  *
@@ -282,3 +284,101 @@ export const getAuthFromSessionStorage = () => {
         roles: getFromSessionStorage('roles') || []
     };
 };
+
+// ─── Log chart shared utilities ──────────────────────────────────────────────
+
+/**
+ * Capitalises the first character of a string.
+ *
+ * @param {string} str
+ * @returns {string}
+ */
+export const capitalize = (str) => str[0].toUpperCase() + str.slice(1);
+
+/**
+ * Returns a YYYY-MM-DD date string for N days before today,
+ * using the local calendar (not UTC) to avoid off-by-one timezone errors.
+ *
+ * @param {number} daysAgo
+ * @returns {string}
+ */
+export const getLocalDateNDaysAgo = (daysAgo) => {
+    const d = new Date();
+    d.setDate(d.getDate() - daysAgo);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+};
+
+/** Returns today's date as YYYY-MM-DD (local calendar). */
+export const getLocalTodayString = () => getLocalDateNDaysAgo(0);
+
+/**
+ * Maps each PAST_N time-unit constant to the number of days ago for the
+ * window cutoff (inclusive: PAST_7 → last 7 days = 6 days ago + today).
+ *
+ * @type {Object<string, number>}
+ */
+export const LOG_CHART_DAYS_AGO_MAP = {
+    [LOG_CHART_TIME_UNITS.PAST_7]:  6,
+    [LOG_CHART_TIME_UNITS.PAST_30]: 29,
+    [LOG_CHART_TIME_UNITS.PAST_60]: 59,
+    [LOG_CHART_TIME_UNITS.PAST_90]: 89,
+};
+
+/**
+ * Dropdown option list shared by all log charts.
+ *
+ * @type {Array<{value: string, label: string}>}
+ */
+export const LOG_CHART_TIME_UNIT_OPTIONS = [
+    {value: LOG_CHART_TIME_UNITS.TODAY,   label: 'Today'},
+    {value: LOG_CHART_TIME_UNITS.PAST_7,  label: 'Past 7 Days'},
+    {value: LOG_CHART_TIME_UNITS.PAST_30, label: 'Past 30 Days'},
+    {value: LOG_CHART_TIME_UNITS.PAST_60, label: 'Past 60 Days'},
+    {value: LOG_CHART_TIME_UNITS.PAST_90, label: 'Past 90 Days'},
+];
+
+/**
+ * Returns the subset of logs that fall within the selected time window.
+ *
+ * @param {Array}  logs
+ * @param {string} timeUnit  One of the LOG_CHART_TIME_UNITS values.
+ * @returns {Array}
+ */
+export const filterLogsByWindow = (logs, timeUnit) => {
+    if (timeUnit === LOG_CHART_TIME_UNITS.TODAY) {
+        const today = getLocalTodayString();
+        return logs.filter((log) => log.created_on?.split(' ')[0] === today);
+    }
+    const cutoff = getLocalDateNDaysAgo(LOG_CHART_DAYS_AGO_MAP[timeUnit]);
+    return logs.filter((log) => {
+        const datePart = log.created_on?.split(' ')[0];
+        return datePart != null && datePart >= cutoff;
+    });
+};
+
+/**
+ * Extracts the base route name from a full endpoint string.
+ * e.g. "PATCH /images/@image_id" → "images"
+ *
+ * @param {string} endpoint
+ * @returns {string}
+ */
+export const extractBaseRoute = (endpoint) => {
+    const parts = endpoint.split(' ');
+    if (parts.length < 2) return endpoint;
+    const segments = parts[1].split('/').filter(Boolean);
+    return segments[0] ?? endpoint;
+};
+
+/**
+ * Formats a base route name for display.
+ * e.g. "pages_sections" → "Pages Sections"
+ *
+ * @param {string} route
+ * @returns {string}
+ */
+export const formatBaseRoute = (route) =>
+    route.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());

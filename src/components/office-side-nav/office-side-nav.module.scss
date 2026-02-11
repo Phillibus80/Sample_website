@@ -1,0 +1,115 @@
+@use '../../scss/main' as main;
+
+.nav {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: main.$colors-nav-bar-background;
+  border-right: 1px solid #e5e5e5;
+  overflow: hidden;
+  z-index: 100;
+  transition: width 0.3s ease;
+}
+
+.expanded {
+  width: main.$position-sidebar-width-expanded;
+}
+
+.collapsed {
+  width: main.$position-sidebar-width-collapsed;
+}
+
+.navItem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  color: inherit;
+  gap: 0.5rem;
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: #f0f0f0;
+  }
+}
+
+.navItemActive {
+  background-color: main.$colors-primary-yellow;
+  color: #333;
+
+  &:hover {
+    background-color: main.$colors-primary-yellow;
+    opacity: 0.9;
+  }
+}
+
+.label {
+  flex: 1;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: opacity 0.2s ease, max-width 0.2s ease;
+}
+
+.labelVisible {
+  opacity: 1;
+  max-width: 160px;
+  pointer-events: auto;
+}
+
+.labelHidden {
+  opacity: 0;
+  max-width: 0;
+  pointer-events: none;
+}
+
+.icon {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.toggleBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  width: 100%;
+  color: main.$colors-grey-text;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: #f0f0f0;
+  }
+}
+
+.toggleIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  transition: transform 0.3s ease;
+}
+
+.toggleIconExpanded {
+  transform: rotate(180deg);
+}
+
+.toggleIconCollapsed {
+  transform: rotate(0deg);
+}

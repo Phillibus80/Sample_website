@@ -38,7 +38,7 @@ const OfficeUsers = () => {
         />
 
         <Container className={`mt-5`}>
-            <Table striped bordered hover className={`w-100 text-black`}>
+            <Table striped bordered hover responsive className={`w-100 text-black`}>
                 <thead>
                 <tr>
                     <th>First Name</th>
@@ -71,7 +71,7 @@ const OfficeUsers = () => {
                 </tbody>
             </Table>
 
-            <Row>
+            <Row className='mt-5'>
                 <Button
                     className='w-25'
                     type='button'
