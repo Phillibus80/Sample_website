@@ -7,16 +7,36 @@ import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 
+import DataTable from '../../../data-table/DataTable.jsx';
+import LineChart from '../../../line-chart/line-chart.jsx';
 import PieChart from '../../../pie-chart/pie-chart.jsx';
 
 const LOG_COLORS = {
-    success: '#28a745',
-    warning: '#ffc107',
-    critical: '#dc3545'
+    success: 'var(--log-success)',
+    warning: 'var(--log-warning)',
+    critical: 'var(--log-critical)'
 };
 
 const LG_PER_ROW = 4;
 const MD_PER_ROW = 3;
+
+/** Column definitions for the audit-log data table. */
+const LOG_TABLE_COLUMNS = [
+    {key: 'endpoint', label: 'Endpoint', sortable: true},
+    {key: 'level', label: 'Level', sortable: true},
+    {key: 'username', label: 'Username', sortable: true},
+    {key: 'message', label: 'Message', sortable: true},
+    {key: 'created_on', label: 'Created On', sortable: true}
+];
+
+/** Column keys available for filtering in the data table. */
+const LOG_TABLE_FILTER_COLUMNS = [
+    'endpoint',
+    'level',
+    'username',
+    'message',
+    'created_on'
+];
 
 /**
  * Extracts the base route name from a full endpoint string.
@@ -43,10 +63,12 @@ const formatBaseRoute = (route) =>
     route.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 
 /**
- * A component that displays audit log data grouped by endpoint as pie charts,
- * with search filtering and base-route dropdown.
+ * Displays audit log data as:
+ *  1. A line chart of success / warning / critical counts over time.
+ *  2. Pie charts grouped by endpoint (with search and route-filter controls).
+ *  3. A sortable, paginated, filterable data table of all log records.
  *
- * @param {Array} logs - Array of log objects from the API.
+ * @param {Array} logs - Array of log objects from the admin context.
  * @return {React.JSX.Element}
  */
 const OfficeLogs = ({logs}) => {
@@ -62,24 +84,27 @@ const OfficeLogs = ({logs}) => {
         return acc;
     }, {});
 
-    const allChartData = Object.entries(groupedByEndpoint).map(([endpoint, levelCounts]) => ({
-        endpoint,
-        series: Object.entries(levelCounts).map(([label, value]) => ({label, value}))
-    }));
+    const allChartData = Object.entries(groupedByEndpoint).map(
+        ([endpoint, levelCounts]) => ({
+            endpoint,
+            series: Object.entries(levelCounts).map(([label, value]) => ({
+                label,
+                value
+            }))
+        })
+    );
 
-    if (allChartData.length === 0) {
-        return (
-            <Container className='mt-5'>
-                <p className='text-muted text-center'>No audit logs available.</p>
-            </Container>
-        );
-    }
-
-    const allBaseRoutes = [...new Set(allChartData.map((c) => extractBaseRoute(c.endpoint)))].sort();
+    const allBaseRoutes = [
+        ...new Set(allChartData.map((c) => extractBaseRoute(c.endpoint)))
+    ].sort();
 
     const filteredChartData = allChartData.filter((chart) => {
-        const matchesSearch = chart.endpoint.toLowerCase().includes(searchText.toLowerCase());
-        const matchesRoute = selectedRoute ? extractBaseRoute(chart.endpoint) === selectedRoute : true;
+        const matchesSearch = chart.endpoint
+            .toLowerCase()
+            .includes(searchText.toLowerCase());
+        const matchesRoute = selectedRoute
+            ? extractBaseRoute(chart.endpoint) === selectedRoute
+            : true;
         return matchesSearch && matchesRoute;
     });
 
@@ -96,71 +121,159 @@ const OfficeLogs = ({logs}) => {
 
     return (
         <Container className='mt-5'>
-            <Row className='mb-4 g-2'>
-                <Col xs={12} md={8}>
-                    <Form.Control
-                        type='text'
-                        placeholder='Filter endpoints...'
-                        value={searchText}
-                        onChange={(e) => setSearchText(e.target.value)}
-                        aria-label='Filter endpoints'
+
+            <LineChart
+                logs={logs}
+                colors={LOG_COLORS}
+                title='Log Activity Over Time'
+            />
+
+            {allChartData.length === 0 ? (
+                <p className='text-muted text-center'>No logs available.</p>
+            ) : (
+                <>
+                    <Row className='mb-4 g-2'>
+                        <Col xs={12} md={8}>
+                            <Form.Control
+                                type='text'
+                                placeholder='Filter endpoints...'
+                                value={searchText}
+                                onChange={(e) => setSearchText(e.target.value)}
+                                aria-label='Filter endpoints'
+                            />
+                        </Col>
+                        <Col xs={12} md={4}>
+                            <Form.Select
+                                value={selectedRoute}
+                                onChange={(e) => setSelectedRoute(e.target.value)}
+                                aria-label='Select route'
+                            >
+                                <option value=''>All Routes</option>
+                                {allBaseRoutes.map((route) => (
+                                    <option key={route} value={route}>
+                                        {formatBaseRoute(route)}
+                                    </option>
+                                ))}
+                            </Form.Select>
+                        </Col>
+                    </Row>
+
+                    {!hasResults && (
+                        <p className='text-muted text-center'>
+                            No results match your filters.
+                        </p>
+                    )}
+
+                    {hasResults && (
+                        <Accordion
+                            alwaysOpen
+                            defaultActiveKey={allBaseRoutes}
+                            key={allBaseRoutes.join(',')}
+                        >
+                            {Object.entries(groupedByRoute).map(
+                                ([baseRoute, charts]) => {
+                                    const lgRemainder =
+                                        charts.length % LG_PER_ROW;
+                                    const mdRemainder =
+                                        charts.length % MD_PER_ROW;
+
+                                    return (
+                                        <Accordion.Item
+                                            eventKey={baseRoute}
+                                            key={baseRoute}
+                                        >
+                                            <Accordion.Header>
+                                                {formatBaseRoute(baseRoute)}
+                                            </Accordion.Header>
+                                            <Accordion.Body>
+                                                <Row>
+                                                    {charts.map(
+                                                        (chart, index) => {
+                                                            const inLastLgRow =
+                                                                lgRemainder >
+                                                                    0 &&
+                                                                index >=
+                                                                    charts.length -
+                                                                        lgRemainder;
+                                                            const inLastMdRow =
+                                                                mdRemainder >
+                                                                    0 &&
+                                                                index >=
+                                                                    charts.length -
+                                                                        mdRemainder;
+
+                                                            const lgSize =
+                                                                inLastLgRow
+                                                                    ? Math.floor(
+                                                                          12 /
+                                                                              lgRemainder
+                                                                      )
+                                                                    : 3;
+                                                            const mdSize =
+                                                                inLastMdRow
+                                                                    ? Math.floor(
+                                                                          12 /
+                                                                              mdRemainder
+                                                                      )
+                                                                    : 4;
+
+                                                            return (
+                                                                <Col
+                                                                    key={
+                                                                        chart.endpoint
+                                                                    }
+                                                                    xs={12}
+                                                                    md={mdSize}
+                                                                    lg={lgSize}
+                                                                    className='mb-4'
+                                                                >
+                                                                    <PieChart
+                                                                        series={
+                                                                            chart.series
+                                                                        }
+                                                                        colors={
+                                                                            LOG_COLORS
+                                                                        }
+                                                                        title={
+                                                                            chart.endpoint
+                                                                        }
+                                                                    />
+                                                                </Col>
+                                                            );
+                                                        }
+                                                    )}
+                                                </Row>
+                                            </Accordion.Body>
+                                        </Accordion.Item>
+                                    );
+                                }
+                            )}
+                        </Accordion>
+                    )}
+                </>
+            )}
+
+            <div className='mt-5'>
+                <h5 className='mb-3'>Audit Log Records</h5>
+                {logs.length === 0 ? (
+                    <p className='text-muted text-center'>No logs available.</p>
+                ) : (
+                    <DataTable
+                        data={logs}
+                        columns={LOG_TABLE_COLUMNS}
+                        sortable
+                        paginated
+                        pageSize={50}
+                        filterable
+                        filterColumns={LOG_TABLE_FILTER_COLUMNS}
+                        selectable={false}
+                        striped
+                        bordered
+                        hover
+                        responsive
                     />
-                </Col>
-                <Col xs={12} md={4}>
-                    <Form.Select
-                        value={selectedRoute}
-                        onChange={(e) => setSelectedRoute(e.target.value)}
-                        aria-label='Select route'
-                    >
-                        <option value=''>All Routes</option>
-                        {allBaseRoutes.map((route) => (
-                            <option key={route} value={route}>
-                                {formatBaseRoute(route)}
-                            </option>
-                        ))}
-                    </Form.Select>
-                </Col>
-            </Row>
-
-            {!hasResults && (
-                <p className='text-muted text-center'>No results match your filters.</p>
-            )}
-
-            {hasResults && (
-                <Accordion alwaysOpen defaultActiveKey={allBaseRoutes} key={allBaseRoutes.join(',')}>
-                    {Object.entries(groupedByRoute).map(([baseRoute, charts]) => {
-                        const lgRemainder = charts.length % LG_PER_ROW;
-                        const mdRemainder = charts.length % MD_PER_ROW;
-
-                        return (
-                            <Accordion.Item eventKey={baseRoute} key={baseRoute}>
-                                <Accordion.Header>{formatBaseRoute(baseRoute)}</Accordion.Header>
-                                <Accordion.Body>
-                                    <Row>
-                                        {charts.map((chart, index) => {
-                                            const inLastLgRow = lgRemainder > 0 && index >= charts.length - lgRemainder;
-                                            const inLastMdRow = mdRemainder > 0 && index >= charts.length - mdRemainder;
-
-                                            const lgSize = inLastLgRow ? Math.floor(12 / lgRemainder) : 3;
-                                            const mdSize = inLastMdRow ? Math.floor(12 / mdRemainder) : 4;
-
-                                            return (
-                                                <Col key={chart.endpoint} xs={12} md={mdSize} lg={lgSize} className='mb-4'>
-                                                    <PieChart
-                                                        series={chart.series}
-                                                        colors={LOG_COLORS}
-                                                        title={chart.endpoint}
-                                                    />
-                                                </Col>
-                                            );
-                                        })}
-                                    </Row>
-                                </Accordion.Body>
-                            </Accordion.Item>
-                        );
-                    })}
-                </Accordion>
-            )}
+                )}
+            </div>
         </Container>
     );
 };

@@ -106,7 +106,7 @@ const PieChart = ({series, colors, title}) => {
                     <path
                         key={slice.label}
                         d={buildSlicePath(slice.startAngle, slice.endAngle)}
-                        fill={colors[slice.label] ?? '#ccc'}
+                        fill={colors[slice.label] ?? 'var(--chart-fallback)'}
                         className={styles.slice}
                         onMouseEnter={() => setHoveredIndex(slice.index)}
                         onMouseLeave={() => setHoveredIndex(null)}
@@ -140,7 +140,7 @@ const PieChart = ({series, colors, title}) => {
                     <div key={slice.label} className={styles.legendItem}>
                         <span
                             className={styles.legendColor}
-                            style={{backgroundColor: colors[slice.label] ?? '#ccc'}}
+                            style={{backgroundColor: colors[slice.label] ?? 'var(--chart-fallback)'}}
                         />
                         <span className={styles.legendLabel}>{slice.label}</span>
                     </div>

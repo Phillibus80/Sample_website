@@ -440,6 +440,134 @@ VALUES ('Honey Dome', 33, 1, NOW()),
        ('Honey Pearl', 32, 2, NOW()),
        ('Default Event', 34, 3, NOW());
 
+INSERT INTO LOGS (ENDPOINT, LOG_LEVEL, USERNAME, MESSAGE, CREATED_ON)
+VALUES
+    -- Dec 10, 2025 ───────────────────────────────────────────────────────────
+    ('POST /login',              'success',  'phillibus', 'User signed in.',                        '2025-12-10 08:30:00'),
+    ('GET /pages',               'success',  'phillibus', 'Pages fetched.',                         '2025-12-10 08:30:20'),
+    ('POST /pages',              'success',  'phillibus', 'Page created.',                          '2025-12-10 08:45:00'),
+    ('POST /login',              'critical', NULL,        'Failed login attempt — bad credentials.','2025-12-10 10:15:44'),
+    ('POST /send_email',         'success',  NULL,        'Email notification sent.',               '2025-12-10 11:00:00'),
+    ('POST /logout',             'success',  'phillibus', 'User signed out.',                       '2025-12-10 17:00:00'),
+
+    -- Dec 17, 2025 ───────────────────────────────────────────────────────────
+    ('POST /login',              'success',  'alice123',  'User signed in.',                        '2025-12-17 09:00:00'),
+    ('GET /images',              'success',  'alice123',  'Images fetched.',                        '2025-12-17 09:00:30'),
+    ('POST /images',             'warning',  'alice123',  'Image upload exceeded recommended size.','2025-12-17 09:02:15'),
+    ('POST /login',              'success',  'bobbyJ',    'User signed in.',                        '2025-12-17 10:30:00'),
+    ('GET /events',              'success',  'bobbyJ',    'Events fetched.',                        '2025-12-17 10:30:18'),
+    ('PATCH /events/@id',        'success',  'phillibus', 'Event updated.',                         '2025-12-17 11:15:00'),
+    ('DELETE /events/@id',       'critical', 'phillibus', 'Attempted delete of non-existent event.','2025-12-17 11:16:30'),
+    ('POST /logout',             'success',  'alice123',  'User signed out.',                       '2025-12-17 16:00:00'),
+
+    -- Dec 22, 2025 ───────────────────────────────────────────────────────────
+    ('POST /login',              'success',  'phillibus', 'User signed in.',                        '2025-12-22 08:00:00'),
+    ('GET /logs',                'success',  'phillibus', 'Logs fetched.',                          '2025-12-22 08:00:40'),
+    ('GET /users',               'success',  'phillibus', 'User list fetched.',                     '2025-12-22 08:01:10'),
+    ('PATCH /users/@id',         'success',  'phillibus', 'User updated.',                          '2025-12-22 08:03:00'),
+    ('POST /login',              'critical', NULL,        'Failed login attempt — bad credentials.','2025-12-22 09:44:01'),
+    ('POST /login',              'critical', NULL,        'Failed login attempt — bad credentials.','2025-12-22 09:44:50'),
+    ('GET /locations',           'success',  'alice123',  'Locations fetched.',                     '2025-12-22 13:00:00'),
+    ('POST /locations',          'warning',  'alice123',  'Location insert missing optional field.','2025-12-22 13:01:22'),
+    ('POST /send_email',         'success',  NULL,        'Email notification sent.',               '2025-12-22 15:30:00'),
+    ('POST /logout',             'success',  'phillibus', 'User signed out.',                       '2025-12-22 17:30:00'),
+
+    -- Dec 29, 2025 ───────────────────────────────────────────────────────────
+    ('POST /login',              'success',  'bobbyJ',    'User signed in.',                        '2025-12-29 09:15:00'),
+    ('GET /pages',               'success',  'bobbyJ',    'Pages fetched.',                         '2025-12-29 09:15:25'),
+    ('POST /links',              'success',  'phillibus', 'Link created.',                          '2025-12-29 10:00:00'),
+    ('PATCH /links/@id',         'warning',  'phillibus', 'Link update skipped — no changes.',      '2025-12-29 10:01:10'),
+    ('DELETE /links/@id',        'critical', 'phillibus', 'Link delete failed — resource not found.','2025-12-29 10:02:45'),
+    ('POST /images',             'success',  'alice123',  'Image uploaded successfully.',           '2025-12-29 11:30:00'),
+    ('DELETE /images/@id',       'warning',  'alice123',  'Image delete skipped — still referenced.','2025-12-29 11:31:44'),
+    ('POST /logout',             'success',  'bobbyJ',    'User signed out.',                       '2025-12-29 15:00:00'),
+
+    -- Jan 20 ─────────────────────────────────────────────────────────────────
+    ('POST /login',              'success',  'alice123',  'User signed in.',                        '2026-01-20 08:12:04'),
+    ('GET /pages',               'success',  'alice123',  'Pages fetched.',                         '2026-01-20 08:12:31'),
+    ('POST /login',              'success',  'phillibus', 'User signed in.',                        '2026-01-20 09:45:00'),
+    ('GET /images',              'success',  'phillibus', 'Images fetched.',                        '2026-01-20 09:45:18'),
+    ('POST /images',             'warning',  'phillibus', 'Image upload exceeded recommended size.','2026-01-20 09:47:02'),
+    ('POST /login',              'critical', NULL,        'Failed login attempt — bad credentials.','2026-01-20 11:03:55'),
+    ('POST /login',              'critical', NULL,        'Failed login attempt — bad credentials.','2026-01-20 11:04:10'),
+
+    -- Jan 23 ─────────────────────────────────────────────────────────────────
+    ('POST /login',              'success',  'bobbyJ',    'User signed in.',                        '2026-01-23 07:30:00'),
+    ('GET /events',              'success',  'bobbyJ',    'Events fetched.',                        '2026-01-23 07:30:22'),
+    ('POST /events',             'success',  'phillibus', 'Event created.',                         '2026-01-23 10:15:45'),
+    ('PATCH /events/@id',        'warning',  'phillibus', 'Event update missing optional field.',   '2026-01-23 10:16:30'),
+    ('DELETE /events/@id',       'critical', 'phillibus', 'Attempted delete of non-existent event.','2026-01-23 10:18:00'),
+    ('POST /logout',             'success',  'bobbyJ',    'User signed out.',                       '2026-01-23 11:00:00'),
+
+    -- Jan 28 ─────────────────────────────────────────────────────────────────
+    ('POST /login',              'success',  'phillibus', 'User signed in.',                        '2026-01-28 09:00:00'),
+    ('GET /users',               'success',  'phillibus', 'User list fetched.',                     '2026-01-28 09:00:14'),
+    ('PATCH /users/@id',         'success',  'phillibus', 'User updated.',                          '2026-01-28 09:02:05'),
+    ('DELETE /users/@id',        'warning',  'phillibus', 'Attempted delete on protected account.', '2026-01-28 09:03:44'),
+    ('GET /locations',           'success',  'alice123',  'Locations fetched.',                     '2026-01-28 13:22:10'),
+    ('POST /locations',          'critical', 'alice123',  'Location insert failed — duplicate name.','2026-01-28 13:23:50'),
+    ('POST /send_email',         'success',  NULL,        'Email notification sent.',               '2026-01-28 14:00:00'),
+    ('POST /send_email',         'warning',  NULL,        'Email rate limit threshold approaching.','2026-01-28 14:00:45'),
+
+    -- Feb 2 ──────────────────────────────────────────────────────────────────
+    ('POST /login',              'success',  'alice123',  'User signed in.',                        '2026-02-02 08:05:00'),
+    ('GET /links',               'success',  'alice123',  'Links fetched.',                         '2026-02-02 08:05:30'),
+    ('POST /links',              'success',  'phillibus', 'Link created.',                          '2026-02-02 08:45:12'),
+    ('PATCH /links/@id',         'success',  'phillibus', 'Link updated.',                          '2026-02-02 08:46:00'),
+    ('DELETE /links/@id',        'warning',  'phillibus', 'Link targeted for delete not found.',    '2026-02-02 08:47:30'),
+    ('POST /login',              'critical', NULL,        'Failed login attempt — bad credentials.','2026-02-02 10:33:01'),
+    ('POST /login',              'critical', NULL,        'Failed login attempt — bad credentials.','2026-02-02 10:33:45'),
+    ('POST /login',              'critical', NULL,        'Failed login attempt — bad credentials.','2026-02-02 10:34:12'),
+    ('POST /logout',             'success',  'alice123',  'User signed out.',                       '2026-02-02 17:00:00'),
+
+    -- Feb 4 ──────────────────────────────────────────────────────────────────
+    ('POST /login',              'success',  'bobbyJ',    'User signed in.',                        '2026-02-04 09:10:00'),
+    ('GET /pages',               'success',  'bobbyJ',    'Pages fetched.',                         '2026-02-04 09:10:18'),
+    ('POST /pages',              'success',  'phillibus', 'Page created.',                          '2026-02-04 11:00:05'),
+    ('PATCH /pages/@id',         'warning',  'phillibus', 'Page update skipped — no changes.',      '2026-02-04 11:01:22'),
+    ('DELETE /pages/@id',        'critical', 'phillibus', 'Page delete failed — foreign key constraint.','2026-02-04 11:02:44'),
+    ('GET /images',              'success',  'phillibus', 'Images fetched.',                        '2026-02-04 11:30:00'),
+    ('POST /images',             'success',  'phillibus', 'Image uploaded successfully.',           '2026-02-04 11:31:10'),
+
+    -- Feb 6 ──────────────────────────────────────────────────────────────────
+    ('POST /login',              'success',  'phillibus', 'User signed in.',                        '2026-02-06 08:00:00'),
+    ('GET /logs',                'success',  'phillibus', 'Logs fetched.',                          '2026-02-06 08:00:22'),
+    ('POST /send_email',         'success',  NULL,        'Email notification sent.',               '2026-02-06 09:15:00'),
+    ('POST /send_email',         'critical', NULL,        'Email delivery failed — SMTP error.',    '2026-02-06 09:16:04'),
+    ('GET /locations',           'success',  'alice123',  'Locations fetched.',                     '2026-02-06 10:40:00'),
+    ('PATCH /locations/@id',     'success',  'alice123',  'Location updated.',                      '2026-02-06 10:41:30'),
+    ('POST /login',              'critical', NULL,        'Failed login attempt — account locked.',  '2026-02-06 14:22:09'),
+    ('POST /logout',             'success',  'phillibus', 'User signed out.',                       '2026-02-06 17:30:00'),
+
+    -- Feb 8 ──────────────────────────────────────────────────────────────────
+    ('POST /login',              'success',  'alice123',  'User signed in.',                        '2026-02-08 07:55:00'),
+    ('GET /pages',               'success',  'alice123',  'Pages fetched.',                         '2026-02-08 07:55:20'),
+    ('POST /login',              'success',  'phillibus', 'User signed in.',                        '2026-02-08 08:30:00'),
+    ('GET /images',              'success',  'phillibus', 'Images fetched.',                        '2026-02-08 08:30:45'),
+    ('DELETE /images/@id',       'warning',  'phillibus', 'Image delete skipped — still referenced.','2026-02-08 08:32:00'),
+    ('GET /events',              'success',  'bobbyJ',    'Events fetched.',                        '2026-02-08 09:00:00'),
+    ('PATCH /events/@id',        'success',  'bobbyJ',    'Event updated.',                         '2026-02-08 09:01:15'),
+    ('POST /pages',              'critical', 'alice123',  'Page creation failed — name conflict.',  '2026-02-08 10:10:00'),
+    ('POST /send_email',         'success',  NULL,        'Email notification sent.',               '2026-02-08 12:00:00'),
+    ('POST /login',              'critical', NULL,        'Failed login attempt — bad credentials.','2026-02-08 15:44:33'),
+    ('POST /logout',             'success',  'alice123',  'User signed out.',                       '2026-02-08 17:00:00'),
+
+    -- Feb 9 (today) ───────────────────────────────────────────────────────────
+    ('POST /login',              'success',  'phillibus', 'User signed in.',                        '2026-02-09 08:00:00'),
+    ('GET /logs',                'success',  'phillibus', 'Logs fetched.',                          '2026-02-09 08:00:30'),
+    ('GET /users',               'success',  'phillibus', 'User list fetched.',                     '2026-02-09 08:01:00'),
+    ('POST /login',              'success',  'alice123',  'User signed in.',                        '2026-02-09 09:15:00'),
+    ('GET /pages',               'success',  'alice123',  'Pages fetched.',                         '2026-02-09 09:15:22'),
+    ('PATCH /pages/@id',         'success',  'alice123',  'Page updated.',                          '2026-02-09 09:17:44'),
+    ('POST /images',             'warning',  'phillibus', 'Image upload exceeded recommended size.','2026-02-09 10:05:00'),
+    ('DELETE /users/@id',        'critical', 'phillibus', 'Attempted delete on protected account.', '2026-02-09 10:30:00'),
+    ('POST /login',              'critical', NULL,        'Failed login attempt — bad credentials.','2026-02-09 11:00:01'),
+    ('POST /login',              'critical', NULL,        'Failed login attempt — bad credentials.','2026-02-09 11:00:44'),
+    ('GET /events',              'success',  'bobbyJ',    'Events fetched.',                        '2026-02-09 13:00:00'),
+    ('POST /events',             'success',  'phillibus', 'Event created.',                         '2026-02-09 13:45:00'),
+    ('POST /send_email',         'warning',  NULL,        'Email rate limit threshold approaching.','2026-02-09 14:20:00'),
+    ('POST /logout',             'success',  'phillibus', 'User signed out.',                       '2026-02-09 17:00:00');
+
 INSERT INTO COMPONENT_CONTENT (ID, PAGE_SECTION_COMPONENTS_ID, LINK_ID, TEXT_CONTENT_ID, IMAGE_ID, EVENT_ID)
 VALUES (1, 1, NULL, 9, NULL, NULL),
        (2, 1, 1, NULL, 25, NULL),

@@ -6,3 +6,18 @@ $error-text: red;
 $primary-yellow: #ffb508;
 $honey-color: #a9631e;
 $primary-background: #f5f7fa;
+
+$log-success: #28a745;
+$log-warning: #ffc107;
+$log-critical: #dc3545;
+
+$chart-tooltip-label: #333;
+$chart-tooltip-value: #222;
+$chart-fallback: #ccc;
+
+:root {
+  --log-success: #{$log-success};
+  --log-warning: #{$log-warning};
+  --log-critical: #{$log-critical};
+  --chart-fallback: #{$chart-fallback};
+}
