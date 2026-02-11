@@ -74,3 +74,23 @@ export const FORM_ERROR_TEXT = {
     CREATE_PAGE_SECTION_SELECTION_TEXT: 'Must select a section.',
     CREATE_PAGE_NAME_TEXT: 'The page must have a name.'
 };
+
+/**
+ * Log severity levels corresponding to the LOG_LEVEL column in the LOGS table.
+ * @type {{SUCCESS: string, WARNING: string, CRITICAL: string}}
+ */
+export const LOG_LEVELS = {
+    SUCCESS: 'success',
+    WARNING: 'warning',
+    CRITICAL: 'critical'
+};
+
+/**
+ * Time-grouping units available in the log activity line chart.
+ * @type {{DAY: string, WEEK: string, MONTH: string}}
+ */
+export const LOG_CHART_TIME_UNITS = {
+    DAY: 'day',
+    WEEK: 'week',
+    MONTH: 'month'
+};

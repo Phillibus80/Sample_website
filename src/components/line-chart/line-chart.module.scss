@@ -1,0 +1,121 @@
+@use '../../scss/main' as main;
+
+.wrapper {
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+  color: main.$colors-grey-text;
+}
+
+.controls {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.5rem;
+}
+
+.select {
+  width: auto;
+  min-width: 160px;
+}
+
+.svg {
+  width: 100%;
+  display: block;
+  overflow: visible;
+}
+
+.gridLine {
+  stroke: #e0e0e0;
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+}
+
+.axis {
+  stroke: #ccc;
+  stroke-width: 1.5;
+}
+
+.axisLabel {
+  font-size: 11px;
+  fill: main.$colors-grey-text;
+}
+
+.line {
+  pointer-events: none;
+}
+
+.dot {
+  pointer-events: none;
+}
+
+.crosshair {
+  stroke: #bbb;
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+  pointer-events: none;
+}
+
+.tooltipBox {
+  fill: white;
+  stroke: #ddd;
+  stroke-width: 1;
+  filter: drop-shadow(0 2px 4px rgb(0 0 0 / 10%));
+}
+
+.tooltipDate {
+  font-size: 12px;
+  font-weight: 700;
+  fill: #333;
+}
+
+.tooltipValue {
+  font-size: 11px;
+  fill: #555;
+  text-transform: capitalize;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.legendColor {
+  display: inline-block;
+  width: 28px;
+  height: 3px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.legendLabel {
+  color: main.$colors-grey-text;
+  text-transform: capitalize;
+}
+
+.empty {
+  color: main.$colors-grey-text;
+  font-style: italic;
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.emptyChart {
+  font-size: 14px;
+  fill: main.$colors-grey-text;
+  font-style: italic;
+}

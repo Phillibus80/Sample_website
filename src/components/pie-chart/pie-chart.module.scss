@@ -33,7 +33,7 @@
 .tooltipLabel {
     font-size: 0.85rem;
     font-weight: 600;
-    fill: #333;
+    fill: main.$colors-chart-tooltip-label;
     text-transform: capitalize;
     pointer-events: none;
 }
@@ -41,7 +41,7 @@
 .tooltipPercent {
     font-size: 1.1rem;
     font-weight: 700;
-    fill: #222;
+    fill: main.$colors-chart-tooltip-value;
     pointer-events: none;
 }
 
