@@ -1,5 +1,3 @@
-import {useState} from 'react';
-
 import PropTypes from 'prop-types';
 import {AiOutlineMail} from 'react-icons/ai';
 import {GoSidebarCollapse} from 'react-icons/go';
