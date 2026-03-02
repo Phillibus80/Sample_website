@@ -100,7 +100,7 @@ try {
             $db,
             'EVENTS',
             ['TITLE' => $eventTitle],
-            ['TITLE' => $eventTitle, 'TEXT_CONTENT_ID' => $eventTxtId, 'LOCATION_ID' => $locationId]
+            ['TITLE' => $eventTitle, 'TEXT_CONTENT_ID' => $eventTxtId, 'LOCATION_ID' => $locationId, 'EVENT_TIME' => $eventTime]
         ) ?? null;
     }
 

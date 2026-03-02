@@ -120,19 +120,51 @@
   font-style: italic;
 }
 
-// Per-level colour classes — used instead of inline style/fill props
-.lineSuccess  { stroke: var(--log-success);  }
-.lineWarning  { stroke: var(--log-warning);  }
-.lineCritical { stroke: var(--log-critical); }
+// Per-level color classes — used instead of inline style/fill props
+.lineSuccess {
+  stroke: var(--log-success);
+}
 
-.dotSuccess   { fill: var(--log-success);  }
-.dotWarning   { fill: var(--log-warning);  }
-.dotCritical  { fill: var(--log-critical); }
+.lineWarning {
+  stroke: var(--log-warning);
+}
 
-.legendSuccess  { background-color: var(--log-success);  }
-.legendWarning  { background-color: var(--log-warning);  }
-.legendCritical { background-color: var(--log-critical); }
+.lineCritical {
+  stroke: var(--log-critical);
+}
 
-.tipSuccess   { fill: var(--log-success);  }
-.tipWarning   { fill: var(--log-warning);  }
-.tipCritical  { fill: var(--log-critical); }
+.dotSuccess {
+  fill: var(--log-success);
+}
+
+.dotWarning {
+  fill: var(--log-warning);
+}
+
+.dotCritical {
+  fill: var(--log-critical);
+}
+
+.legendSuccess {
+  background-color: var(--log-success);
+}
+
+.legendWarning {
+  background-color: var(--log-warning);
+}
+
+.legendCritical {
+  background-color: var(--log-critical);
+}
+
+.tipSuccess {
+  fill: var(--log-success);
+}
+
+.tipWarning {
+  fill: var(--log-warning);
+}
+
+.tipCritical {
+  fill: var(--log-critical);
+}

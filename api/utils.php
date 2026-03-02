@@ -781,7 +781,7 @@ function validateRequestData(object|array $requestData, array $fieldNameTypeArra
 
             if (empty($sanitized)) {
                 $errors[$field] = "Field cannot be empty.";
-            } elseif (!preg_match('/^[a-zA-Z\-_,.!@#$%^&*\\s]+$/', $sanitized)) {
+            } elseif (!preg_match('/^[a-zA-Z0-9\-_,.\'\"!@#$%^&*\\s]+$/', $sanitized)) {
                 $errors[$field] = "Field contains invalid characters.";
             }
             continue;

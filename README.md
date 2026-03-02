@@ -1,6 +1,6 @@
-# Sample Website with CMS
+# Wood Valley Bees
 
-This is the project for a sample website with a CMS. In development, it uses Docker as the development environment. It also
+This is the project for the Wood Valley Bees CMS. In development, it uses Docker as the development environment. It also
 uses NGINX to proxy all API calls to allow for CSRF Token validation.
 
 A React front end, using [Tanstack Query](https://tanstack.com/query/latest).

@@ -9,11 +9,11 @@ import * as styles from './office-side-nav.module.scss';
 
 /** Ordered list of nav items rendered by the sidebar. */
 const NAV_ITEMS = [
-    {key: 'audit-logs',   label: 'Audit Logs',   Icon: LuLogs},
-    {key: 'user-list',    label: 'User List',    Icon: LuUsers},
-    {key: 'email-list',   label: 'Email List',   Icon: AiOutlineMail},
+    {key: 'audit-logs', label: 'Audit Logs', Icon: LuLogs},
+    {key: 'user-list', label: 'User List', Icon: LuUsers},
+    {key: 'email-list', label: 'Email List', Icon: AiOutlineMail},
     {key: 'content-list', label: 'Content List', Icon: MdContentCopy},
-    {key: 'pages',        label: 'Pages',        Icon: RiPagesLine},
+    {key: 'pages', label: 'Pages', Icon: RiPagesLine},
 ];
 
 /**
@@ -44,11 +44,11 @@ const OfficeSideNav = ({activeKey, onNavigate, isExpanded, onToggle}) => {
                     <span className={`${styles.label} ${isExpanded ? styles.labelVisible : styles.labelHidden}`}>
                         {label}
                     </span>
-                    <Icon className={styles.icon} aria-hidden='true' />
+                    <Icon className={styles.icon} aria-hidden='true'/>
                 </button>
             ))}
 
-            <div className={styles.spacer} />
+            <div className={styles.spacer}/>
 
             <button
                 type='button'
@@ -67,10 +67,10 @@ const OfficeSideNav = ({activeKey, onNavigate, isExpanded, onToggle}) => {
 };
 
 OfficeSideNav.propTypes = {
-    activeKey:  PropTypes.string.isRequired,
+    activeKey: PropTypes.string.isRequired,
     onNavigate: PropTypes.func.isRequired,
     isExpanded: PropTypes.bool.isRequired,
-    onToggle:   PropTypes.func.isRequired,
+    onToggle: PropTypes.func.isRequired,
 };
 
 export default OfficeSideNav;

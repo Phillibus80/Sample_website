@@ -42,14 +42,14 @@ const OfficeTabs = () => {
                 title={
                     <span>
                         Create Page&nbsp;
-                        <GrAddCircle className={btnStyles.btn_icon} />
+                        <GrAddCircle className={btnStyles.btn_icon}/>
                     </span>
                 }
                 key='create-page'
                 eventKey='create-page'
             >
                 <h2 className='mt-5'>Create Page</h2>
-                <OfficeCreatePage />
+                <OfficeCreatePage/>
             </Tab>,
         ]
         : [];
@@ -63,7 +63,7 @@ const OfficeTabs = () => {
                         key={page.NAME}
                         eventKey={page.NAME}
                     >
-                        <OfficeTab pageName={page.NAME} />
+                        <OfficeTab pageName={page.NAME}/>
                     </Tab>
                 );
             }
@@ -98,28 +98,28 @@ const OfficeTabs = () => {
                 {activeView === 'audit-logs' && (
                     <>
                         <h2 className='mt-5'>Audit Logs</h2>
-                        <OfficeLogs logs={logs} />
+                        <OfficeLogs logs={logs}/>
                     </>
                 )}
 
                 {activeView === 'user-list' && (
                     <>
                         <h2 className='mt-5'>User List</h2>
-                        <OfficeUsers />
+                        <OfficeUsers/>
                     </>
                 )}
 
                 {activeView === 'email-list' && (
                     <>
                         <h2 className='mt-5'>Email List</h2>
-                        <OfficeEmailUserTab />
+                        <OfficeEmailUserTab/>
                     </>
                 )}
 
                 {activeView === 'content-list' && (
                     <>
                         <h2 className='mt-5'>Content List</h2>
-                        <OfficeContentTab />
+                        <OfficeContentTab/>
                     </>
                 )}
             </main>

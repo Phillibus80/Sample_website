@@ -14,7 +14,7 @@ const CarouselImage = ({imageSrc}) => {
         <div className={`${styles.imageGradient}`}>
             <Image
                 className='object-fit-cover'
-                style={{width: '100%'}}
+                style={{width: '100%', height: '100%'}}
                 src={imageSrc}
                 fluid
             />

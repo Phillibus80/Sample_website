@@ -25,7 +25,6 @@ const UpdatePermissionField = ({userKey, currentUser}) => {
             {''}
             <Field
                 id={`user_${currentUser.id}_${userKey}`}
-                as={Form.Control}
                 className={`rounded-3 border-1 w-100 p-2 ${styles.table_input}`}
                 component={UserRoleCheckboxes}
                 name={userKey}

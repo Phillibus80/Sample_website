@@ -72,9 +72,17 @@
 }
 
 // Per-level bar fill classes
-.barSuccess  { fill: var(--log-success);  }
-.barWarning  { fill: var(--log-warning);  }
-.barCritical { fill: var(--log-critical); }
+.barSuccess {
+  fill: var(--log-success);
+}
+
+.barWarning {
+  fill: var(--log-warning);
+}
+
+.barCritical {
+  fill: var(--log-critical);
+}
 
 .crosshair {
   stroke: #bbb;
@@ -103,9 +111,17 @@
 }
 
 // Per-level tooltip swatch fill classes
-.tipSuccess  { fill: var(--log-success);  }
-.tipWarning  { fill: var(--log-warning);  }
-.tipCritical { fill: var(--log-critical); }
+.tipSuccess {
+  fill: var(--log-success);
+}
+
+.tipWarning {
+  fill: var(--log-warning);
+}
+
+.tipCritical {
+  fill: var(--log-critical);
+}
 
 .fadeMask {
   position: absolute;
@@ -141,9 +157,17 @@
 }
 
 // Per-level legend background classes
-.legendSuccess  { background-color: var(--log-success);  }
-.legendWarning  { background-color: var(--log-warning);  }
-.legendCritical { background-color: var(--log-critical); }
+.legendSuccess {
+  background-color: var(--log-success);
+}
+
+.legendWarning {
+  background-color: var(--log-warning);
+}
+
+.legendCritical {
+  background-color: var(--log-critical);
+}
 
 .legendLabel {
   color: main.$colors-grey-text;

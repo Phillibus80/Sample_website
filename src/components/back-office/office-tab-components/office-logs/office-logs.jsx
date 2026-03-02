@@ -97,10 +97,10 @@ const OfficeLogs = ({logs}) => {
 
             <Row className='mb-4 g-3'>
                 <Col xs={12} lg={6}>
-                    <LineChart logs={logs} title='Log Activity Over Time' />
+                    <LineChart logs={logs} title='Log Activity Over Time'/>
                 </Col>
                 <Col xs={12} lg={6}>
-                    <BarChart logs={logs} title='Log Counts by Endpoint' />
+                    <BarChart logs={logs} title='Log Counts by Endpoint'/>
                 </Col>
             </Row>
 
@@ -167,30 +167,30 @@ const OfficeLogs = ({logs}) => {
                                                         (chart, index) => {
                                                             const inLastLgRow =
                                                                 lgRemainder >
-                                                                    0 &&
+                                                                0 &&
                                                                 index >=
-                                                                    charts.length -
-                                                                        lgRemainder;
+                                                                charts.length -
+                                                                lgRemainder;
                                                             const inLastMdRow =
                                                                 mdRemainder >
-                                                                    0 &&
+                                                                0 &&
                                                                 index >=
-                                                                    charts.length -
-                                                                        mdRemainder;
+                                                                charts.length -
+                                                                mdRemainder;
 
                                                             const lgSize =
                                                                 inLastLgRow
                                                                     ? Math.floor(
-                                                                          12 /
-                                                                              lgRemainder
-                                                                      )
+                                                                        12 /
+                                                                        lgRemainder
+                                                                    )
                                                                     : 3;
                                                             const mdSize =
                                                                 inLastMdRow
                                                                     ? Math.floor(
-                                                                          12 /
-                                                                              mdRemainder
-                                                                      )
+                                                                        12 /
+                                                                        mdRemainder
+                                                                    )
                                                                     : 4;
 
                                                             return (

@@ -20,59 +20,65 @@ export const generateUserUpdateFields = (
     currentUser,
     errors,
     touched
-) => (currentUser !== null)
-    ? Object.keys(currentUser).map(userKey => {
+) => {
+    if (currentUser === null) return null;
 
-            const isAdminField = (
-                userKey === 'id'
-                || userKey === 'createdOn'
-                || userKey === 'lastModifiedOn'
-            );
+    const fieldsToExclude = ['role', 'password', 'newPassword'];
+    const userKeys = Object.keys(currentUser).filter(key => !fieldsToExclude.includes(key));
 
-            const isUpdatePermissionsField = (userKey === 'permissions' && !!currentUser?.id);
+    return userKeys.map(userKey => {
 
-            const isTypicalUserInputField = (
-                userKey !== 'id'
-                && userKey !== 'createdOn'
-                && userKey !== 'lastModifiedOn'
-                && userKey !== 'permissions'
-            );
+        const isAdminField = (
+            userKey === 'id'
+            || userKey === 'createdOn'
+            || userKey === 'lastModifiedOn'
+        );
 
-            return <Row className='mb-3' key={`user_${currentUser.id}_${userKey}`}>
-                <Form.Group>
-                    {
-                        isAdminField
-                        && <AdminUserField
-                            userKey={userKey}
-                            currentUser={currentUser}
-                        />
-                    }
+        const isUpdatePermissionsField = (userKey === 'permissions' && !!currentUser?.id);
 
-                    {
-                        isUpdatePermissionsField
-                        && <UpdatePermissionField
-                            userKey={userKey}
-                            currentUser={currentUser}
-                        />
-                    }
+        const isTypicalUserInputField = (
+            userKey !== 'id'
+            && userKey !== 'createdOn'
+            && userKey !== 'lastModifiedOn'
+            && userKey !== 'permissions'
+        );
 
-                    {
-                        isTypicalUserInputField
-                        && <TypicalUserInputField
-                            userKey={userKey}
-                            currentUser={currentUser}
-                        />
-                    }
+        return <Row className='mb-3' key={`user_${currentUser.id}_${userKey}`}>
+            <Form.Group>
+                {
+                    isAdminField
+                    && <AdminUserField
+                        userKey={userKey}
+                        currentUser={currentUser}
+                    />
+                }
+
+                {
+                    isUpdatePermissionsField
+                    && <UpdatePermissionField
+                        userKey={userKey}
+                        currentUser={currentUser}
+                    />
+                }
+
+                {
+                    isTypicalUserInputField
+                    && <TypicalUserInputField
+                        userKey={userKey}
+                        currentUser={currentUser}
+                    />
+                }
 
 
-                    {touched[userKey] && !!errors[userKey] ? (
-                        <div className={styles.error_text}>{errors[userKey]}</div>
-                    ) : null}
+                {(!isTypicalUserInputField && touched[userKey] && !!errors[userKey]) ? (
+                    <div className={styles.error_text}>{errors[userKey]}</div>
+                ) : null}
+                {!isTypicalUserInputField ? (
                     <Form.Control.Feedback type='invalid'>
                         {errors[userKey]}
                     </Form.Control.Feedback>
-                </Form.Group>
-            </Row>;
-        }
-    )
-    : null;
+                ) : null}
+            </Form.Group>
+        </Row>;
+    });
+};
