@@ -321,7 +321,7 @@ export const getLocalTodayString = () => getLocalDateNDaysAgo(0);
  * @type {Object<string, number>}
  */
 export const LOG_CHART_DAYS_AGO_MAP = {
-    [LOG_CHART_TIME_UNITS.PAST_7]:  6,
+    [LOG_CHART_TIME_UNITS.PAST_7]: 6,
     [LOG_CHART_TIME_UNITS.PAST_30]: 29,
     [LOG_CHART_TIME_UNITS.PAST_60]: 59,
     [LOG_CHART_TIME_UNITS.PAST_90]: 89,
@@ -333,8 +333,8 @@ export const LOG_CHART_DAYS_AGO_MAP = {
  * @type {Array<{value: string, label: string}>}
  */
 export const LOG_CHART_TIME_UNIT_OPTIONS = [
-    {value: LOG_CHART_TIME_UNITS.TODAY,   label: 'Today'},
-    {value: LOG_CHART_TIME_UNITS.PAST_7,  label: 'Past 7 Days'},
+    {value: LOG_CHART_TIME_UNITS.TODAY, label: 'Today'},
+    {value: LOG_CHART_TIME_UNITS.PAST_7, label: 'Past 7 Days'},
     {value: LOG_CHART_TIME_UNITS.PAST_30, label: 'Past 30 Days'},
     {value: LOG_CHART_TIME_UNITS.PAST_60, label: 'Past 60 Days'},
     {value: LOG_CHART_TIME_UNITS.PAST_90, label: 'Past 90 Days'},

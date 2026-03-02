@@ -1,6 +1,6 @@
 import {lazy, Suspense} from 'react';
 
-import OfficeContentImage from './office-content-image.jsx';
+import OfficeContentImage from './office-content-image/office-content-image.jsx';
 import OfficeContentLink from './office-content-link.jsx';
 import OfficeContentLocation from './office-content-location.jsx';
 import {ROLES} from '../../../../constants/constants.js';

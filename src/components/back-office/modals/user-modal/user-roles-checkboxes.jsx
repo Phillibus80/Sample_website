@@ -35,7 +35,7 @@ const UserRoleCheckboxes = ({form, disabled}) => {
                 /**
                  * @type {Array<React.ReactNode> | []}
                  */
-                data.data.roles.map(role =>
+                Array.from(new Set(data.data.roles)).map(role =>
                     <Form.Check
                         key={role}
                         type='checkbox'

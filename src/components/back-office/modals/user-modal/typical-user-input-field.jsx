@@ -15,6 +15,7 @@ import * as styles from '../../office-tab-components/office-users/office-users.m
  */
 const TypicalUserInputField = ({userKey, currentUser}) => {
     const {touched, errors} = useFormikContext();
+    const showError = touched[userKey] && !!errors[userKey];
 
     return (
         <>
@@ -31,11 +32,13 @@ const TypicalUserInputField = ({userKey, currentUser}) => {
                 type={(userKey === 'password' || userKey === 'newPassword') ? 'password' : 'input'}
                 name={userKey}
                 aria-label={`An input field for the user's ${userKey}.`}
-                isInvalid={touched[userKey] && !!errors[userKey]}
+                isInvalid={showError}
             />
-            <Form.Control.Feedback type='invalid' style={{display: 'block'}}>
-                {errors[userKey]}
-            </Form.Control.Feedback>
+            {showError ? (
+                <Form.Control.Feedback type='invalid' style={{display: 'block'}}>
+                    {errors[userKey]}
+                </Form.Control.Feedback>
+            ) : null}
         </>
     );
 };

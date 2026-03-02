@@ -1,89 +1,105 @@
 @use '../../scss/main' as main;
 
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 
 .title {
-    text-align: center;
-    margin-bottom: 0.5rem;
-    font-size: 0.9rem;
-    word-break: break-word;
-    color: main.$colors-grey-text;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  word-break: break-word;
+  color: main.$colors-grey-text;
 }
 
 .svg {
-    width: 100%;
-    max-width: 300px;
-    overflow: visible;
+  width: 100%;
+  max-width: 300px;
+  overflow: visible;
 }
 
 .slice {
-    cursor: pointer;
-    transition: opacity 0.15s ease;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
 
-    &:hover {
-        opacity: 0.8;
-    }
+  &:hover {
+    opacity: 0.8;
+  }
 }
 
 .tooltipLabel {
-    font-size: 0.85rem;
-    font-weight: 600;
-    fill: main.$colors-chart-tooltip-label;
-    text-transform: capitalize;
-    pointer-events: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  fill: main.$colors-chart-tooltip-label;
+  text-transform: capitalize;
+  pointer-events: none;
 }
 
 .tooltipPercent {
-    font-size: 1.1rem;
-    font-weight: 700;
-    fill: main.$colors-chart-tooltip-value;
-    pointer-events: none;
+  font-size: 1.1rem;
+  font-weight: 700;
+  fill: main.$colors-chart-tooltip-value;
+  pointer-events: none;
 }
 
 .empty {
-    color: main.$colors-grey-text;
-    font-style: italic;
-    text-align: center;
-    padding: 2rem 0;
+  color: main.$colors-grey-text;
+  font-style: italic;
+  text-align: center;
+  padding: 2rem 0;
 }
 
 .legend {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.5rem 1rem;
-    margin-top: 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1rem;
+  margin-top: 0.75rem;
 }
 
 .legendItem {
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-    font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.85rem;
 }
 
 .legendColor {
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    flex-shrink: 0;
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
 
 .legendLabel {
-    text-transform: capitalize;
+  text-transform: capitalize;
 }
 
-// Per-level colour classes — used instead of inline fill/style props
-.sliceSuccess   { fill: var(--log-success);  }
-.sliceWarning   { fill: var(--log-warning);  }
-.sliceCritical  { fill: var(--log-critical); }
+// Per-level color classes — used instead of inline fill/style props
+.sliceSuccess {
+  fill: var(--log-success);
+}
 
-.legendSuccess  { background-color: var(--log-success);  }
-.legendWarning  { background-color: var(--log-warning);  }
-.legendCritical { background-color: var(--log-critical); }
+.sliceWarning {
+  fill: var(--log-warning);
+}
+
+.sliceCritical {
+  fill: var(--log-critical);
+}
+
+.legendSuccess {
+  background-color: var(--log-success);
+}
+
+.legendWarning {
+  background-color: var(--log-warning);
+}
+
+.legendCritical {
+  background-color: var(--log-critical);
+}

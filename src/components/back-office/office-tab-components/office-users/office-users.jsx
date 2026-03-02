@@ -33,7 +33,7 @@ const UserDeleteCell = ({user}) => {
     if (!canRemove) return null;
 
     return isPending ? (
-        <Spinner animation='border' role='status' style={{color: 'blue'}} />
+        <Spinner animation='border' role='status' style={{color: 'blue'}}/>
     ) : (
         <GrSubtractCircle
             className={styles.subtractCircle}
@@ -80,8 +80,8 @@ const UserEditCell = ({user, onEdit}) => {
 
 UserEditCell.propTypes = {
     user: PropTypes.shape({
-        firstName:   PropTypes.string.isRequired,
-        lastName:    PropTypes.string.isRequired,
+        firstName: PropTypes.string.isRequired,
+        lastName: PropTypes.string.isRequired,
         permissions: PropTypes.arrayOf(PropTypes.string).isRequired,
     }).isRequired,
     onEdit: PropTypes.func.isRequired,
@@ -89,16 +89,16 @@ UserEditCell.propTypes = {
 
 const BASE_COLUMNS = [
     {key: 'firstName', label: 'First Name', sortable: true},
-    {key: 'lastName',  label: 'Last Name',  sortable: true},
-    {key: 'email',     label: 'Email',      sortable: true},
-    {key: 'username',  label: 'User Name',  sortable: true},
+    {key: 'lastName', label: 'Last Name', sortable: true},
+    {key: 'email', label: 'Email', sortable: true},
+    {key: 'username', label: 'User Name', sortable: true},
 ];
 
 const ADMIN_COLUMNS = [
-    {key: 'permissions',  label: 'Permissions',   sortable: true},
-    {key: 'createdOn',    label: 'Created On',    sortable: true},
+    {key: 'permissions', label: 'Permissions', sortable: true},
+    {key: 'createdOn', label: 'Created On', sortable: true},
     {key: 'lastModified', label: 'Last Modified', sortable: true},
-    {key: 'deleteUser',   label: 'Delete',        sortable: false},
+    {key: 'deleteUser', label: 'Delete', sortable: false},
 ];
 
 const EDIT_COLUMN = {key: 'edit', label: '', sortable: false};
@@ -127,16 +127,16 @@ const OfficeUsers = () => {
 
     const tableData = users.map((user) => ({
         firstName: user.firstName,
-        lastName:  user.lastName,
-        email:     user.email,
-        username:  user.username,
+        lastName: user.lastName,
+        email: user.email,
+        username: user.username,
         ...(isAdminRole && {
-            permissions:  user.permissions?.toString() ?? '',
-            createdOn:    new Date(user.createdOn).toDateString(),
+            permissions: user.permissions?.toString() ?? '',
+            createdOn: new Date(user.createdOn).toDateString(),
             lastModified: new Date(user.lastModifiedOn).toDateString(),
-            deleteUser:   <UserDeleteCell user={user} />,
+            deleteUser: <UserDeleteCell user={user}/>,
         }),
-        edit: <UserEditCell user={user} onEdit={showUserModal} />,
+        edit: <UserEditCell user={user} onEdit={showUserModal}/>,
     }));
 
     return (
@@ -164,11 +164,11 @@ const OfficeUsers = () => {
                         type='button'
                         onClick={() =>
                             showUserModal({
-                                firstName:   '',
-                                lastName:    '',
-                                email:       '',
-                                username:    '',
-                                password:    '',
+                                firstName: '',
+                                lastName: '',
+                                email: '',
+                                username: '',
+                                password: '',
                                 permissions: [],
                             })
                         }
@@ -176,7 +176,7 @@ const OfficeUsers = () => {
                         Create User
                     </Button>
                 </Row>
-                <ScrollTopButton />
+                <ScrollTopButton/>
             </Container>
         </>
     );

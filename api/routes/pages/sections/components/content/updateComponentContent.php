@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../../../../../utils.php';
 
+$decodedToken = Flight::get('decodedToken');
 $pathParam = Flight::get('currentComponentContentId');
 $requestData = Flight::request()->data;
 
@@ -10,13 +11,11 @@ $validationRules = [
     'image_url' => 'imageLink',
     'event_title' => 'string',
     'event_description' => 'string',
-    'event_location' => 'alphaNumeric',
+    'event_location' => 'string',
     'event_time' => 'string',
     'event_telephone' => 'telephone',
 ];
 
-// Using the patch variant since there can be different combinations
-// of request entries
 $updateErrors = validatePatchRequestData($requestData, $validationRules);
 if (count($updateErrors) > 0) {
     writeLog('PATCH /pages_sections_components_content', 'warning', 'Validation failed.', $decodedToken->user->username);
@@ -38,6 +37,9 @@ try {
 
     $fields = [];
     $values = [];
+
+    $hasEventUpdates = false;
+    $eventId = $search_results[0]['EVENT_ID'] ?? null;
 
     if (isset($requestData['link_url'])) {
         $linkId = getRecordId($db, 'LINKS', ['URL' => $requestData['link_url']]);
@@ -78,99 +80,106 @@ try {
     }
 
     if (isset($requestData['event_title'])) {
-        $eventId = $search_results[0]['EVENT_ID'];
         if (!$eventId) {
-            writeLog('PATCH /pages_sections_components_content', 'critical', 'Event title: ' . $requestData['event_title'] . ' not found.', $decodedToken->user->username);
-            sendResponse(404, 'Event title: ' . $requestData['event_title'] . ' not found');
+            writeLog('PATCH /pages_sections_components_content', 'warning', 'No event associated with component content.', $decodedToken->user->username);
+            sendResponse(400, 'Cannot update event title - no event associated with this component content.');
         }
 
-        $updatedEventTitleResult = runQuery($db, '
+        runQuery($db, '
             UPDATE EVENTS
             SET TITLE = ?
             WHERE ID = ?
         ', [$requestData['event_title'], $eventId]);
 
-        $fields[] = 'EVENT_ID = ?';
-        $values[] = $eventId;
+        $hasEventUpdates = true;
     }
 
     if (isset($requestData['event_description'])) {
-        $eventId = $search_results[0]['EVENT_ID'];
+        if (!$eventId) {
+            writeLog('PATCH /pages_sections_components_content', 'warning', 'No event associated with component content.', $decodedToken->user->username);
+            sendResponse(400, 'Cannot update event description - no event associated with this component content.');
+        }
+
         $eventDesId = getOrCreate(
             $db,
             'TEXT_CONTENT',
             ['TXT' => $requestData['event_description']],
             ['TXT' => $requestData['event_description']]
         );
-        if (!$eventDesId) {
-            writeLog('PATCH /pages_sections_components_content', 'critical', 'Event description: ' . $requestData['event_description'] . ' not found.', $decodedToken->user->username);
-            sendResponse(404, 'Event description: ' . $requestData['event_description'] . ' not found');
-        }
 
-        $updatedEventTextResult = runQuery($db, '
+        runQuery($db, '
             UPDATE EVENTS
             SET TEXT_CONTENT_ID = ?
             WHERE ID = ?
         ', [$eventDesId, $eventId]);
 
-        $fields[] = 'EVENT_ID = ?';
-        $values[] = $eventId;
+        $hasEventUpdates = true;
     }
 
     if (isset($requestData['event_location'])) {
-        $eventId = $search_results[0]['EVENT_ID'];
+        if (!$eventId) {
+            writeLog('PATCH /pages_sections_components_content', 'warning', 'No event associated with component content.', $decodedToken->user->username);
+            sendResponse(400, 'Cannot update event location - no event associated with this component content.');
+        }
+
         $eventLocationId = getRecordId($db, 'LOCATIONS', ['NAME' => $requestData['event_location']]);
         if (!$eventLocationId) {
             writeLog('PATCH /pages_sections_components_content', 'critical', 'Event location: ' . $requestData['event_location'] . ' not found.', $decodedToken->user->username);
-            sendResponse(404, 'Event location: ' . $requestData['event_location'] . ' not found');
+            sendResponse(404, 'Event location: ' . $requestData['event_location'] . ' not found.');
         }
 
-        $updatedEventLocationResult = runQuery($db, '
+        runQuery($db, '
             UPDATE EVENTS
             SET LOCATION_ID = ?
             WHERE ID = ?
         ', [$eventLocationId, $eventId]);
 
-        $fields[] = 'EVENT_ID = ?';
-        $values[] = $eventId;
+        $hasEventUpdates = true;
     }
 
     if (isset($requestData['event_time'])) {
-        $eventId = $search_results[0]['EVENT_ID'];
         if (!$eventId) {
-            writeLog('PATCH /pages_sections_components_content', 'critical', 'Event ID: ' . $pathParam . ' not found.', $decodedToken->user->username);
-            sendResponse(404, 'Event ID: ' . $pathParam . ' not found');
+            writeLog('PATCH /pages_sections_components_content', 'warning', 'No event associated with component content.', $decodedToken->user->username);
+            sendResponse(400, 'Cannot update event time - no event associated with this component content.');
         }
 
-        $updatedEventTitleResult = runQuery($db, '
+        runQuery($db, '
             UPDATE EVENTS
             SET EVENT_TIME = ?
             WHERE ID = ?
         ', [$requestData['event_time'], $eventId]);
 
-        $fields[] = 'EVENT_ID = ?';
-        $values[] = $eventId;
+        $hasEventUpdates = true;
     }
 
     if (isset($requestData['event_telephone'])) {
-        $eventId = $search_results[0]['EVENT_ID'];
+        if (!$eventId) {
+            writeLog('PATCH /pages_sections_components_content', 'warning', 'No event associated with component content.', $decodedToken->user->username);
+            sendResponse(400, 'Cannot update event telephone - no event associated with this component content.');
+        }
+
         $locationId = runQuery($db, '
                 SELECT LOCATION_ID
                 FROM EVENTS
                 WHERE ID = ?
             ', [$eventId]);
 
-        if (!$locationId[0]['LOCATION_ID']) {
+        if (!$locationId || !isset($locationId[0]['LOCATION_ID'])) {
             writeLog('PATCH /pages_sections_components_content', 'critical', 'Location associated with Event ID: ' . $eventId . ' not found.', $decodedToken->user->username);
-            sendResponse(404, 'Location associated with Event ID: ' . $eventId . ' not found');
+            sendResponse(404, 'Location associated with Event ID: ' . $eventId . ' not found.');
         }
 
-        $updatedEventLocationResult = runQuery($db, '
+        runQuery($db, '
             UPDATE LOCATIONS
             SET TELEPHONE = ?
             WHERE ID = ?
         ', [$requestData['event_telephone'], $locationId[0]['LOCATION_ID']]);
 
+        $hasEventUpdates = true;
+    }
+
+    // Add EVENT_ID to COMPONENT_CONTENT update only once if any event field was updated
+    if ($hasEventUpdates && $eventId) {
         $fields[] = 'EVENT_ID = ?';
         $values[] = $eventId;
     }

@@ -5,12 +5,7 @@ import Form from 'react-bootstrap/Form';
 
 import * as styles from './line-chart.module.scss';
 import {LOG_CHART_TIME_UNITS, LOG_LEVELS} from '../../constants/constants.js';
-import {
-    capitalize,
-    filterLogsByWindow,
-    getLocalTodayString,
-    LOG_CHART_TIME_UNIT_OPTIONS,
-} from '../../utils/utils.js';
+import {capitalize, filterLogsByWindow, getLocalTodayString, LOG_CHART_TIME_UNIT_OPTIONS,} from '../../utils/utils.js';
 
 /** SVG coordinate-space dimensions. */
 const VIEWBOX_WIDTH = 800;

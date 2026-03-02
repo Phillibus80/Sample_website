@@ -1,0 +1,37 @@
+@use '../../../../scss/main' as main;
+
+.input {
+  &_background {
+    background-color: white;
+    color: black;
+  }
+}
+
+.error_text {
+  color: main.$colors-error-text;
+}
+
+.image_section {
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #dee2e6;
+  border-radius: 0.5rem;
+  background-color: #f8f9fa;
+}
+
+.image_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+
+  h5 {
+    margin: 0;
+  }
+}
+
+.file_preview {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: #6c757d;
+}

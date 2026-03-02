@@ -370,7 +370,7 @@ const BarChart = ({logs, title}) => {
                 </svg>
 
                 {/* Right-edge fade mask — hidden when scrolled to end */}
-                {showFade && <div className={styles.fadeMask} />}
+                {showFade && <div className={styles.fadeMask}/>}
             </div>
 
             <div className={styles.legend}>

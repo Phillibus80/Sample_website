@@ -11,6 +11,8 @@ import {ROLES} from '../../../../constants/constants.js';
 import {useAuth} from '../../../../hooks/auth/use-auth.jsx';
 import {useCreateUser, useUpdateUser} from '../../../../hooks/users/user-hooks.js';
 
+const EMAIL_REGX = /^(([^<>()[\]\\.,;:\s@"]+(.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(([[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}])|(([a-zA-Z-0-9]+.)+[a-zA-Z]{2,}))$/;
+
 /**
  * A Modal component that allows for the manipulation of the user's data.
  *
@@ -59,7 +61,8 @@ const OfficeUserModal = ({showModal, setShowModal, currentUser}) => {
                     object().shape({
                         firstName: string().required('A first name is required to continue.'),
                         lastName: string().required('A last name is required to continue.'),
-                        email: string().required('An email is required to continue.'),
+                        email: string()
+                            .matches(EMAIL_REGX, 'Invalid email address'),
                         username: string().required('A username is required to continue.'),
                         password: isNewUser
                             ? string()
@@ -139,8 +142,6 @@ const OfficeUserModal = ({showModal, setShowModal, currentUser}) => {
                             {
                                 generateUserUpdateFields(
                                     currentUser,
-                                    handleChange,
-                                    handleBlur,
                                     errors,
                                     touched
                                 )

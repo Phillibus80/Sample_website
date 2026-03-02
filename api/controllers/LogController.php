@@ -16,6 +16,6 @@ class LogController
     public function index(): void
     {
         $decodedToken = Flight::get('decodedToken');
-        require __DIR__ . '/../routes/logs/getLog.php';
+        require __DIR__ . '/../routes/webLogs/getLog.php';
     }
 }
