@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {lazy, Suspense, useState} from 'react';
 
 import {Tab, Tabs} from 'react-bootstrap';
 import {GrAddCircle} from 'react-icons/gr';
@@ -15,8 +15,14 @@ import OfficeContentTab from '../office-content-tab/office-content-tab.jsx';
 import OfficeCreatePage from '../office-create-page/office-create-page.jsx';
 import OfficeEmailUserTab from '../office-email-users-tab/office-email-user-tab.jsx';
 import OfficeLogs from '../office-logs/office-logs.jsx';
-import OfficeTab from '../office-tab/office-tab.jsx';
 import OfficeUsers from '../office-users/office-users.jsx';
+
+// Role-split so SUPER never downloads the simplified-view tree and
+// ADMIN/USER never download the accordion tree.
+const OfficeTab = lazy(() => import('../office-tab/office-tab.jsx'));
+const SimplifiedOfficeTab = lazy(
+    () => import('../../simplified-view/simplified-office-tab/simplified-office-tab.jsx')
+);
 
 /**
  * Back-office shell with a fixed side navigation panel.
@@ -33,6 +39,7 @@ const OfficeTabs = () => {
     const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
 
     const hasAdminAccess = roles?.includes(ROLES.SUPER) || roles?.includes(ROLES.ADMIN);
+    const hasSuperRole = roles?.includes(ROLES.SUPER);
 
     if (!pages) return null;
 
@@ -63,7 +70,11 @@ const OfficeTabs = () => {
                         key={page.NAME}
                         eventKey={page.NAME}
                     >
-                        <OfficeTab pageName={page.NAME}/>
+                        <Suspense fallback={null}>
+                            {hasSuperRole
+                                ? <OfficeTab pageName={page.NAME}/>
+                                : <SimplifiedOfficeTab pageName={page.NAME}/>}
+                        </Suspense>
                     </Tab>
                 );
             }
@@ -90,7 +101,7 @@ const OfficeTabs = () => {
                 }`}
             >
                 {activeView === 'pages' && defActiveKey && (
-                    <Tabs defaultActiveKey={defActiveKey} fill>
+                    <Tabs defaultActiveKey={defActiveKey} fill mountOnEnter>
                         {generateTabs(pages)}
                     </Tabs>
                 )}
