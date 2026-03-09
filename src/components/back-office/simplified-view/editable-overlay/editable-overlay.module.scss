@@ -1,0 +1,74 @@
+@use '../../../../scss/main' as main;
+
+.overlay {
+  position: relative;
+  min-height: 60px;
+  padding: 0.75rem;
+  margin: 0.25rem;
+  border: 2px dashed main.$colors-primary-yellow;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
+
+  &:hover {
+    background-color: rgba(main.$colors-primary-yellow, 0.08);
+  }
+
+  &Empty {
+    border-color: main.$colors-grey-text;
+
+    &:hover {
+      background-color: rgba(main.$colors-grey-text, 0.08);
+    }
+  }
+
+  // Opt-in dark variant for overlays sitting on backgrounds that clash
+  // with the default yellow (e.g. Benefits' #ffb508).
+  &Contrast {
+    border-color: rgba(black, 0.7);
+
+    &:hover {
+      background-color: rgba(black, 0.06);
+    }
+  }
+}
+
+.badge {
+  position: absolute;
+  top: -0.6rem;
+  left: 0.5rem;
+  padding: 0.1rem 0.5rem;
+  background-color: main.$colors-primary-yellow;
+  color: black;
+  border-radius: 0.25rem;
+  font-family: main.$type-normal-text-font;
+  font-size: 0.7rem;
+  font-weight: bold;
+  white-space: nowrap;
+  z-index: 10;
+
+  .overlayEmpty & {
+    background-color: main.$colors-grey-text;
+    color: white;
+  }
+
+  .overlayContrast & {
+    background-color: rgba(black, 0.7);
+    color: white;
+  }
+}
+
+.placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60px;
+  color: main.$colors-grey-text;
+  font-family: main.$type-normal-text-font;
+
+  &Hint {
+    font-size: 0.8rem;
+    opacity: 0.7;
+  }
+}

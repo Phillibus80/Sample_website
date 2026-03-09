@@ -66,6 +66,7 @@ const OfficeImageList = (
                         imageObject={content}
                         isDisabled={isDisabled}
                         prefix={prefix}
+                        hideSubtractBtn={!hasSuperRole && imageContent?.length < 2}
                     />
                 </div>
             )

@@ -1,0 +1,43 @@
+@use '../../../../scss/main' as main;
+
+.section {
+  font-family: main.$type-normal-text-font;
+  margin-bottom: 3rem;
+
+  &Title {
+    font-family: main.$type-title-font;
+    font-weight: bolder;
+  }
+}
+
+.subtractCircle {
+  color: red;
+
+  &:hover {
+    color: gray;
+    cursor: pointer;
+  }
+}
+
+.previewWrapper {
+  position: relative;
+  margin-top: 1rem;
+
+  &Dimmed {
+    opacity: 0.45;
+  }
+}
+
+.hiddenBadge {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.2rem 0.6rem;
+  background-color: main.$colors-grey-text;
+  color: white;
+  border-radius: 0.25rem;
+  font-family: main.$type-normal-text-font;
+  font-size: 0.75rem;
+  font-weight: bold;
+  z-index: 20;
+}
