@@ -21,7 +21,7 @@ const Subtitle = ({titleContent, imageList, showImage = false, fontColor = 'blac
     const {src: honeyDipperImage} = imageList?.at(0) || {src: ''};
 
     return (
-        <section className={`d-flex justify-content-start g-3 ${styles.subtitle}`}>
+        <section className='d-flex justify-content-start g-3'>
             {
                 showImage &&
                 <Image

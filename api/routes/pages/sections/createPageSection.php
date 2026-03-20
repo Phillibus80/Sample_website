@@ -3,8 +3,8 @@ require_once __DIR__ . '/../../../actions/section_creation_actions.php';
 require_once __DIR__ . '/../../../utils.php';
 
 $requiredFieldsAndTypes = [
-    'section_name' => 'alphaNumeric',
-    'page_name' => 'alphaNumeric'
+    'section_name' => 'string',
+    'page_name' => 'string'
 ];
 
 $validationErrors = validateRequestData(

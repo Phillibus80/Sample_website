@@ -22,7 +22,7 @@ const OfficeAdditionButton = ({txt, handleOnClick}) => {
                 <GrAddCircle
                     className={`${styles.btn_icon}`}
                 />
-                <span className={`ms-2 ${styles.btn_text}`}>{txt}</span>
+                <span className='ms-2'>{txt}</span>
             </div>
         </Container>
     );

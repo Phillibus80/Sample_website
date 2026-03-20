@@ -6,7 +6,6 @@ import SectionStyleWrapper from '../../../../../components/section-style-wrapper
 import HoneyDipperTitle from '../../../../../components/typography/honey-dipper-title/honey-dipper-title.jsx';
 import Subtitle from '../../../../../components/typography/subtitle/subtitle.jsx';
 import {COMPONENTS} from '../../../../../constants/app-constants.js';
-import * as eventsStyles from '../../../../../sections/events-list/events-list.module.scss';
 import EditableOverlay from '../../editable-overlay/editable-overlay.jsx';
 import OrphanStrip from '../orphan-strip.jsx';
 import {findComponent} from '../utils.js';
@@ -43,7 +42,7 @@ const EventsPreview = ({section, onEdit}) => {
     return (
         <>
             <SectionStyleWrapper>
-                <div className={eventsStyles.events}>
+                <div>
                     <EditableOverlay component={title} onClick={onEdit}>
                         <HoneyDipperTitle
                             titleContent={titleText}

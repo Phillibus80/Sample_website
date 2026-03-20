@@ -697,6 +697,21 @@ function validateType(mixed $value, string $type, string $fieldName): ?string
             }
             return null;
 
+        case 'externalUrl':
+            $trimmed = trim($value);
+            if ($trimmed === '') {
+                return "$fieldName cannot be empty.";
+            }
+            // Allow http(s) absolute URLs, root-relative paths, or bare domains
+            // (e.g. facebook.com/page). Rejects javascript:, data:, vbscript:, etc.
+            if (!preg_match(
+                '/^(https?:\/\/|\/|(www\.)?[a-z0-9][a-z0-9-]*(\.[a-z0-9-]+)*\.[a-z]{2,}([\/?#]|$))/i',
+                $trimmed
+            )) {
+                return "$fieldName must start with http://, https://, /, or a domain name.";
+            }
+            return null;
+
         case 'url':
             if (!filter_var($value, FILTER_VALIDATE_URL)) {
                 return "$fieldName must be a URL.";

@@ -5,9 +5,9 @@ $pathParam = Flight::get('image_id');
 $requestData = Flight::request()->data;
 
 $validationRules = [
-    'image_text' => 'alpha',
+    'image_text' => 'string',
     'src' => 'imageLink',
-    'alt' => 'alpha'
+    'alt' => 'string'
 ];
 
 $updateErrors = validatePatchRequestData($requestData, $validationRules);

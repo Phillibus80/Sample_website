@@ -6,8 +6,8 @@ $pathParam = Flight::get('event_id');
 $requestData = Flight::request()->data;
 
 $validationRules = [
-    'title' => 'alpha',
-    'description' => 'alpha',
+    'title' => 'string',
+    'description' => 'string',
     'event_time' => 'string',
     'location' => 'alphaNumeric',
     'address' => 'alphaNumeric',

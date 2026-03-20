@@ -6,10 +6,10 @@ $requestData = Flight::request()->data;
 $pathParam = Flight::get('currentPageSectionComponentId');
 
 $validationRules = [
-    'link_text' => 'alpha',
-    'link_url' => 'string',
+    'link_text' => 'string',
+    'link_url' => 'externalUrl',
     'text_content' => 'string',
-    'image_text' => 'alpha',
+    'image_text' => 'string',
     'image_src' => 'imageLink',
     'image_alt' => 'alphaNumeric',
     'event_title' => 'alphaNumeric',

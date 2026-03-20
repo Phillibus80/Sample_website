@@ -6,7 +6,7 @@ $pathParam = Flight::get('currentComponentContentId');
 $requestData = Flight::request()->data;
 
 $validationRules = [
-    'link_url' => 'string',
+    'link_url' => 'externalUrl',
     'text_content' => 'string',
     'image_url' => 'imageLink',
     'event_title' => 'string',

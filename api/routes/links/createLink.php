@@ -7,7 +7,7 @@ $requestData = Flight::request()->data;
 
 $requiredFieldsAndTypes = [
     'link_text' => 'string',
-    'url' => 'string'
+    'url' => 'externalUrl'
 ];
 
 $validationErrors = validateRequestData(
