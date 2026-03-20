@@ -64,7 +64,12 @@ $middle_y: calc(#{$stagger_up} + #{$half_image_size} - (#{$image_gap} / 2));
         $group: math.floor(math.div($i - 1, 3)); // 0, 1, 2 for group 1, 2, 3
 
         // Determine y value
-        $y: if($mod == 1, $stagger_up, if($mod == 2, $stagger_down, $middle_y));
+        $y: $middle_y;
+        @if $mod == 1 {
+          $y: $stagger_up;
+        } @else if $mod == 2 {
+          $y: $stagger_down;
+        }
 
         // Determine x multiplier based on pattern
         $x_mult: 0;
@@ -74,7 +79,10 @@ $middle_y: calc(#{$stagger_up} + #{$half_image_size} - (#{$image_gap} / 2));
           $x_mult: $group * 2 + 1; // 1, 3, 5
         }
 
-        $x: if($x_mult == 0, 0, calc(#{$x_mult} * #{$right_push}));
+        $x: 0;
+        @if $x_mult != 0 {
+          $x: calc(#{$x_mult} * #{$right_push});
+        }
 
         &:nth-child(#{$i}) {
           display: block;

@@ -68,7 +68,7 @@ const BenefitsPreview = ({section, onEdit}) => {
                 </EditableOverlay>
 
                 <EditableOverlay component={benefitsList} onClick={onEdit} contrast>
-                    <Container className={benefitsStyles.benefits_list}>
+                    <Container>
                         {benefitsTextContent.map((benefit) => (
                             <div
                                 key={benefit?.text}

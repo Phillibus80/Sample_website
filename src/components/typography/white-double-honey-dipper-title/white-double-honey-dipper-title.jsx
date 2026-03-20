@@ -25,12 +25,7 @@ const whiteDoubleHoneyDipperTitle = ({titleContent, imageList, titleFontSize, sh
     const {src: honeyDipperImage} = imageList?.at(0) ?? {src: ''};
 
     return (
-        <Container className={`
-                    d-flex 
-                    justify-content-center 
-                    align-items-start
-                    ${styles.title}
-                   `}>
+        <Container className='d-flex justify-content-center align-items-start'>
             <div className={`${styles.title_image} pe-2`}>
                 <Image
                     src={`${honeyDipperImage}`}

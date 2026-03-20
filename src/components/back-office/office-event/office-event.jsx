@@ -21,10 +21,11 @@ import Calendar from '../../calendar/calendar.jsx';
  * @param {EventObject} eventObject
  * @param {boolean} isDisabled
  * @param {string} [prefix] - Optional, can be added to the beginning of field names to namespace Fields
+ * @param {boolean} [hideSubtractBtn] - Optional, hide subtract button completely (used for drafts)
  *
  * @return {React.ReactNode | null}
  */
-const OfficeEvent = ({eventObject, isDisabled = false, prefix = ''}) => {
+const OfficeEvent = ({eventObject, isDisabled = false, prefix = '', hideSubtractBtn = false}) => {
     const fieldName = `${prefix ? `${prefix}_` : ''}event_${eventObject?.component_content_id ?? eventObject?.event_id}`;
 
     const {
@@ -165,27 +166,30 @@ const OfficeEvent = ({eventObject, isDisabled = false, prefix = ''}) => {
                         />
                     </div>
 
-                    <InputGroup.Text style={{background: 'transparent', border: 'none'}}>
-                        {
-                            areCallsPending
-                            && <Spinner style={{color: 'blue'}} animation='border' role='status'/>
-                        }
-                        {
-                            (hasSuperRole || hasAdminRole)
-                            && !areCallsPending
-                            && <GrSubtractCircle
-                                className={`ms-3 ${styles.subtractCircle}`}
-                                style={{fontSize: '1.5rem'}}
-                                onClick={async () => {
-                                    if (eventObject.component_content_id) {
-                                        await removeContent({contentId: eventObject.component_content_id});
-                                    } else {
-                                        await removeEvent({id: eventObject.event_id});
-                                    }
-                                }}
-                            />
-                        }
-                    </InputGroup.Text>
+                    {
+                        !hideSubtractBtn
+                        && <InputGroup.Text style={{background: 'transparent', border: 'none'}}>
+                            {
+                                areCallsPending
+                                && <Spinner style={{color: 'blue'}} animation='border' role='status'/>
+                            }
+                            {
+                                (hasSuperRole || hasAdminRole)
+                                && !areCallsPending
+                                && <GrSubtractCircle
+                                    className={`ms-3 ${styles.subtractCircle}`}
+                                    style={{fontSize: '1.5rem'}}
+                                    onClick={async () => {
+                                        if (eventObject.component_content_id) {
+                                            await removeContent({contentId: eventObject.component_content_id});
+                                        } else {
+                                            await removeEvent({id: eventObject.event_id});
+                                        }
+                                    }}
+                                />
+                            }
+                        </InputGroup.Text>
+                    }
 
                 </div>
 
@@ -200,7 +204,8 @@ const OfficeEvent = ({eventObject, isDisabled = false, prefix = ''}) => {
 OfficeEvent.propTypes = {
     eventObject: eventComponentPropType,
     isDisabled: PropTypes.bool,
-    prefix: PropTypes.string
+    prefix: PropTypes.string,
+    hideSubtractBtn: PropTypes.bool
 };
 
 export default OfficeEvent;

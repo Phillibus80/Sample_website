@@ -99,10 +99,10 @@ const FooterPreview = ({section, onEdit}) => {
                         </EditableOverlay>
 
                         <EditableOverlay component={contactField} onClick={onEdit}>
-                            <ul className={`d-flex flex-column mb-0 ${contactStyles.contact_us}`}>
+                            <ul className='d-flex flex-column mb-0'>
                                 {contactTextContent.map((content, index) => (
                                     <li
-                                        className={`d-flex align-items-top ${contactStyles.contact_us_row}`}
+                                        className='d-flex align-items-top'
                                         key={content?.component_content_id}
                                     >
                                         <div className={`pt-2 ${contactStyles.contact_us_image}`}>

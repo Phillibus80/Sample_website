@@ -47,7 +47,7 @@ const InfoPicture = ({content}) => {
      */
     const generateItems = (images) => {
         return images.map(image =>
-            <Carousel.Item key={image.src} className={styles.item}>
+            <Carousel.Item key={image.src}>
                 <Image
                     className={`object-fit-cover ${styles.item_picture}`}
                     src={`${image.src}`}

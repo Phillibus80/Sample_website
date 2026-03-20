@@ -91,7 +91,7 @@ const Benefits = ({content}) => {
                 <HoneycombImage image_src={`${hexImage}`} image_alt={alt}/>
             </div>
 
-            <Container className={`${styles.benefits_list}`}>
+            <Container>
                 {generateBenefits(benefitsTextContent)}
             </Container>
         </SectionStyleWrapper>

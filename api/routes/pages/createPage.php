@@ -5,7 +5,7 @@ require_once __DIR__ . '/../../utils.php';
 $requestData = Flight::request()->data;
 
 $requiredFieldsAndTypes = [
-    'page_name' => 'alphaNumeric'
+    'page_name' => 'string'
 ];
 
 $validationErrors = validateRequestData(

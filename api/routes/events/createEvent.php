@@ -5,7 +5,7 @@ $requestData = Flight::request()->data;
 
 $requiredFieldsAndTypes = [
     'title' => 'string',
-    'location' => 'alphaNumeric',
+    'location' => 'string',
     'lat' => 'float',
     'lng' => 'float'
 ];

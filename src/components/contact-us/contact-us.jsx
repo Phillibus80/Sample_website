@@ -18,11 +18,11 @@ const ContactUs = ({titleText, contactTextContent, contactFieldImages}) => {
         <div className='text-start mt-5'>
             <h3 className={`${styles.title} text-start`}>{titleText}</h3>
 
-            <ul className={`d-flex flex-column ${styles.contact_us}`}>
+            <ul className='d-flex flex-column'>
                 {
                     contactTextContent?.map((content, index) =>
                         <li
-                            className={`d-flex align-items-top ${styles.contact_us_row}`}
+                            className='d-flex align-items-top'
                             key={content?.component_content_id}
                         >
                             <div className={`pt-2 ${styles.contact_us_image}`}>

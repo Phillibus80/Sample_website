@@ -6,8 +6,8 @@ $pathParam = Flight::get('linkId');
 $requestData = Flight::request()->data;
 
 $validationRules = [
-    'link_text' => 'alpha',
-    'link_url' => 'string'
+    'link_text' => 'string',
+    'link_url' => 'externalUrl'
 ];
 
 $updateErrors = validatePatchRequestData($requestData, $validationRules);

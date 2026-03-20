@@ -1,4 +1,3 @@
-import * as styles from './events-list.module.scss';
 import {componentContentWithEvents} from '../../common/commonPropTypes.jsx';
 import LeafletEvents from '../../components/events/leaflet-events/leaflet-events.jsx';
 import SectionStyleWrapper from '../../components/section-style-wrapper/section-style-wrapper.jsx';
@@ -30,7 +29,7 @@ const EventList = ({content}) => {
 
     return (
         <SectionStyleWrapper>
-            <div className={styles.events}>
+            <div>
                 <HoneyDipperTitle
                     titleContent={titleText}
                     imageList={titleImages}
