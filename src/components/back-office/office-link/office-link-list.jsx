@@ -170,7 +170,8 @@ const OfficeLinkList = ({
                                         link_text: ''
                                     }}
                                     isSelectDisabled={false}
-                                    isDisabled={false}
+                                    isDisabled={true}
+                                    syncFieldsOnSelect={true}
                                     prefix={prefix}
                                     isMenuLink={isMenu}
                                     hideSubtractBtn

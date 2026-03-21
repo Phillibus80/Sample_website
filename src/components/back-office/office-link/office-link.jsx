@@ -24,6 +24,7 @@ import {useRemoveLink} from '../../../hooks/links/link-hooks.js';
  * @param {string} [prefix] - Optional, can be added to the beginning of field names to namespace Fields
  * @param {boolean} [hideSubtractBtn] - Optional, hide subtract button completely
  * @param {boolean} [isMenuLink] - indicates if the link is for a menu component
+ * @param {boolean} [syncFieldsOnSelect] - when true, selecting a URL auto-fills Link Title from the matching admin-context link
  *
  * @return {React.ReactNode | null}
  */
@@ -33,7 +34,8 @@ const OfficeLink = ({
                         isDisabled = false,
                         prefix = '',
                         hideSubtractBtn = false,
-                        isMenuLink = false
+                        isMenuLink = false,
+                        syncFieldsOnSelect = false
                     }) => {
     const fieldName = `${prefix ? `${prefix}_` : ''}link_${linkObject.component_content_id ?? linkObject.link_id}`;
 
@@ -113,7 +115,18 @@ const OfficeLink = ({
                         id={`${fieldName}_link_url`}
                         name={`${fieldName}_link_url`}
                         defaultValue={`${linkObject?.link_url}`}
-                        onChange={handleChange}
+                        onChange={e => {
+                            handleChange(e);
+                            if (syncFieldsOnSelect) {
+                                const selected = links.find(l => l.link_url === e.target.value);
+                                if (selected && titleRef.current) {
+                                    titleRef.current.value = selected.link_text;
+                                    if (!linkObject.component_content_id) {
+                                        setFieldValue(`${fieldName}_link_text`, selected.link_text, false);
+                                    }
+                                }
+                            }
+                        }}
                         onBlur={handleBlur}
                         isInvalid={touched[`${fieldName}_link_url`] && !!errors[`${fieldName}_link_url`]}
                         disabled={isSelectDisabled}
@@ -185,7 +198,8 @@ OfficeLink.propTypes = {
     isDisabled: PropTypes.bool,
     prefix: PropTypes.string,
     hideSubtractBtn: PropTypes.bool,
-    isMenuLink: PropTypes.bool
+    isMenuLink: PropTypes.bool,
+    syncFieldsOnSelect: PropTypes.bool
 };
 
 export default OfficeLink;

@@ -23,6 +23,7 @@ import {useRemoveImage} from '../../../hooks/images/image-hooks.jsx';
  * @param {boolean} [isSelectDisabled]
  * @param {string} [prefix] - Optional, can be added to the beginning of field names to namespace Fields
  * @param {boolean} [hideSubtractBtn] - Optional, hide subtract button
+ * @param {boolean} [syncFieldsOnSelect] - when true, selecting a src auto-fills Image Text & Alt from the matching admin-context image
  *
  * @return {React.ReactNode | null}
  */
@@ -33,7 +34,8 @@ const OfficeImage = (
         isSelectDisabled = false,
         prefix = '',
         hideSubtractBtn = false,
-        currentImages = []
+        currentImages = [],
+        syncFieldsOnSelect = false
     }
 ) => {
     const fieldName = `${prefix ? `${prefix}_` : ''}image_${imageObject.component_content_id ?? imageObject.image_id}`;
@@ -57,6 +59,8 @@ const OfficeImage = (
         isPending: removeImageIsPending
     } = useRemoveImage();
     const selectRef = useRef(null);
+    const textRef = useRef(null);
+    const altRef = useRef(null);
     const [localImageSrc, setLocalImageSrc] = useState(null);
 
     useEffect(() => {
@@ -98,6 +102,24 @@ const OfficeImage = (
                             onChange={e => {
                                 handleChange(e);
                                 setLocalImageSrc(`${e.target.value}`);
+                                if (syncFieldsOnSelect) {
+                                    const selected = images.find(img => img.src === e.target.value);
+                                    if (selected) {
+                                        const isDraft = !imageObject.component_content_id;
+                                        if (textRef.current) {
+                                            textRef.current.value = selected.image_text;
+                                            if (isDraft) {
+                                                setFieldValue(`${fieldName}_image_text`, selected.image_text, false);
+                                            }
+                                        }
+                                        if (altRef.current) {
+                                            altRef.current.value = selected.alt;
+                                            if (isDraft) {
+                                                setFieldValue(`${fieldName}_image_alt`, selected.alt, false);
+                                            }
+                                        }
+                                    }
+                                }
                             }}
                             onBlur={handleBlur}
                             isInvalid={touched[`${fieldName}_image_url`] && !!errors[`${fieldName}_image_url`]}
@@ -135,6 +157,7 @@ const OfficeImage = (
                             Image Text
                         </Form.Label>
                         <Form.Control
+                            ref={textRef}
                             disabled={isDisabled}
                             id={`${fieldName}_${imageObject.src ? imageObject.src : ''}_image_text`}
                             name={`${fieldName}_image_text`}
@@ -158,6 +181,7 @@ const OfficeImage = (
                             Image alt text
                         </Form.Label>
                         <Form.Control
+                            ref={altRef}
                             disabled={isDisabled}
                             name={`${fieldName}_image_alt`}
                             id={`${fieldName}_${imageObject.src ? imageObject.src : ''}_image_alt`}
@@ -215,7 +239,8 @@ OfficeImage.propTypes = {
     prefix: PropTypes.string,
     hideSubtractBtn: PropTypes.bool,
     optionDisabled: PropTypes.bool,
-    currentImages: PropTypes.arrayOf(imageComponentPropType)
+    currentImages: PropTypes.arrayOf(imageComponentPropType),
+    syncFieldsOnSelect: PropTypes.bool
 };
 
 export default OfficeImage;
