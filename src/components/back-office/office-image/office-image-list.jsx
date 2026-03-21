@@ -134,6 +134,7 @@ const OfficeImageList = (
                         currentImages={imageContent}
                         imageObject={content}
                         isDisabled={isDisabled}
+                        syncFieldsOnSelect={true}
                         prefix={prefix}
                         hideSubtractBtn={!hasSuperRole && imageContent?.length < 2}
                     />
@@ -149,6 +150,7 @@ const OfficeImageList = (
                         imageObject={content}
                         isDisabled={isDisabled}
                         isSelectDisabled={isSelectDisabled}
+                        syncFieldsOnSelect={true}
                         prefix={prefix}
                     />
                 </div>);
@@ -182,8 +184,9 @@ const OfficeImageList = (
                                         image_text: '',
                                         alt: ''
                                     }}
-                                    isDisabled={false}
+                                    isDisabled={true}
                                     isSelectDisabled={false}
+                                    syncFieldsOnSelect={true}
                                     prefix={prefix}
                                     hideSubtractBtn
                                 />

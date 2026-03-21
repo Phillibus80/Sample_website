@@ -36,12 +36,14 @@ const OfficeMenuImageLink = ({imageObject, linkObject, prefix = ''}) => {
                         linkObject={linkObject}
                         isSelectDisabled={false}
                         isDisabled={true}
+                        syncFieldsOnSelect={true}
                         prefix={prefix}
                         hideSubtractBtn={true}
                     />
                     <OfficeImage
                         imageObject={imageObject}
                         isDisabled={true}
+                        syncFieldsOnSelect={true}
                         prefix={prefix}
                         hideSubtractBtn={!roles.includes(ROLES.SUPER)}
                     />
