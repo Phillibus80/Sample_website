@@ -4,6 +4,7 @@ import {sectionContentPropType} from '../../common/commonPropTypes.jsx';
 import {COMPONENTS} from '../../constants/app-constants.js';
 import * as styles from '../../sections/info/info.module.scss';
 import {extractComponentsFromSection} from '../../utils/utils.js';
+import FormattedText from '../formatted-text/formatted-text.jsx';
 import HoneyDipperTitle from '../typography/honey-dipper-title/honey-dipper-title.jsx';
 import Subtitle from '../typography/subtitle/subtitle.jsx';
 
@@ -39,9 +40,7 @@ const InfoContent = ({content, componentTitleType = COMPONENTS.TITLE}) => {
                 showSecondDipper={false}
             />
             <Subtitle titleContent={subtitleText} imageList={titleImages}/>
-            <p className={`text-start ${styles.info_text}`}>
-                {mainBodyText}
-            </p>
+            <FormattedText text={mainBodyText} className={`text-start ${styles.info_text}`}/>
         </Container>
     );
 };

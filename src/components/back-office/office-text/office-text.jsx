@@ -6,6 +6,7 @@ import {InputGroup, Spinner} from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 import {GrSubtractCircle} from 'react-icons/gr';
 
+import OfficeRichText from './office-rich-text.jsx';
 import * as styles from './office-text.module.scss';
 import {COMPONENTS} from '../../../constants/app-constants.js';
 import {PLACEHOLDER_TEXT, ROLES} from '../../../constants/constants.js';
@@ -55,6 +56,16 @@ const OfficeText = ({componentName, textComponent, prefix = '', hideDeleteButton
     }, [fieldName, handleChange, initialValues, setFieldValue, values]);
 
     if (!textComponent) return null;
+
+    if (componentName === COMPONENTS.TEXT_CONTAINER) {
+        return (
+            <OfficeRichText
+                textComponent={textComponent}
+                prefix={prefix}
+                hideDeleteButton={hideDeleteButton}
+            />
+        );
+    }
 
     return (
         <Form.Group

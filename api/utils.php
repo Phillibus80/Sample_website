@@ -934,6 +934,16 @@ function validatePatchRequestData(object|array $requestData, array $validationRu
                 }
                 continue 2;
 
+            case 'markup':
+                // Lightweight markup (**bold**, - bullets, etc.) should never contain
+                // raw HTML — strip_tags is defense-in-depth against UI bypass.
+                $sanitized = trim(strip_tags($value));
+
+                if ($sanitized === '') {
+                    $errors[$field] = "$field cannot be empty.";
+                }
+                continue 2;
+
             case 'arrayOfRoles':
                 if (!is_array($value) || count($value) === 0) {
                     $errors[$field] = "$field must be a non-empty array.";

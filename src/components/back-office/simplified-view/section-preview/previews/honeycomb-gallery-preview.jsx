@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import Container from 'react-bootstrap/Container';
 
 import {componentContentWithEvents} from '../../../../../common/commonPropTypes.jsx';
+import FormattedText from '../../../../../components/formatted-text/formatted-text.jsx';
 import HoneycombGallery from '../../../../../components/galleries/honeycombo-gallery/honeycomb-gallery.jsx';
 import SectionStyleWrapper from '../../../../../components/section-style-wrapper/section-style-wrapper.jsx';
 import CursiveTitle from '../../../../../components/typography/cursive-title/cursive-title.jsx';
@@ -73,7 +74,7 @@ const HoneycombGalleryPreview = ({section, onEdit}) => {
                     </EditableOverlay>
 
                     <EditableOverlay component={textContainer} onClick={onEdit}>
-                        <p className={`text-start mb-0 ${infoStyles.info_text}`}>{bodyText}</p>
+                        <FormattedText text={bodyText} className={`text-start mb-0 ${infoStyles.info_text}`}/>
                     </EditableOverlay>
                 </Container>
             </SectionStyleWrapper>
