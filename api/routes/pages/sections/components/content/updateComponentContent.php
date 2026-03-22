@@ -7,7 +7,7 @@ $requestData = Flight::request()->data;
 
 $validationRules = [
     'link_url' => 'externalUrl',
-    'text_content' => 'string',
+    'text_content' => 'markup',
     'image_url' => 'imageLink',
     'event_title' => 'string',
     'event_description' => 'string',

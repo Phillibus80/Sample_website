@@ -3,6 +3,7 @@ import {Image} from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 
 import {componentContentWithEvents} from '../../../../../common/commonPropTypes.jsx';
+import FormattedText from '../../../../../components/formatted-text/formatted-text.jsx';
 import HoneyDipperTitle from '../../../../../components/typography/honey-dipper-title/honey-dipper-title.jsx';
 import Subtitle from '../../../../../components/typography/subtitle/subtitle.jsx';
 import {COMPONENTS} from '../../../../../constants/app-constants.js';
@@ -85,7 +86,7 @@ const InfoPicturePreview = ({section, onEdit}) => {
                         </EditableOverlay>
 
                         <EditableOverlay component={textContainer} onClick={onEdit}>
-                            <p className={`text-start mb-0 ${infoStyles.info_text}`}>{bodyText}</p>
+                            <FormattedText text={bodyText} className={`text-start mb-0 ${infoStyles.info_text}`}/>
                         </EditableOverlay>
                     </Container>
                 </div>
