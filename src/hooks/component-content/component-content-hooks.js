@@ -1,5 +1,4 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query';
-import {useNavigate} from 'react-router';
 
 import {
     createComponentContent,
@@ -7,8 +6,6 @@ import {
     updateComponentContent
 } from '../../api-calls/content/content-calls.js';
 import {TOAST_TYPES} from '../../constants/constants.js';
-import {ROUTING_CONSTANTS} from '../../constants/routing-constants.js';
-import {clearAuthFromSessionStorage} from '../../utils/utils.js';
 import {useAuth} from '../auth/use-auth.jsx';
 import {useToastContext} from '../context/context-hooks.jsx';
 
@@ -21,7 +18,6 @@ export const useCreateComponentContent = () => {
     const queryClient = useQueryClient();
     const {bearerToken, csrfToken} = useAuth();
     const {showToast} = useToastContext();
-    const navigate = useNavigate();
 
     return useMutation({
         mutationKey: ['createNewContent'],
@@ -30,55 +26,25 @@ export const useCreateComponentContent = () => {
                                requestBody
                            }) => createComponentContent(componentContentId, requestBody, bearerToken, csrfToken),
         onSuccess: async () => {
-            await queryClient.invalidateQueries({
-                queryKey: ['pageContent']
-            });
-            await queryClient.invalidateQueries({
-                queryKey: ['images']
-            });
-            await queryClient.invalidateQueries({
-                queryKey: ['links']
-            });
-            await queryClient.invalidateQueries({
-                queryKey: ['events']
-            });
+            await Promise.all([
+                queryClient.invalidateQueries({queryKey: ['pageContent']}),
+                queryClient.invalidateQueries({queryKey: ['images']}),
+                queryClient.invalidateQueries({queryKey: ['links']}),
+                queryClient.invalidateQueries({queryKey: ['events']})
+            ]);
             showToast({message: 'Content created.', type: TOAST_TYPES.PRIMARY});
         },
         onError: async (error) => {
-            if (error?.status === 401) {
-                await queryClient.invalidateQueries({
-                    queryKey: ['pageContent']
-                });
-                await queryClient.invalidateQueries({
-                    queryKey: ['images']
-                });
-                await queryClient.invalidateQueries({
-                    queryKey: ['links']
-                });
-                await queryClient.invalidateQueries({
-                    queryKey: ['events']
-                });
-                showToast({
-                    message: `Error creating content. ${error?.response?.data?.message}`,
-                    type: TOAST_TYPES.ERROR
-                });
-                clearAuthFromSessionStorage();
-                navigate(ROUTING_CONSTANTS.LOGIN.URL, {replace: true});
-            } else {
-                await queryClient.invalidateQueries({
-                    queryKey: ['pageContent']
-                });
-                await queryClient.invalidateQueries({
-                    queryKey: ['images']
-                });
-                await queryClient.invalidateQueries({
-                    queryKey: ['links']
-                });
-                await queryClient.invalidateQueries({
-                    queryKey: ['events']
-                });
-                showToast({message: 'Error creating content.', type: TOAST_TYPES.ERROR});
-            }
+            await Promise.all([
+                queryClient.invalidateQueries({queryKey: ['pageContent']}),
+                queryClient.invalidateQueries({queryKey: ['images']}),
+                queryClient.invalidateQueries({queryKey: ['links']}),
+                queryClient.invalidateQueries({queryKey: ['events']})
+            ]);
+            showToast({
+                message: `Error creating content. ${error?.response?.data?.message ?? ''}`,
+                type: TOAST_TYPES.ERROR
+            });
         }
     });
 };
@@ -93,7 +59,6 @@ export const useRemoveComponentContent = () => {
     const queryClient = useQueryClient();
     const {bearerToken, csrfToken} = useAuth();
     const {showToast} = useToastContext();
-    const navigate = useNavigate();
 
     return useMutation({
         mutationKey: ['removeContent'],
@@ -111,25 +76,11 @@ export const useRemoveComponentContent = () => {
              * @return {Promise<void>}
              */
             async (error) => {
-                if (error?.status === 401) {
-                    await queryClient.invalidateQueries({
-                        queryKey: ['pageContent']
-                    });
-                    showToast({
-                        message: `Error removing content. ${error?.response?.data?.message}`,
-                        type: TOAST_TYPES.ERROR
-                    });
-                    clearAuthFromSessionStorage();
-                    navigate(ROUTING_CONSTANTS.LOGIN.URL, {replace: true});
-                } else {
-                    await queryClient.invalidateQueries({
-                        queryKey: ['pageContent']
-                    });
-                    showToast({
-                        message: `Error removing content. ${error?.response?.data?.message}`,
-                        type: TOAST_TYPES.ERROR
-                    });
-                }
+                await queryClient.invalidateQueries({queryKey: ['pageContent']});
+                showToast({
+                    message: `Error removing content. ${error?.response?.data?.message ?? ''}`,
+                    type: TOAST_TYPES.ERROR
+                });
             }
     });
 };
@@ -144,7 +95,6 @@ export const useUpdateComponentContent = () => {
     const queryClient = useQueryClient();
     const {bearerToken, csrfToken} = useAuth();
     const {showToast} = useToastContext();
-    const navigate = useNavigate();
 
     return useMutation({
         mutationKey: ['updateContent'],
@@ -153,28 +103,15 @@ export const useUpdateComponentContent = () => {
                                requestBody
                            }) => updateComponentContent(componentContentId, requestBody, bearerToken, csrfToken),
         onSuccess: async () => {
-            await queryClient.invalidateQueries({
-                queryKey: ['pageContent']
-            });
+            await queryClient.invalidateQueries({queryKey: ['pageContent']});
             showToast({message: 'Content updated.', type: TOAST_TYPES.PRIMARY});
         },
         onError: async (error) => {
-            if (error?.status === 401) {
-                await queryClient.invalidateQueries({
-                    queryKey: ['pageContent']
-                });
-                showToast({
-                    message: `Error updating content. ${error?.response?.data?.message}`,
-                    type: TOAST_TYPES.ERROR
-                });
-                clearAuthFromSessionStorage();
-                navigate(ROUTING_CONSTANTS.LOGIN.URL, {replace: true});
-            } else {
-                await queryClient.invalidateQueries({
-                    queryKey: ['pageContent']
-                });
-                showToast({message: `Error updating content.`, type: TOAST_TYPES.ERROR});
-            }
+            await queryClient.invalidateQueries({queryKey: ['pageContent']});
+            showToast({
+                message: `Error updating content. ${error?.response?.data?.message ?? ''}`,
+                type: TOAST_TYPES.ERROR
+            });
         }
     });
 };

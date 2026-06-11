@@ -6,12 +6,7 @@ import {Accordion} from 'react-bootstrap';
 
 import OfficeImage from './office-image.jsx';
 import {imageComponentPropType} from '../../../common/commonPropTypes.jsx';
-import {
-    DEFAULT_CONTENT,
-    IMAGE_SRC_PLACEHOLDER_TEXT,
-    PLACEHOLDER_TEXT,
-    ROLES
-} from '../../../constants/constants.js';
+import {DEFAULT_CONTENT, IMAGE_SRC_PLACEHOLDER_TEXT, PLACEHOLDER_TEXT, ROLES} from '../../../constants/constants.js';
 import {useAuth} from '../../../hooks/auth/use-auth.jsx';
 import OfficeAdditionButton from '../office-addition-button/office-addition-button.jsx';
 import OfficeDraftRow from '../office-draft-row/office-draft-row.jsx';

@@ -28,6 +28,8 @@ const isRealValue = (val) =>
     && val !== DEFAULT_CONTENT.TEXT.LABEL
     && val !== DEFAULT_CONTENT.LOCATIONS.LABEL;
 
+const defaultTime = new Date(Date.now()).toISOString();
+
 /**
  * A utility function that takes an array of Event Component Objects taken from the
  * response object and creates an Accordion wrapped list of office event components.
@@ -72,7 +74,7 @@ const OfficeEventList = ({
         await setFieldValue(`${base}_event_title`, '', false);
         await setFieldValue(`${base}_event_description`, '', false);
         await setFieldValue(`${base}_event_telephone`, '', false);
-        await setFieldValue(`${base}_event_time`, new Date(Date.now()).toISOString(), false);
+        await setFieldValue(`${base}_event_time`, new Date(Date.now()).toLocaleString(), false);
         setDrafts(prev => [...prev, {draftKey}]);
     };
 
@@ -85,6 +87,28 @@ const OfficeEventList = ({
         const base = draftFieldBase(key);
         return isRealValue(values[`${base}_event_title`])
             && isRealValue(values[`${base}_event_location`]);
+    };
+
+    const convertTime = (timeStr) => {
+        const [defaultDate, defaultTimeString] = defaultTime.split('T');
+        const [defaultTimeClean] = defaultTimeString.split('.');
+        const defaultTimeDateStr = `${defaultDate} ${defaultTimeClean}`;
+
+        if (!timeStr) return defaultTimeDateStr;
+
+        const [date, timeString] = timeStr.split(',');
+        const splitDate = date.split('/');
+        const month = splitDate[0].padStart(2, '0');
+        const day = splitDate[1].padStart(2, '0');
+        const cleanedDate = `${splitDate[2]}-${month}-${day}`;
+        const [time, meridian] = timeString.split(' ').filter(Boolean);
+        const splitTime = time.split(':');
+        let hour = Number(splitTime[0]);
+        if (meridian === 'PM' && hour !== 12) hour += 12;
+        else if (meridian === 'AM' && hour === 12) hour = 0;
+        const militaryTime = `${String(hour).padStart(2, '0')}:${splitTime[1]}:${splitTime[2]}`;
+
+        return `${cleanedDate} ${militaryTime}`;
     };
 
     const saveDraft = async (key) => {
@@ -101,7 +125,7 @@ const OfficeEventList = ({
             event_location: locationName,
             event_lat: matchingLocation?.location_lat ?? DEFAULT_CONTENT.LOCATIONS.LAT,
             event_lng: matchingLocation?.location_lng ?? DEFAULT_CONTENT.LOCATIONS.LNG,
-            event_time: values[`${base}_event_time`] ?? new Date(Date.now()).toISOString()
+            event_time: convertTime(values[`${base}_event_time`])
         };
 
         setPendingDraft(key);
@@ -194,7 +218,7 @@ const OfficeEventList = ({
                                         event_telephone: '',
                                         event_lat: DEFAULT_CONTENT.LOCATIONS.LAT,
                                         event_lng: DEFAULT_CONTENT.LOCATIONS.LNG,
-                                        event_time: new Date(Date.now()).toISOString()
+                                        event_time: convertTime(false),
                                     }}
                                     isDisabled={false}
                                     prefix={prefix}

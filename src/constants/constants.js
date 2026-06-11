@@ -15,6 +15,7 @@ export const API_ROUTE_CONST = {
     IMAGES: '/images',
     LOGS: '/logs',
     SEND_EMAIL: '/send_email',
+    CSRF_TOKEN: '/csrf-token',
 };
 
 export const QUERY_STATUS = {

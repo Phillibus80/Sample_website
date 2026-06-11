@@ -1,11 +1,8 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query';
-import {useNavigate} from 'react-router';
 
 import {createPage, createPageSection, removePageSection} from '../../api-calls/pages/pages.js';
 import {updatePageSection} from '../../api-calls/sections/section-calls.js';
 import {TOAST_TYPES} from '../../constants/constants.js';
-import {ROUTING_CONSTANTS} from '../../constants/routing-constants.js';
-import {clearAuthFromSessionStorage} from '../../utils/utils.js';
 import {useAuth} from '../auth/use-auth.jsx';
 import {useToastContext} from '../context/context-hooks.jsx';
 
@@ -34,7 +31,7 @@ export const useCreatePageSection = () => {
     const {bearerToken, csrfToken} = useAuth();
     const {showToast} = useToastContext();
     const queryClient = useQueryClient();
-    const navigate = useNavigate();
+
     return (
         useMutation({
             mutationKey: ['createPageSection'],
@@ -50,28 +47,14 @@ export const useCreatePageSection = () => {
                 showToast({message: 'New section added to page.', type: TOAST_TYPES.PRIMARY});
             },
             onError: async (error) => {
-                if (error?.status === 401) {
-                    await queryClient.invalidateQueries({
-                        queryKey: ['sections']
-                    });
-                    await queryClient.invalidateQueries({
-                        queryKey: ['pageContent']
-                    });
-                    showToast({
-                        message: `Error adding section from page.  ${error?.response?.data?.message}`,
-                        type: TOAST_TYPES.ERROR
-                    });
-                    clearAuthFromSessionStorage();
-                    navigate(ROUTING_CONSTANTS.LOGIN.URL, {replace: true});
-                } else {
-                    await queryClient.invalidateQueries({
-                        queryKey: ['sections']
-                    });
-                    await queryClient.invalidateQueries({
-                        queryKey: ['pageContent']
-                    });
-                    showToast({message: 'Error adding section from page.', type: TOAST_TYPES.ERROR});
-                }
+                await Promise.all([
+                    queryClient.invalidateQueries({queryKey: ['sections']}),
+                    queryClient.invalidateQueries({queryKey: ['pageContent']})
+                ]);
+                showToast({
+                    message: `Error adding section to page. ${error?.response?.data?.message ?? ''}`,
+                    type: TOAST_TYPES.ERROR
+                });
             }
         })
     );
@@ -86,7 +69,6 @@ export const useRemovePageSection = () => {
     const {bearerToken, csrfToken} = useAuth();
     const {showToast} = useToastContext();
     const queryClient = useQueryClient();
-    const navigate = useNavigate();
 
     return useMutation({
         mutationKey: ['removePageSection'],
@@ -100,28 +82,14 @@ export const useRemovePageSection = () => {
             showToast({message: 'Section removed.', type: TOAST_TYPES.PRIMARY});
         },
         onError: async (error) => {
-            if (error?.status === 401) {
-                await queryClient.invalidateQueries({
-                    queryKey: ['sections']
-                });
-                await queryClient.invalidateQueries({
-                    queryKey: ['pageContent']
-                });
-                showToast({
-                    message: `Error removing section.  ${error?.response?.data?.message}`,
-                    type: TOAST_TYPES.ERROR
-                });
-                sessionStorage.removeItem('authToken');
-                navigate(ROUTING_CONSTANTS.LOGIN.URL, {replace: true});
-            } else {
-                await queryClient.invalidateQueries({
-                    queryKey: ['sections']
-                });
-                await queryClient.invalidateQueries({
-                    queryKey: ['pageContent']
-                });
-                showToast({message: 'Error removing section.', type: TOAST_TYPES.ERROR});
-            }
+            await Promise.all([
+                queryClient.invalidateQueries({queryKey: ['sections']}),
+                queryClient.invalidateQueries({queryKey: ['pageContent']})
+            ]);
+            showToast({
+                message: `Error removing section. ${error?.response?.data?.message ?? ''}`,
+                type: TOAST_TYPES.ERROR
+            });
         }
     });
 };
@@ -135,7 +103,6 @@ export const useUpdatePageSection = () => {
     const queryClient = useQueryClient();
     const {bearerToken, csrfToken} = useAuth();
     const {showToast} = useToastContext();
-    const navigate = useNavigate();
 
     return useMutation({
         mutationKey: ['updatePageSection'],
@@ -151,34 +118,15 @@ export const useUpdatePageSection = () => {
             showToast({message: 'Section updated.', type: TOAST_TYPES.PRIMARY});
         },
         onError: async (error) => {
-            if (error?.status === 401) {
-                await queryClient.invalidateQueries({
-                    queryKey: ['pageContent', 'admin']
-                });
-                await queryClient.invalidateQueries({
-                    queryKey: ['pageContent']
-                });
-                await queryClient.invalidateQueries({
-                    queryKey: ['sections']
-                });
-                showToast({
-                    message: `Error updating the section.  ${error?.response?.data?.message}`,
-                    type: TOAST_TYPES.ERROR
-                });
-                sessionStorage.removeItem('authToken');
-                navigate(ROUTING_CONSTANTS.LOGIN.URL, {replace: true});
-            } else {
-                await queryClient.invalidateQueries({
-                    queryKey: ['pageContent', 'admin']
-                });
-                await queryClient.invalidateQueries({
-                    queryKey: ['pageContent']
-                });
-                await queryClient.invalidateQueries({
-                    queryKey: ['sections']
-                });
-                showToast({message: 'Error updating the section.', type: TOAST_TYPES.ERROR});
-            }
+            await Promise.all([
+                queryClient.invalidateQueries({queryKey: ['pageContent', 'admin']}),
+                queryClient.invalidateQueries({queryKey: ['pageContent']}),
+                queryClient.invalidateQueries({queryKey: ['sections']})
+            ]);
+            showToast({
+                message: `Error updating the section. ${error?.response?.data?.message ?? ''}`,
+                type: TOAST_TYPES.ERROR
+            });
         }
     });
 };

@@ -11,14 +11,11 @@ import * as styles from './carousel-image.module.scss';
  */
 const CarouselImage = ({imageSrc}) => {
     return (
-        <div className={`${styles.imageGradient}`}>
-            <Image
-                className='object-fit-cover'
-                style={{width: '100%', height: '100%'}}
-                src={imageSrc}
-                fluid
-            />
-        </div>
+        <Image
+            className={styles.carouselImage}
+            src={imageSrc}
+            alt=''
+        />
     );
 };
 

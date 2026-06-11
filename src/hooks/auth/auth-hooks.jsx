@@ -7,7 +7,7 @@ import {useAuth} from './use-auth.jsx';
 import {login, logout} from '../../api-calls/calls.js';
 import {TOAST_TYPES} from '../../constants/constants.js';
 import {ROUTING_CONSTANTS} from '../../constants/routing-constants.js';
-import {clearAuthFromSessionStorage} from '../../utils/utils.js';
+import {clearAuthFromSessionStorage, destroyPhpSession} from '../../utils/utils.js';
 import {useToastContext} from '../context/context-hooks.jsx';
 
 
@@ -44,6 +44,7 @@ export const useLogOut = () => {
             onSuccess: () => {
                 queryClient.clear();
                 clearAuthFromSessionStorage();
+                destroyPhpSession();
                 logoutFromContext();
                 showToast({message: 'Logged out.', type: TOAST_TYPES.PRIMARY});
                 navigate(ROUTING_CONSTANTS.LOGIN.URL, {replace: true});

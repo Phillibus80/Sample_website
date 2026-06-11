@@ -4,11 +4,13 @@ import PropTypes from 'prop-types';
 import {useNavigate} from 'react-router';
 
 import AuthContext from './auth-context.jsx';
-import {setLogoutCallback} from '../../api-calls/axios-interceptor.js';
+import {setCsrfRefreshCallback, setLogoutCallback} from '../../api-calls/axios-interceptor.js';
+import {refreshCsrfToken as refreshCsrfTokenApi} from '../../api-calls/calls.js';
 import {ROUTING_CONSTANTS} from '../../constants/routing-constants.js';
 import {
     clearAuthFromSessionStorage,
     decodeJWT,
+    destroyPhpSession,
     getAuthFromSessionStorage,
     getTokenTimeRemaining,
     isTokenExpired,
@@ -52,12 +54,32 @@ export const AuthProvider = ({children}) => {
         setRoles([]);
         setCsrfToken('');
         clearAuthFromSessionStorage();
+        destroyPhpSession();
         navigate(ROUTING_CONSTANTS.LOGIN.URL, {replace: true});
     }, [navigate]);
 
     useEffect(() => {
         setLogoutCallback(logoutUser);
     }, [logoutUser]);
+
+    const refreshCsrf = useCallback(async () => {
+        try {
+            const response = await refreshCsrfTokenApi(bearerToken);
+            const newToken = response?.data?.csrfToken;
+            if (newToken) {
+                setCsrfToken(newToken);
+                saveAuthToSessionStorage(bearerToken, newToken, loggedInUserName, roles);
+                return newToken;
+            }
+            return null;
+        } catch {
+            return null;
+        }
+    }, [bearerToken, loggedInUserName, roles]);
+
+    useEffect(() => {
+        setCsrfRefreshCallback(refreshCsrf);
+    }, [refreshCsrf]);
 
     const validateCurrentToken = useCallback(() => {
         if (!bearerToken) {
