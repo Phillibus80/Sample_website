@@ -1,10 +1,7 @@
 import {useMutation, useQueryClient, useSuspenseQuery} from '@tanstack/react-query';
-import {useNavigate} from 'react-router';
 
 import {createUser, deleteUser, getUsers, updateUser} from '../../api-calls/users/user-calls.js';
 import {TOAST_TYPES} from '../../constants/constants.js';
-import {ROUTING_CONSTANTS} from '../../constants/routing-constants.js';
-import {clearAuthFromSessionStorage} from '../../utils/utils.js';
 import {useAuth} from '../auth/use-auth.jsx';
 import {useToastContext} from '../context/context-hooks.jsx';
 
@@ -34,7 +31,6 @@ export const useCreateUser = () => {
     const {bearerToken, csrfToken} = useAuth();
     const {showToast} = useToastContext();
     const queryClient = useQueryClient();
-    const navigate = useNavigate();
 
     return useMutation({
         mutationKey: ['create-user'],
@@ -44,22 +40,11 @@ export const useCreateUser = () => {
             showToast({message: 'User created.', type: TOAST_TYPES.PRIMARY});
         },
         onError: async (error) => {
-            if (error?.status === 401) {
-                await queryClient.invalidateQueries({
-                    queryKey: ['users']
-                });
-                showToast({
-                    message: `Error creating user.  ${error?.response?.data?.message}`,
-                    type: TOAST_TYPES.ERROR
-                });
-                clearAuthFromSessionStorage();
-                navigate(ROUTING_CONSTANTS.LOGIN.URL, {replace: true});
-            } else {
-                await queryClient.invalidateQueries({
-                        queryKey: ['users']
-                });
-                showToast({message: 'Error creating user.', type: TOAST_TYPES.ERROR});
-            }
+            await queryClient.invalidateQueries({queryKey: ['users']});
+            showToast({
+                message: `Error creating user. ${error?.response?.data?.message ?? ''}`,
+                type: TOAST_TYPES.ERROR
+            });
         }
         }
     );
@@ -74,7 +59,6 @@ export const useUpdateUser = () => {
     const {bearerToken, csrfToken} = useAuth();
     const {showToast} = useToastContext();
     const queryClient = useQueryClient();
-    const navigate = useNavigate();
 
     return useMutation({
         mutationKey: ['update-user'],
@@ -87,22 +71,11 @@ export const useUpdateUser = () => {
             showToast({message: 'User updated.', type: TOAST_TYPES.PRIMARY});
         },
         onError: async (error) => {
-            if (error?.status === 401) {
-                await queryClient.invalidateQueries({
-                    queryKey: ['users']
-                });
-                showToast({
-                    message: `Error updating user.  ${error?.response?.data?.message}`,
-                    type: TOAST_TYPES.ERROR
-                });
-                clearAuthFromSessionStorage();
-                navigate(ROUTING_CONSTANTS.LOGIN.URL, {replace: true});
-            } else {
-                await queryClient.invalidateQueries({
-                    queryKey: ['users']
-                });
-                showToast({message: 'Error updating user.', type: TOAST_TYPES.ERROR});
-            }
+            await queryClient.invalidateQueries({queryKey: ['users']});
+            showToast({
+                message: `Error updating user. ${error?.response?.data?.message ?? ''}`,
+                type: TOAST_TYPES.ERROR
+            });
         }
     });
 };
@@ -116,7 +89,6 @@ export const useDeleteUser = () => {
     const {bearerToken, csrfToken} = useAuth();
     const {showToast} = useToastContext();
     const queryClient = useQueryClient();
-    const navigate = useNavigate();
 
     return useMutation({
         mutationKey: ['remove-user'],
@@ -126,22 +98,11 @@ export const useDeleteUser = () => {
             showToast({message: 'User removed.', type: TOAST_TYPES.PRIMARY});
         },
         onError: async (error) => {
-            if (error?.status === 401) {
-                await queryClient.invalidateQueries({
-                    queryKey: ['users']
-                });
-                showToast({
-                    message: `Error removing user.  ${error?.response?.data?.message}`,
-                    type: TOAST_TYPES.ERROR
-                });
-                clearAuthFromSessionStorage();
-                navigate(ROUTING_CONSTANTS.LOGIN.URL, {replace: true});
-            } else {
-                await queryClient.invalidateQueries({
-                    queryKey: ['users']
-                });
-                showToast({message: 'Error removing user.', type: TOAST_TYPES.ERROR});
-            }
+            await queryClient.invalidateQueries({queryKey: ['users']});
+            showToast({
+                message: `Error removing user. ${error?.response?.data?.message ?? ''}`,
+                type: TOAST_TYPES.ERROR
+            });
         }
     });
 };

@@ -66,6 +66,22 @@ export const logout = async (
     }
 );
 
+/**
+ * Refreshes the CSRF token from the server.
+ *
+ * @param {string} bearerToken
+ * @return {Promise<axios.AxiosResponse<any>>}
+ */
+export const refreshCsrfToken = async (bearerToken) => axios.get(
+    urlBuilder(apiURL, API_ROUTE_CONST.CSRF_TOKEN),
+    {
+        withCredentials: true,
+        headers: {
+            Authorization: `Bearer ${bearerToken}`
+        }
+    }
+);
+
 export const getUserByName = async (username, bearerToken) => axios.get(
     urlBuilder(apiURL, API_ROUTE_CONST.USERS, [username]),
     {

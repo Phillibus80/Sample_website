@@ -1,10 +1,7 @@
 import {useMutation, useQueryClient, useSuspenseQuery} from '@tanstack/react-query';
-import {useNavigate} from 'react-router';
 
 import {createSection, getSections, removeSection} from '../../api-calls/sections/section-calls.js';
 import {API_ROUTE_CONST, TOAST_TYPES} from '../../constants/constants.js';
-import {ROUTING_CONSTANTS} from '../../constants/routing-constants.js';
-import {clearAuthFromSessionStorage} from '../../utils/utils.js';
 import {useAuth} from '../auth/use-auth.jsx';
 import {useToastContext} from '../context/context-hooks.jsx';
 
@@ -34,7 +31,6 @@ export const useCreateSection = () => {
     const {bearerToken, csrfToken} = useAuth();
     const {showToast} = useToastContext();
     const queryClient = useQueryClient();
-    const navigate = useNavigate();
 
     return useMutation({
         mutationKey: ['createSection'],
@@ -48,28 +44,14 @@ export const useCreateSection = () => {
             showToast({message: 'Section created.', type: TOAST_TYPES.PRIMARY});
         },
         onError: async (error) => {
-            if (error?.status === 401) {
-                await queryClient.invalidateQueries({
-                    queryKey: [API_ROUTE_CONST.SECTIONS.replace('/', '')]
-                });
-                await queryClient.invalidateQueries({
-                    queryKey: ['pageContent']
-                });
-                showToast({
-                    message: `Error creating section.  ${error?.response?.data?.message}`,
-                    type: TOAST_TYPES.ERROR
-                });
-                clearAuthFromSessionStorage();
-                navigate(ROUTING_CONSTANTS.LOGIN.URL, {replace: true});
-            } else {
-                await queryClient.invalidateQueries({
-                    queryKey: [API_ROUTE_CONST.SECTIONS.replace('/', '')]
-                });
-                await queryClient.invalidateQueries({
-                    queryKey: ['pageContent']
-                });
-                showToast({message: 'Error creating section.', type: TOAST_TYPES.ERROR});
-            }
+            await Promise.all([
+                queryClient.invalidateQueries({queryKey: [API_ROUTE_CONST.SECTIONS.replace('/', '')]}),
+                queryClient.invalidateQueries({queryKey: ['pageContent']})
+            ]);
+            showToast({
+                message: `Error creating section. ${error?.response?.data?.message ?? ''}`,
+                type: TOAST_TYPES.ERROR
+            });
         }
     });
 };
@@ -83,7 +65,6 @@ export const useRemoveSection = () => {
     const {bearerToken, csrfToken} = useAuth();
     const {showToast} = useToastContext();
     const queryClient = useQueryClient();
-    const navigate = useNavigate();
 
     return useMutation({
         mutationKey: ['removeSection'],
@@ -97,28 +78,14 @@ export const useRemoveSection = () => {
             showToast({message: 'Section removed.', type: TOAST_TYPES.PRIMARY});
         },
         onError: async (error) => {
-            if (error?.status === 401) {
-                await queryClient.invalidateQueries({
-                    queryKey: [API_ROUTE_CONST.SECTIONS.replace('/', '')]
-                });
-                await queryClient.invalidateQueries({
-                    queryKey: ['pageContent']
-                });
-                showToast({
-                    message: `Error removing section.  ${error?.response?.data?.message}`,
-                    type: TOAST_TYPES.ERROR
-                });
-                clearAuthFromSessionStorage();
-                navigate(ROUTING_CONSTANTS.LOGIN.URL, {replace: true});
-            } else {
-                await queryClient.invalidateQueries({
-                    queryKey: [API_ROUTE_CONST.SECTIONS.replace('/', '')]
-                });
-                await queryClient.invalidateQueries({
-                    queryKey: ['pageContent']
-                });
-                showToast({message: 'Error removing section.', type: TOAST_TYPES.ERROR});
-            }
+            await Promise.all([
+                queryClient.invalidateQueries({queryKey: [API_ROUTE_CONST.SECTIONS.replace('/', '')]}),
+                queryClient.invalidateQueries({queryKey: ['pageContent']})
+            ]);
+            showToast({
+                message: `Error removing section. ${error?.response?.data?.message ?? ''}`,
+                type: TOAST_TYPES.ERROR
+            });
         }
     });
 };

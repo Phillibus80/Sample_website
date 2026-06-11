@@ -1,5 +1,4 @@
 import {useMutation, useQueryClient, useSuspenseQuery} from '@tanstack/react-query';
-import {useNavigate} from 'react-router';
 
 import {
     createLink,
@@ -10,8 +9,6 @@ import {
     updateLink
 } from '../../api-calls/links/link-calls.js';
 import {API_ROUTE_CONST, TOAST_TYPES} from '../../constants/constants.js';
-import {ROUTING_CONSTANTS} from '../../constants/routing-constants.js';
-import {clearAuthFromSessionStorage} from '../../utils/utils.js';
 import {useAuth} from '../auth/use-auth.jsx';
 import {useToastContext} from '../context/context-hooks.jsx';
 
@@ -73,7 +70,6 @@ export const useCreateLink = () => {
     const {bearerToken, csrfToken} = useAuth();
     const {showToast} = useToastContext();
     const queryClient = useQueryClient();
-    const navigate = useNavigate();
 
     return (
         useMutation({
@@ -87,25 +83,14 @@ export const useCreateLink = () => {
                 showToast({message: 'Link created.', type: TOAST_TYPES.PRIMARY});
             },
             onError: async (e) => {
-                if (e?.status === 401) {
-                    await queryClient.invalidateQueries({
-                        queryKey: ['links']
-                    });
-                    await queryClient.invalidateQueries({
-                        queryKey: ['pageContent']
-                    });
-                    showToast({message: `Error creating link. ${e?.response?.data?.message}`, type: TOAST_TYPES.ERROR});
-                    clearAuthFromSessionStorage();
-                    navigate(ROUTING_CONSTANTS.LOGIN.URL, {replace: true});
-                } else {
-                    await queryClient.invalidateQueries({
-                        queryKey: ['links']
-                    });
-                    await queryClient.invalidateQueries({
-                        queryKey: ['pageContent']
-                    });
-                    showToast({message: 'Error creating link', type: TOAST_TYPES.ERROR});
-                }
+                await Promise.all([
+                    queryClient.invalidateQueries({queryKey: ['links']}),
+                    queryClient.invalidateQueries({queryKey: ['pageContent']})
+                ]);
+                showToast({
+                    message: `Error creating link. ${e?.response?.data?.message ?? ''}`,
+                    type: TOAST_TYPES.ERROR
+                });
             }
         })
     );
@@ -120,7 +105,6 @@ export const useUpdateLink = () => {
     const {bearerToken, csrfToken} = useAuth();
     const {showToast} = useToastContext();
     const queryClient = useQueryClient();
-    const navigate = useNavigate();
 
     return useMutation({
         mutationKey: ['updateLink'],
@@ -134,25 +118,14 @@ export const useUpdateLink = () => {
             showToast({message: 'Link updated.', type: TOAST_TYPES.PRIMARY});
         },
         onError: async (e) => {
-            if (e?.status === 401) {
-                await queryClient.invalidateQueries({
-                    queryKey: ['links']
-                });
-                await queryClient.invalidateQueries({
-                    queryKey: ['pageContent']
-                });
-                showToast({message: `Error updating link.  ${e?.response?.data?.message}`, type: TOAST_TYPES.ERROR});
-                sessionStorage.removeItem('authToken');
-                navigate(ROUTING_CONSTANTS.LOGIN.URL, {replace: true});
-            } else {
-                await queryClient.invalidateQueries({
-                    queryKey: ['links']
-                });
-                await queryClient.invalidateQueries({
-                    queryKey: ['pageContent']
-                });
-                showToast({message: 'Error updating link.', type: TOAST_TYPES.ERROR});
-            }
+            await Promise.all([
+                queryClient.invalidateQueries({queryKey: ['links']}),
+                queryClient.invalidateQueries({queryKey: ['pageContent']})
+            ]);
+            showToast({
+                message: `Error updating link. ${e?.response?.data?.message ?? ''}`,
+                type: TOAST_TYPES.ERROR
+            });
         }
     });
 };
@@ -166,7 +139,6 @@ export const useRemoveLink = () => {
     const {bearerToken, csrfToken} = useAuth();
     const {showToast} = useToastContext();
     const queryClient = useQueryClient();
-    const navigate = useNavigate();
 
     return useMutation({
         mutationKey: ['removeLink'],
@@ -177,22 +149,11 @@ export const useRemoveLink = () => {
             showToast({message: 'Link removed.', type: TOAST_TYPES.PRIMARY});
         },
         onError: async (error) => {
-            if (error?.status === 401) {
-                await queryClient.invalidateQueries({
-                    queryKey: ['links']
-                });
-                showToast({
-                    message: `Error removing link.  ${error?.response?.data?.message}`,
-                    type: TOAST_TYPES.ERROR
-                });
-                sessionStorage.removeItem('authToken');
-                navigate(ROUTING_CONSTANTS.LOGIN.URL, {replace: true});
-            } else {
-                await queryClient.invalidateQueries({
-                    queryKey: ['links']
-                });
-                showToast({message: 'Error removing link.', type: TOAST_TYPES.ERROR});
-            }
+            await queryClient.invalidateQueries({queryKey: ['links']});
+            showToast({
+                message: `Error removing link. ${error?.response?.data?.message ?? ''}`,
+                type: TOAST_TYPES.ERROR
+            });
         }
     });
 };

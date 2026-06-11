@@ -2,8 +2,7 @@ import PropTypes from 'prop-types';
 import Container from 'react-bootstrap/Container';
 
 import {componentContentWithEvents} from '../../../../../common/commonPropTypes.jsx';
-import LinearHoneycombGrid
-    from '../../../../../components/galleries/linear-honeycomb-grid/linear-honeycomb-grid.jsx';
+import LinearHoneycombGrid from '../../../../../components/galleries/linear-honeycomb-grid/linear-honeycomb-grid.jsx';
 import SectionStyleWrapper from '../../../../../components/section-style-wrapper/section-style-wrapper.jsx';
 import HoneyDipperTitle from '../../../../../components/typography/honey-dipper-title/honey-dipper-title.jsx';
 import Subtitle from '../../../../../components/typography/subtitle/subtitle.jsx';

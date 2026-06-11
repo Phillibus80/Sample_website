@@ -253,6 +253,9 @@ export const clearAuthFromSessionStorage = () => {
     sessionStorage.removeItem('csrfToken');
     sessionStorage.removeItem('loggedInUserName');
     sessionStorage.removeItem('roles');
+};
+
+export const destroyPhpSession = () => {
     document.cookie = 'PHPSESSID=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
 };
 

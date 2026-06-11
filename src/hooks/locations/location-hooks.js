@@ -1,5 +1,4 @@
 import {useMutation, useQueryClient, useSuspenseQuery} from '@tanstack/react-query';
-import {useNavigate} from 'react-router';
 
 import {
     createLocation,
@@ -8,8 +7,6 @@ import {
     updateLocation
 } from '../../api-calls/locations/location-calls.js';
 import {TOAST_TYPES} from '../../constants/constants.js';
-import {ROUTING_CONSTANTS} from '../../constants/routing-constants.js';
-import {clearAuthFromSessionStorage} from '../../utils/utils.js';
 import {useAuth} from '../auth/use-auth.jsx';
 import {useToastContext} from '../context/context-hooks.jsx';
 
@@ -58,7 +55,6 @@ export const useCreateLocation = () => {
     const {bearerToken, csrfToken} = useAuth();
     const {showToast} = useToastContext();
     const queryClient = useQueryClient();
-    const navigate = useNavigate();
 
     return (
         useMutation({
@@ -70,46 +66,23 @@ export const useCreateLocation = () => {
                  */
                     (requestBody) => createLocation(requestBody, bearerToken, csrfToken),
             onSuccess: async () => {
-                await queryClient.invalidateQueries({
-                    queryKey: ['events']
-                });
-                await queryClient.invalidateQueries({
-                    queryKey: ['locations']
-                });
-                await queryClient.invalidateQueries({
-                    queryKey: ['pageContent']
-                });
+                await Promise.all([
+                    queryClient.invalidateQueries({queryKey: ['events']}),
+                    queryClient.invalidateQueries({queryKey: ['locations']}),
+                    queryClient.invalidateQueries({queryKey: ['pageContent']})
+                ]);
                 showToast({message: 'Location created.', type: TOAST_TYPES.PRIMARY});
             },
             onError: async (error) => {
-                if (error?.status === 401) {
-                    await queryClient.invalidateQueries({
-                        queryKey: ['events']
-                    });
-                    await queryClient.invalidateQueries({
-                        queryKey: ['locations']
-                    });
-                    await queryClient.invalidateQueries({
-                        queryKey: ['pageContent']
-                    });
-                    showToast({
-                        message: `Error creating location.  ${error?.response?.data?.message}`,
-                        type: TOAST_TYPES.ERROR
-                    });
-                    clearAuthFromSessionStorage();
-                    navigate(ROUTING_CONSTANTS.LOGIN.URL, {replace: true});
-                } else {
-                    await queryClient.invalidateQueries({
-                        queryKey: ['events']
-                    });
-                    await queryClient.invalidateQueries({
-                        queryKey: ['locations']
-                    });
-                    await queryClient.invalidateQueries({
-                        queryKey: ['pageContent']
-                    });
-                    showToast({message: 'Error creating location', type: TOAST_TYPES.ERROR});
-                }
+                await Promise.all([
+                    queryClient.invalidateQueries({queryKey: ['events']}),
+                    queryClient.invalidateQueries({queryKey: ['locations']}),
+                    queryClient.invalidateQueries({queryKey: ['pageContent']})
+                ]);
+                showToast({
+                    message: `Error creating location. ${error?.response?.data?.message ?? ''}`,
+                    type: TOAST_TYPES.ERROR
+                });
             }
         })
     );
@@ -150,7 +123,6 @@ export const useUpdateLocation = () => {
     const {bearerToken, csrfToken} = useAuth();
     const {showToast} = useToastContext();
     const queryClient = useQueryClient();
-    const navigate = useNavigate();
 
     return useMutation({
         mutationKey: ['updateLocation'],
@@ -164,34 +136,15 @@ export const useUpdateLocation = () => {
             showToast({message: 'Location updated.', type: TOAST_TYPES.PRIMARY});
         },
         onError: async (error) => {
-            if (error?.status === 401) {
-                await queryClient.invalidateQueries({
-                    queryKey: ['events']
-                });
-                await queryClient.invalidateQueries({
-                    queryKey: ['locations']
-                });
-                await queryClient.invalidateQueries({
-                    queryKey: ['pageContent']
-                });
-                showToast({
-                    message: `Error updating event.  ${error?.response?.data?.message}`,
-                    type: TOAST_TYPES.ERROR
-                });
-                sessionStorage.removeItem('authToken');
-                navigate(ROUTING_CONSTANTS.LOGIN.URL, {replace: true});
-            } else {
-                await queryClient.invalidateQueries({
-                    queryKey: ['events']
-                });
-                await queryClient.invalidateQueries({
-                    queryKey: ['locations']
-                });
-                await queryClient.invalidateQueries({
-                    queryKey: ['pageContent']
-                });
-                showToast({message: 'Error updating event.', type: TOAST_TYPES.ERROR});
-            }
+            await Promise.all([
+                queryClient.invalidateQueries({queryKey: ['events']}),
+                queryClient.invalidateQueries({queryKey: ['locations']}),
+                queryClient.invalidateQueries({queryKey: ['pageContent']})
+            ]);
+            showToast({
+                message: `Error updating location. ${error?.response?.data?.message ?? ''}`,
+                type: TOAST_TYPES.ERROR
+            });
         }
     });
 };
@@ -203,7 +156,7 @@ export const useUpdateLocation = () => {
  */
 export const useRemoveLocation = () => {
     const {bearerToken, csrfToken} = useAuth();
-    const {setToastMessage, setShowToast, setToastType} = useToastContext();
+    const {showToast} = useToastContext();
     const queryClient = useQueryClient();
 
     return useMutation({
@@ -211,32 +164,23 @@ export const useRemoveLocation = () => {
         mutationFn: async ({id}) =>
             removeLocation(id, bearerToken, csrfToken),
         onSuccess: async () => {
-            await queryClient.invalidateQueries({
-                queryKey: ['events']
-            });
-            await queryClient.invalidateQueries({
-                queryKey: ['locations']
-            });
-            await queryClient.invalidateQueries({
-                queryKey: ['pageContent']
-            });
-            setToastMessage('Location removed.');
-            setToastType(TOAST_TYPES.PRIMARY);
-            setShowToast(true);
+            await Promise.all([
+                queryClient.invalidateQueries({queryKey: ['events']}),
+                queryClient.invalidateQueries({queryKey: ['locations']}),
+                queryClient.invalidateQueries({queryKey: ['pageContent']})
+            ]);
+            showToast({message: 'Location removed.', type: TOAST_TYPES.PRIMARY});
         },
-        onError: async () => {
-            await queryClient.invalidateQueries({
-                queryKey: ['events']
+        onError: async (error) => {
+            await Promise.all([
+                queryClient.invalidateQueries({queryKey: ['events']}),
+                queryClient.invalidateQueries({queryKey: ['locations']}),
+                queryClient.invalidateQueries({queryKey: ['pageContent']})
+            ]);
+            showToast({
+                message: `Error removing location. ${error?.response?.data?.message ?? ''}`,
+                type: TOAST_TYPES.ERROR
             });
-            await queryClient.invalidateQueries({
-                queryKey: ['locations']
-            });
-            await queryClient.invalidateQueries({
-                queryKey: ['pageContent']
-            });
-            setToastMessage('Error removing event.');
-            setToastType(TOAST_TYPES.ERROR);
-            setShowToast(true);
         }
     });
 };

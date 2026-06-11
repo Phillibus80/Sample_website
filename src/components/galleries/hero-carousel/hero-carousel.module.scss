@@ -9,18 +9,6 @@
     }
 
     &_image_container {
-        max-height: 250px;
-
-        @include main.abstracts-respond(sm) {
-            max-height: 400px;
-        }
-
-        @include main.abstracts-respond(md) {
-            max-height: 500px;
-        }
-
-        @include main.abstracts-respond(lg) {
-            max-height: 700px;
-        }
+      aspect-ratio: 1300 / 700;
     }
 }
